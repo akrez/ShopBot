@@ -44,7 +44,7 @@ class TelegramApiService
         }
         $requiredParameters['commands'] = json_encode($requiredParameters['commands']);
 
-        return static::sendPostForm('setMyCommands', array_merge_recursive_distinct(
+        return static::sendPostForm('setMyCommands', array_replace_recursive(
             $optionalParameters,
             $requiredParameters
         ));
@@ -65,7 +65,7 @@ class TelegramApiService
             'text' => $text,
         ];
 
-        return static::sendPostForm('sendMessage', array_merge_recursive_distinct(
+        return static::sendPostForm('sendMessage', array_replace_recursive(
             $optionalParameters,
             $requiredParameters
         ));
