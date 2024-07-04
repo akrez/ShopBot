@@ -3,7 +3,8 @@
 namespace App\Supports;
 
 use App\Contracts\MessageProcessorContract;
-use App\Enums\MessageProcessorResponseTypeEnum;
+use App\Enums\MessageProcessor\ReplyMarkupEnum;
+use App\Enums\MessageProcessor\ResponseTypeEnum;
 use App\Models\Message;
 
 class DefaultMessageProcessor implements MessageProcessorContract
@@ -12,7 +13,7 @@ class DefaultMessageProcessor implements MessageProcessorContract
 
     public function getResponseType()
     {
-        return MessageProcessorResponseTypeEnum::DEFAULT->value;
+        return ResponseTypeEnum::DEFAULT->value;
     }
 
     public function sendResponse() {}
@@ -24,8 +25,13 @@ class DefaultMessageProcessor implements MessageProcessorContract
                 'keyboard' => [
                     [
                         [
-                            'text' => 'ورود به وسیله اشتراک گزاری شماره تلفن همراه',
+                            'text' => ReplyMarkupEnum::CONTACT,
                             'request_contact' => true,
+                        ],
+                    ],
+                    [
+                        [
+                            'text' => ReplyMarkupEnum::CART,
                         ],
                     ],
                 ],
