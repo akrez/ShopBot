@@ -2,7 +2,7 @@
 
 namespace App\Supports\MessageProcessors;
 
-use App\Enums\MessageProcessorResponseTypeEnum;
+use App\Enums\MessageProcessor\ResponseTypeEnum;
 use App\Supports\DefaultMessageProcessor;
 
 class BotMessageProcessor extends DefaultMessageProcessor
@@ -13,7 +13,7 @@ class BotMessageProcessor extends DefaultMessageProcessor
             isset($content['from']['is_bot'])
             and $content['from']['is_bot']
         ) {
-            return MessageProcessorResponseTypeEnum::BOT->value;
+            return ResponseTypeEnum::BOT->value;
         }
     }
 }
