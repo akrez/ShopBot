@@ -26,13 +26,18 @@ class DefaultMessageProcessor implements MessageProcessorContract
                 'keyboard' => [
                     [
                         [
-                            'text' => ReplyMarkupEnum::REQUEST_CONTACT,
-                            'request_contact' => true,
+                            'text' => ReplyMarkupEnum::CART,
                         ],
                     ],
                     [
                         [
-                            'text' => ReplyMarkupEnum::CART,
+                            'text' => ReplyMarkupEnum::CONTACT_US,
+                        ],
+                    ],
+                    [
+                        [
+                            'text' => ReplyMarkupEnum::REQUEST_CONTACT,
+                            'request_contact' => true,
                         ],
                     ],
                 ],

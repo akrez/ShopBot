@@ -9,6 +9,7 @@ use App\Models\Message;
 use App\Supports\DefaultMessageProcessor;
 use App\Supports\MessageProcessors\BotMessageProcessor;
 use App\Supports\MessageProcessors\CartMessageProcessor;
+use App\Supports\MessageProcessors\ContactUsMessageProcessor;
 use App\Supports\MessageProcessors\RequestContactMessageProcessor;
 use Illuminate\Support\Arr;
 
@@ -41,6 +42,7 @@ class TelegramService
             BotMessageProcessor::class,
             RequestContactMessageProcessor::class,
             CartMessageProcessor::class,
+            ContactUsMessageProcessor::class,
         ]);
 
         $message->update([
@@ -48,6 +50,11 @@ class TelegramService
         ]);
 
         SendMessageJob::dispatch($messageProcessor);
+    }
+
+    public static function sendMessage(MessageProcessorContract $messageProcessor)
+    {
+        $messageProcessor->sendResponse();
     }
 
     /**
@@ -68,10 +75,5 @@ class TelegramService
     protected static function getDefaultMessageProcessorInstance(Message $message): MessageProcessorContract
     {
         return new DefaultMessageProcessor($message);
-    }
-
-    public static function sendMessage(MessageProcessorContract $messageProcessor)
-    {
-        $messageProcessor->sendResponse();
     }
 }

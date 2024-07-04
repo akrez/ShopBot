@@ -22,6 +22,7 @@ return new class extends Migration
                 ResponseTypeEnum::REQUEST_CONTACT->value,
                 ResponseTypeEnum::CART->value,
                 ResponseTypeEnum::DEFAULT->value,
+                ResponseTypeEnum::CONTACT_US->value,
             ])->nullable();
             $table->softDeletes()->nullable();
             $table->timestamps();
