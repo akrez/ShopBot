@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\MessageProcessorResponseTypeEnum;
+use App\Enums\MessageProcessor\ResponseTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,8 +18,10 @@ return new class extends Migration
             $table->json('message_json')->nullable();
             $table->longText('message_text')->nullable();
             $table->enum('response_type', [
-                MessageProcessorResponseTypeEnum::DEFAULT->value,
-                MessageProcessorResponseTypeEnum::BOT->value,
+                ResponseTypeEnum::BOT->value,
+                ResponseTypeEnum::CONTACT->value,
+                ResponseTypeEnum::CART->value,
+                ResponseTypeEnum::DEFAULT->value,
             ])->nullable();
             $table->softDeletes()->nullable();
             $table->timestamps();
