@@ -2,14 +2,11 @@
 
 namespace App\Supports\MessageProcessor;
 
-use App\Contracts\MessageProcessorContract;
 use App\Enums\MessageProcessorResponseTypeEnum;
-use App\Models\Message;
+use App\Supports\MessageProcessor;
 
-class BotMessageProcessor implements MessageProcessorContract
+class BotMessageProcessor extends MessageProcessor
 {
-    public function __construct(protected Message $message) {}
-
     public function getResponseType()
     {
         if (
@@ -19,6 +16,4 @@ class BotMessageProcessor implements MessageProcessorContract
             return MessageProcessorResponseTypeEnum::BOT->value;
         }
     }
-
-    public function sendResponse() {}
 }

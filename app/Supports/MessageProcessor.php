@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Supports\MessageProcessor;
+namespace App\Supports;
 
 use App\Contracts\MessageProcessorContract;
 use App\Enums\MessageProcessorResponseTypeEnum;
 use App\Models\Message;
 
-class DefaultMessageProcessor implements MessageProcessorContract
+class MessageProcessor implements MessageProcessorContract
 {
     public function __construct(protected Message $message) {}
 
