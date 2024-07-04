@@ -8,6 +8,8 @@ use App\Jobs\SendMessageJob;
 use App\Models\Message;
 use App\Supports\DefaultMessageProcessor;
 use App\Supports\MessageProcessors\BotMessageProcessor;
+use App\Supports\MessageProcessors\CartMessageProcessor;
+use App\Supports\MessageProcessors\ContactMessageProcessor;
 use Illuminate\Support\Arr;
 
 class TelegramService
@@ -37,6 +39,8 @@ class TelegramService
     {
         $messageProcessor = static::detectMessageProcessor($message, [
             BotMessageProcessor::class,
+            ContactMessageProcessor::class,
+            CartMessageProcessor::class,
         ]);
 
         $message->update([
