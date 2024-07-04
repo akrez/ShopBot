@@ -26,8 +26,7 @@ class ProcessMessageJob implements ShouldQueue
     public function __construct(
         private Bot $bot,
         private Message $message
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.

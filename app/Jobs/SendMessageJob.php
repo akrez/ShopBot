@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Contracts\MessageProcessorContract;
-use App\Models\Bot;
 use App\Services\TelegramService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,9 +17,7 @@ class SendMessageJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(private MessageProcessorContract $messageProcessor)
-    {
-    }
+    public function __construct(private MessageProcessorContract $messageProcessor) {}
 
     /**
      * Execute the job.
