@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum MessageProcessorResponseTypeEnum: string
 {
-    case NONE = 'none';
+    case DEFAULT = 'default';
     case BOT = 'bot';
 }

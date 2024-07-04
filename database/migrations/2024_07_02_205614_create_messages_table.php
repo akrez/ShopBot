@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('message_json')->nullable();
             $table->longText('message_text')->nullable();
             $table->enum('response_type', [
-                MessageProcessorResponseTypeEnum::NONE->value,
+                MessageProcessorResponseTypeEnum::DEFAULT->value,
                 MessageProcessorResponseTypeEnum::BOT->value,
             ])->nullable();
             $table->softDeletes()->nullable();
