@@ -7,7 +7,7 @@ use App\Jobs\ProcessMessageJob;
 use App\Jobs\SendMessageJob;
 use App\Models\Message;
 use App\Supports\MessageProcessor\BotMessageProcessor;
-use App\Supports\MessageProcessor\NoneMessageProcessor;
+use App\Supports\MessageProcessor\DefaultMessageProcessor;
 use Illuminate\Support\Arr;
 
 class TelegramService
@@ -35,24 +35,35 @@ class TelegramService
 
     public static function processMessage(Message $message)
     {
-        $messageProcessorClasses = [
+        $messageProcessor = static::detectMessageProcessor($message, [
             BotMessageProcessor::class,
-        ];
+        ]);
 
+        $message->update([
+            'response_type' => $messageProcessor->getResponseType(),
+        ]);
+
+        SendMessageJob::dispatch($messageProcessor);
+    }
+
+    /**
+     * @param  array<int, MessageProcessorContract> $messageProcessorClasses
+     */
+    protected static function detectMessageProcessor(Message $message, array $messageProcessorClasses): MessageProcessorContract
+    {
         foreach ($messageProcessorClasses as $messageProcessorClass) {
             $messageProcessor = new $messageProcessorClass($message);
-            $responseType = $messageProcessor->getResponseType();
-            if ($responseType) {
-                $message->update([
-                    'response_type' => $responseType,
-                ]);
-                SendMessageJob::dispatch($messageProcessor);
-
-                return;
+            if ($messageProcessor->getResponseType()) {
+                return $messageProcessor;
             }
         }
 
-        SendMessageJob::dispatch(new NoneMessageProcessor($message));
+        return static::getDefaultMessageProcessorInstance($message);
+    }
+
+    protected static function getDefaultMessageProcessorInstance(Message $message): MessageProcessorContract
+    {
+        return new DefaultMessageProcessor($message);
     }
 
     public static function sendMessage(MessageProcessorContract $messageProcessor)
