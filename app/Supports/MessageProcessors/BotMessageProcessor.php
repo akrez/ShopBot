@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Supports\MessageProcessor;
+namespace App\Supports\MessageProcessors;
 
 use App\Enums\MessageProcessorResponseTypeEnum;
-use App\Supports\MessageProcessor;
+use App\Supports\DefaultMessageProcessor;
 
-class BotMessageProcessor extends MessageProcessor
+class BotMessageProcessor extends DefaultMessageProcessor
 {
     public function getResponseType()
     {

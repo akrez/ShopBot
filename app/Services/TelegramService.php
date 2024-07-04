@@ -6,8 +6,8 @@ use App\Contracts\MessageProcessorContract;
 use App\Jobs\ProcessMessageJob;
 use App\Jobs\SendMessageJob;
 use App\Models\Message;
-use App\Supports\MessageProcessor;
-use App\Supports\MessageProcessor\BotMessageProcessor;
+use App\Supports\DefaultMessageProcessor;
+use App\Supports\MessageProcessors\BotMessageProcessor;
 use Illuminate\Support\Arr;
 
 class TelegramService
@@ -63,7 +63,7 @@ class TelegramService
 
     protected static function getDefaultMessageProcessorInstance(Message $message): MessageProcessorContract
     {
-        return new MessageProcessor($message);
+        return new DefaultMessageProcessor($message);
     }
 
     public static function sendMessage(MessageProcessorContract $messageProcessor)
