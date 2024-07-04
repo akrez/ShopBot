@@ -19,7 +19,7 @@ return new class extends Migration
             $table->longText('message_text')->nullable();
             $table->enum('response_type', [
                 ResponseTypeEnum::BOT->value,
-                ResponseTypeEnum::CONTACT->value,
+                ResponseTypeEnum::REQUEST_CONTACT->value,
                 ResponseTypeEnum::CART->value,
                 ResponseTypeEnum::DEFAULT->value,
             ])->nullable();

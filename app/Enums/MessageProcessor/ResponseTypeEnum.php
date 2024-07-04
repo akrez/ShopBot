@@ -9,7 +9,7 @@ enum ResponseTypeEnum: string
     use Enum;
 
     case BOT = 'bot';
-    case CONTACT = 'contact';
+    case REQUEST_CONTACT = 'request_contact';
     case CART = 'cart';
     case DEFAULT = 'default';
 }

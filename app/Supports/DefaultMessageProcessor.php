@@ -6,6 +6,7 @@ use App\Contracts\MessageProcessorContract;
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Enums\MessageProcessor\ResponseTypeEnum;
 use App\Models\Message;
+use App\Services\TelegramApiService;
 
 class DefaultMessageProcessor implements MessageProcessorContract
 {
@@ -25,7 +26,7 @@ class DefaultMessageProcessor implements MessageProcessorContract
                 'keyboard' => [
                     [
                         [
-                            'text' => ReplyMarkupEnum::CONTACT,
+                            'text' => ReplyMarkupEnum::REQUEST_CONTACT,
                             'request_contact' => true,
                         ],
                     ],

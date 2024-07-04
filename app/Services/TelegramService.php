@@ -9,7 +9,7 @@ use App\Models\Message;
 use App\Supports\DefaultMessageProcessor;
 use App\Supports\MessageProcessors\BotMessageProcessor;
 use App\Supports\MessageProcessors\CartMessageProcessor;
-use App\Supports\MessageProcessors\ContactMessageProcessor;
+use App\Supports\MessageProcessors\RequestContactMessageProcessor;
 use Illuminate\Support\Arr;
 
 class TelegramService
@@ -39,7 +39,7 @@ class TelegramService
     {
         $messageProcessor = static::detectMessageProcessor($message, [
             BotMessageProcessor::class,
-            ContactMessageProcessor::class,
+            RequestContactMessageProcessor::class,
             CartMessageProcessor::class,
         ]);
 

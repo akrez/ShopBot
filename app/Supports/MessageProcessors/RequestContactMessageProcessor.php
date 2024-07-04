@@ -5,7 +5,7 @@ namespace App\Supports\MessageProcessors;
 use App\Enums\MessageProcessor\ResponseTypeEnum;
 use App\Supports\DefaultMessageProcessor;
 
-class ContactMessageProcessor extends DefaultMessageProcessor
+class RequestContactMessageProcessor extends DefaultMessageProcessor
 {
     public function getResponseType()
     {
@@ -14,7 +14,7 @@ class ContactMessageProcessor extends DefaultMessageProcessor
             and ! empty($content['contact']['first_name'])
             and ! empty($content['contact']['phone_number'])
         ) {
-            return ResponseTypeEnum::CONTACT->value;
+            return ResponseTypeEnum::REQUEST_CONTACT->value;
         }
     }
 }
