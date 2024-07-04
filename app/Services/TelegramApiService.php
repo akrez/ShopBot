@@ -2,22 +2,25 @@
 
 namespace App\Services;
 
+use App\Models\Bot;
 use Illuminate\Support\Facades\Http;
 
 class TelegramApiService
 {
-    private static function getUrl($path)
+    public function __construct(protected Bot $bot) {}
+
+    private function getUrl($path)
     {
         return implode('/', [
             config('telegramapi.base_url'),
-            config('telegramapi.token'),
+            $this->bot->token,
             $path,
         ]);
     }
 
-    private static function sendPostForm($path, $data = [], $headers = [])
+    private function sendPostForm($path, $data = [], $headers = [])
     {
-        $url = static::getUrl($path);
+        $url = $this->getUrl($path);
 
         return Http::withHeaders($headers)
             ->asForm()
@@ -25,12 +28,12 @@ class TelegramApiService
             ->json();
     }
 
-    public static function getMe()
+    public function getMe()
     {
-        return static::sendPostForm('getMe');
+        return $this->sendPostForm('getMe');
     }
 
-    public static function setMyCommands($commands, $optionalParameters = [])
+    public function setMyCommands($commands, $optionalParameters = [])
     {
         $requiredParameters = [
             'commands' => [],
@@ -44,28 +47,28 @@ class TelegramApiService
         }
         $requiredParameters['commands'] = json_encode($requiredParameters['commands']);
 
-        return static::sendPostForm('setMyCommands', array_replace_recursive(
+        return $this->sendPostForm('setMyCommands', array_replace_recursive(
             $optionalParameters,
             $requiredParameters
         ));
     }
 
-    public static function getUpdates($offset = null, $limit = 200)
+    public function getUpdates($offset = null, $limit = 200)
     {
-        return static::sendPostForm('getUpdates', [
+        return $this->sendPostForm('getUpdates', [
             'limit' => $limit,
             'offset' => $offset,
         ]);
     }
 
-    public static function sendMessage($chatId, $text, $optionalParameters = [])
+    public function sendMessage($chatId, $text, $optionalParameters = [])
     {
         $requiredParameters = [
             'chat_id' => $chatId,
             'text' => $text,
         ];
 
-        return static::sendPostForm('sendMessage', array_replace_recursive(
+        return $this->sendPostForm('sendMessage', array_replace_recursive(
             $optionalParameters,
             $requiredParameters
         ));

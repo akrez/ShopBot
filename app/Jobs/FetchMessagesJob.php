@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Contracts\MessageProcessorContract;
 use App\Models\Bot;
 use App\Services\TelegramService;
 use Illuminate\Bus\Queueable;
@@ -11,22 +10,20 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SendMessageJob implements ShouldQueue
+class FetchMessagesJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(private MessageProcessorContract $messageProcessor)
-    {
-    }
+    public function __construct(protected Bot $bot) {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        TelegramService::sendMessage($this->messageProcessor);
+        (new TelegramService)->fetchMessages($this->bot);
     }
 }

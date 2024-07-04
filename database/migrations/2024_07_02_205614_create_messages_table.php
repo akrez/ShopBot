@@ -17,6 +17,7 @@ return new class extends Migration
             $table->json('message_json')->nullable();
             $table->longText('message_text')->nullable();
             $table->string('processor')->nullable();
+            $table->foreignId('bot_id')->constrained()->cascadeOnDelete();
             $table->softDeletes()->nullable();
             $table->timestamps();
         });

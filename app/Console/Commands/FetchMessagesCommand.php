@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Services\TelegramService;
+use App\Jobs\FetchMessagesJob;
+use App\Models\Bot;
 use Illuminate\Console\Command;
 
 class FetchMessagesCommand extends Command
@@ -26,6 +27,8 @@ class FetchMessagesCommand extends Command
      */
     public function handle()
     {
-        TelegramService::fetchMessages();
+        foreach (Bot::all() as $bot) {
+            FetchMessagesJob::dispatch($bot);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Bot;
 use App\Models\Message;
 use App\Services\TelegramService;
 use App\Supports\DefaultMessageProcessor;
@@ -22,14 +23,18 @@ class ProcessMessageJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(private Message $message) {}
+    public function __construct(
+        private Bot $bot,
+        private Message $message
+    ) {
+    }
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        TelegramService::processMessage($this->message, [
+        TelegramService::processMessage($this->bot, $this->message, [
             BotMessageProcessor::class,
             RequestContactMessageProcessor::class,
             CartMessageProcessor::class,

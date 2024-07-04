@@ -5,15 +5,16 @@ namespace App\Services;
 use App\Contracts\MessageProcessorContract;
 use App\Jobs\ProcessMessageJob;
 use App\Jobs\SendMessageJob;
+use App\Models\Bot;
 use App\Models\Message;
 use Illuminate\Support\Arr;
 
 class TelegramService
 {
-    public static function fetchMessages()
+    public static function fetchMessages(Bot $bot)
     {
         $maxId = Message::max('id');
-        $response = TelegramApiService::getUpdates($maxId + 1);
+        $response = (new TelegramApiService($bot))->getUpdates($maxId + 1);
         $results = Arr::get($response, 'result', []);
         //
         foreach ($results as $result) {
@@ -22,21 +23,23 @@ class TelegramService
             //
             $message = Message::create([
                 'id' => $id,
+                'bot_id' => $bot->id,
                 'chat_id' => ($content['chat']['id'] ?? null),
                 'message_text' => ($content['text'] ?? null),
                 'message_json' => json_encode($content),
             ]);
             //
-            ProcessMessageJob::dispatch($message);
+            ProcessMessageJob::dispatch($bot, $message);
         }
     }
 
     /**
      * @param  array<int, MessageProcessorContract>  $messageProcessorClasses
      */
-    public static function processMessage(Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): void
+    public static function processMessage(Bot $bot, Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): void
     {
         $messageProcessor = static::detectMessageProcessor(
+            $bot,
             $message,
             $messageProcessorClasses,
             $defaultMessageProcessorClass
@@ -57,15 +60,15 @@ class TelegramService
     /**
      * @param  array<int, MessageProcessorContract>  $messageProcessorClasses
      */
-    protected static function detectMessageProcessor(Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): MessageProcessorContract
+    protected static function detectMessageProcessor(Bot $bot, Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): MessageProcessorContract
     {
         foreach ($messageProcessorClasses as $messageProcessorClass) {
-            $messageProcessor = new $messageProcessorClass($message);
+            $messageProcessor = new $messageProcessorClass($bot, $message);
             if ($messageProcessor->isProcessor()) {
                 return $messageProcessor;
             }
         }
 
-        return new $defaultMessageProcessorClass($message);
+        return new $defaultMessageProcessorClass($bot, $message);
     }
 }

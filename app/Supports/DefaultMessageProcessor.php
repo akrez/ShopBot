@@ -4,18 +4,24 @@ namespace App\Supports;
 
 use App\Contracts\MessageProcessorContract;
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
+use App\Models\Bot;
 use App\Models\Message;
+use App\Services\TelegramApiService;
 
 class DefaultMessageProcessor implements MessageProcessorContract
 {
-    public function __construct(protected Message $message) {}
+    public function __construct(protected Bot $bot, protected Message $message)
+    {
+    }
 
     public function isProcessor()
     {
         return true;
     }
 
-    public function sendResponse() {}
+    public function sendResponse()
+    {
+    }
 
     public function getDefaultReplyMarkup()
     {
