@@ -6,11 +6,6 @@ use App\Contracts\MessageProcessorContract;
 use App\Jobs\ProcessMessageJob;
 use App\Jobs\SendMessageJob;
 use App\Models\Message;
-use App\Supports\DefaultMessageProcessor;
-use App\Supports\MessageProcessors\BotMessageProcessor;
-use App\Supports\MessageProcessors\CartMessageProcessor;
-use App\Supports\MessageProcessors\ContactUsMessageProcessor;
-use App\Supports\MessageProcessors\RequestContactMessageProcessor;
 use Illuminate\Support\Arr;
 
 class TelegramService
@@ -36,14 +31,16 @@ class TelegramService
         }
     }
 
-    public static function processMessage(Message $message)
+    /**
+     * @param  array<int, MessageProcessorContract>  $messageProcessorClasses
+     */
+    public static function processMessage(Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): void
     {
-        $messageProcessor = static::detectMessageProcessor($message, [
-            BotMessageProcessor::class,
-            RequestContactMessageProcessor::class,
-            CartMessageProcessor::class,
-            ContactUsMessageProcessor::class,
-        ]);
+        $messageProcessor = static::detectMessageProcessor(
+            $message,
+            $messageProcessorClasses,
+            $defaultMessageProcessorClass
+        );
 
         $message->update([
             'response_type' => $messageProcessor->getResponseType(),
@@ -60,7 +57,7 @@ class TelegramService
     /**
      * @param  array<int, MessageProcessorContract>  $messageProcessorClasses
      */
-    protected static function detectMessageProcessor(Message $message, array $messageProcessorClasses): MessageProcessorContract
+    protected static function detectMessageProcessor(Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): MessageProcessorContract
     {
         foreach ($messageProcessorClasses as $messageProcessorClass) {
             $messageProcessor = new $messageProcessorClass($message);
@@ -69,11 +66,6 @@ class TelegramService
             }
         }
 
-        return static::getDefaultMessageProcessorInstance($message);
-    }
-
-    protected static function getDefaultMessageProcessorInstance(Message $message): MessageProcessorContract
-    {
-        return new DefaultMessageProcessor($message);
+        return new $defaultMessageProcessorClass($message);
     }
 }
