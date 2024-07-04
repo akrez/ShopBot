@@ -11,12 +11,14 @@ use App\Supports\MessageProcessors\CartMessageProcessor;
 use App\Supports\MessageProcessors\ContactUsMessageProcessor;
 use App\Supports\MessageProcessors\RequestContactMessageProcessor;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessMessageJob implements ShouldQueue
+class ProcessMessageJob implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -27,6 +29,33 @@ class ProcessMessageJob implements ShouldQueue
         private Bot $bot,
         private Message $message
     ) {}
+
+    /**
+     * The number of seconds after which the job's unique lock will be released.
+     *
+     * @var int
+     */
+    public $uniqueFor = 60;
+
+    /**
+     * Get the unique ID for the job.
+     */
+    public function uniqueId(): string
+    {
+        return $this->bot->id.'-'.$this->message->id;
+    }
+
+    /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array<int, object>
+     */
+    public function middleware(): array
+    {
+        return [
+            new WithoutOverlapping($this->bot->id.'-'.$this->message->id),
+        ];
+    }
 
     /**
      * Execute the job.

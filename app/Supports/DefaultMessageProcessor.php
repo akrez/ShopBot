@@ -9,7 +9,7 @@ use App\Models\Message;
 
 class DefaultMessageProcessor implements MessageProcessorContract
 {
-    public function __construct(protected Bot $bot, protected Message $message) {}
+    public function __construct(public Bot $bot, public Message $message) {}
 
     public function isProcessor()
     {
