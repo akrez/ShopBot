@@ -4,16 +4,15 @@ namespace App\Supports;
 
 use App\Contracts\MessageProcessorContract;
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
-use App\Enums\MessageProcessor\ResponseTypeEnum;
 use App\Models\Message;
 
 class DefaultMessageProcessor implements MessageProcessorContract
 {
     public function __construct(protected Message $message) {}
 
-    public function getResponseType()
+    public function isProcessor()
     {
-        return ResponseTypeEnum::DEFAULT->value;
+        return true;
     }
 
     public function sendResponse() {}

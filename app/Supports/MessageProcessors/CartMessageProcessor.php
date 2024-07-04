@@ -3,15 +3,16 @@
 namespace App\Supports\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
-use App\Enums\MessageProcessor\ResponseTypeEnum;
 use App\Supports\DefaultMessageProcessor;
 
 class CartMessageProcessor extends DefaultMessageProcessor
 {
-    public function getResponseType()
+    public function isProcessor()
     {
         if ($this->message->message_text === ReplyMarkupEnum::CART->value) {
-            return ResponseTypeEnum::CART->value;
+            return true;
         }
+
+        return false;
     }
 }

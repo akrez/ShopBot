@@ -43,7 +43,7 @@ class TelegramService
         );
 
         $message->update([
-            'response_type' => $messageProcessor->getResponseType(),
+            'processor' => $messageProcessor::class,
         ]);
 
         SendMessageJob::dispatch($messageProcessor);
@@ -61,7 +61,7 @@ class TelegramService
     {
         foreach ($messageProcessorClasses as $messageProcessorClass) {
             $messageProcessor = new $messageProcessorClass($message);
-            if ($messageProcessor->getResponseType()) {
+            if ($messageProcessor->isProcessor()) {
                 return $messageProcessor;
             }
         }

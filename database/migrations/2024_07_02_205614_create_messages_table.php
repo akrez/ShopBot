@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\MessageProcessor\ResponseTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,13 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('chat_id')->nullable();
             $table->json('message_json')->nullable();
             $table->longText('message_text')->nullable();
-            $table->enum('response_type', [
-                ResponseTypeEnum::BOT->value,
-                ResponseTypeEnum::REQUEST_CONTACT->value,
-                ResponseTypeEnum::CART->value,
-                ResponseTypeEnum::DEFAULT->value,
-                ResponseTypeEnum::CONTACT_US->value,
-            ])->nullable();
+            $table->string('processor')->nullable();
             $table->softDeletes()->nullable();
             $table->timestamps();
         });
