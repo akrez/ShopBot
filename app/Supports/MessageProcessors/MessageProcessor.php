@@ -25,16 +25,18 @@ class MessageProcessor implements MessageProcessorContract
                 'keyboard' => [
                     [
                         [
-                            'text' => ReplyMarkupEnum::CATEGORIES,
+                            'text' => ReplyMarkupEnum::CONTACT_US,
                         ],
                         [
-                            'text' => ReplyMarkupEnum::CONTACT_US,
+                            'text' => ReplyMarkupEnum::CATEGORIES,
                         ],
                     ],
                     [
                         [
                             'text' => ReplyMarkupEnum::CART,
                         ],
+                    ],
+                    [
                         [
                             'text' => ReplyMarkupEnum::REQUEST_CONTACT,
                             'request_contact' => true,
