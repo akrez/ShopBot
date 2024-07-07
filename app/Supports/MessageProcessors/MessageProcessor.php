@@ -30,6 +30,11 @@ class MessageProcessor implements MessageProcessorContract
                     ],
                     [
                         [
+                            'text' => ReplyMarkupEnum::CATEGORIES,
+                        ],
+                    ],
+                    [
+                        [
                             'text' => ReplyMarkupEnum::CONTACT_US,
                         ],
                     ],
