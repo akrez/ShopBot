@@ -43,7 +43,7 @@ class TelegramService
             //
             $messages[] = $message;
         }
-        //
+
         return $messages;
     }
 
