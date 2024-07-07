@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\FetchMessagesJob;
-use App\Models\Bot;
+use App\Jobs\DispatchFetchMessagesJob;
 use Illuminate\Console\Command;
 
 class FetchMessagesCommand extends Command
@@ -27,8 +26,6 @@ class FetchMessagesCommand extends Command
      */
     public function handle()
     {
-        foreach (Bot::all() as $bot) {
-            FetchMessagesJob::dispatch($bot);
-        }
+        DispatchFetchMessagesJob::dispatch();
     }
 }
