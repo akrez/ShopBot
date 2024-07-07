@@ -25,7 +25,7 @@ class TelegramService
     {
         $messages = [];
         //
-        $maxId = Message::max('id');
+        $maxId = Message::where('bot_id', $bot->id)->max('id');
         $response = (new TelegramApiService($bot))->getUpdates($maxId + 1);
         $results = Arr::get($response, 'result', []);
         //
