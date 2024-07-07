@@ -5,11 +5,6 @@ namespace App\Jobs;
 use App\Models\Bot;
 use App\Models\Message;
 use App\Services\TelegramService;
-use App\Supports\MessageProcessors\BotMessageProcessor;
-use App\Supports\MessageProcessors\CartMessageProcessor;
-use App\Supports\MessageProcessors\ContactUsMessageProcessor;
-use App\Supports\MessageProcessors\RequestContactMessageProcessor;
-use App\Supports\MessageProcessors\SearchMessageProcessor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -64,11 +59,11 @@ class ProcessMessageJob implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        TelegramService::processMessageJob($this->bot, $this->message, [
-            BotMessageProcessor::class,
-            RequestContactMessageProcessor::class,
-            CartMessageProcessor::class,
-            ContactUsMessageProcessor::class,
-        ], SearchMessageProcessor::class);
+        TelegramService::processMessageJob(
+            $this->bot,
+            $this->message,
+            TelegramService::getMessageProcessorClasses(),
+            TelegramService::getDefaultMessageProcessorClass()
+        );
     }
 }

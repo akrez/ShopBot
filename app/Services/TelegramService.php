@@ -7,11 +7,34 @@ use App\Jobs\ProcessMessageJob;
 use App\Jobs\SendMessageJob;
 use App\Models\Bot;
 use App\Models\Message;
+use App\Supports\MessageProcessors\BotMessageProcessor;
+use App\Supports\MessageProcessors\CartMessageProcessor;
+use App\Supports\MessageProcessors\ContactUsMessageProcessor;
+use App\Supports\MessageProcessors\RequestContactMessageProcessor;
+use App\Supports\MessageProcessors\SearchMessageProcessor;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 
 class TelegramService
 {
+    /**
+     * @return array<int, MessageProcessorContract>
+     */
+    public static function getMessageProcessorClasses(): array
+    {
+        return [
+            BotMessageProcessor::class,
+            RequestContactMessageProcessor::class,
+            CartMessageProcessor::class,
+            ContactUsMessageProcessor::class,
+        ];
+    }
+
+    public static function getDefaultMessageProcessorClass(): string
+    {
+        return SearchMessageProcessor::class;
+    }
+
     /**
      * @return array<int, Bot>
      */
