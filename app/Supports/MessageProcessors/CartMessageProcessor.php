@@ -7,7 +7,7 @@ use App\Supports\DefaultMessageProcessor;
 
 class CartMessageProcessor extends DefaultMessageProcessor
 {
-    public function isProcessor()
+    public function shouldProcess()
     {
         if ($this->message->message_text === ReplyMarkupEnum::CART->value) {
             return true;

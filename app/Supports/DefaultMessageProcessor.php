@@ -11,12 +11,12 @@ class DefaultMessageProcessor implements MessageProcessorContract
 {
     public function __construct(public Bot $bot, public Message $message) {}
 
-    public function isProcessor()
+    public function shouldProcess()
     {
         return true;
     }
 
-    public function sendResponse() {}
+    public function process() {}
 
     public function getDefaultReplyMarkup()
     {

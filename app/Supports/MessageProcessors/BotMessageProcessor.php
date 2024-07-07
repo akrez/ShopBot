@@ -6,7 +6,7 @@ use App\Supports\DefaultMessageProcessor;
 
 class BotMessageProcessor extends DefaultMessageProcessor
 {
-    public function isProcessor()
+    public function shouldProcess()
     {
         if (
             isset($content['from']['is_bot'])

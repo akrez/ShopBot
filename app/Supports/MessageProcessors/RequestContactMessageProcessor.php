@@ -6,7 +6,7 @@ use App\Supports\DefaultMessageProcessor;
 
 class RequestContactMessageProcessor extends DefaultMessageProcessor
 {
-    public function isProcessor()
+    public function shouldProcess()
     {
         if (
             ! empty($content['contact']['user_id'])

@@ -9,7 +9,7 @@ interface MessageProcessorContract
 {
     public function __construct(Bot $bot, Message $message);
 
-    public function isProcessor();
+    public function shouldProcess();
 
-    public function sendResponse();
+    public function process();
 }

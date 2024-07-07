@@ -7,7 +7,7 @@ use App\Supports\DefaultMessageProcessor;
 
 class ContactUsMessageProcessor extends DefaultMessageProcessor
 {
-    public function isProcessor()
+    public function shouldProcess()
     {
         if ($this->message->message_text === ReplyMarkupEnum::CONTACT_US->value) {
             return true;

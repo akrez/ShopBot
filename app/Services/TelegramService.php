@@ -90,7 +90,7 @@ class TelegramService
 
     public static function sendMessage(MessageProcessorContract $messageProcessor)
     {
-        $messageProcessor->sendResponse();
+        $messageProcessor->process();
     }
 
     /**
@@ -104,7 +104,7 @@ class TelegramService
     ): MessageProcessorContract {
         foreach ($messageProcessorClasses as $messageProcessorClass) {
             $messageProcessor = new $messageProcessorClass($bot, $message);
-            if ($messageProcessor->isProcessor()) {
+            if ($messageProcessor->shouldProcess()) {
                 return $messageProcessor;
             }
         }
