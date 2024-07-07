@@ -7,10 +7,19 @@ use App\Jobs\ProcessMessageJob;
 use App\Jobs\SendMessageJob;
 use App\Models\Bot;
 use App\Models\Message;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 
 class TelegramService
 {
+    /**
+     * @return array<int, Bot>
+     */
+    public static function getBots(): Collection
+    {
+        return Bot::all();
+    }
+
     public static function fetchMessagesJob(Bot $bot)
     {
         foreach (static::fetchMessages($bot) as $message) {
