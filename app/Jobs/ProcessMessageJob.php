@@ -62,7 +62,7 @@ class ProcessMessageJob implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        TelegramService::processMessage($this->bot, $this->message, [
+        TelegramService::processMessageJob($this->bot, $this->message, [
             BotMessageProcessor::class,
             RequestContactMessageProcessor::class,
             CartMessageProcessor::class,

@@ -53,6 +53,6 @@ class FetchMessagesJob implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        (new TelegramService)->fetchMessages($this->bot);
+        (new TelegramService)->fetchMessagesJob($this->bot);
     }
 }

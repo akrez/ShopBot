@@ -11,8 +11,20 @@ use Illuminate\Support\Arr;
 
 class TelegramService
 {
-    public static function fetchMessages(Bot $bot)
+    public static function fetchMessagesJob(Bot $bot)
     {
+        foreach (static::fetchMessages($bot) as $message) {
+            ProcessMessageJob::dispatch($bot, $message);
+        }
+    }
+
+    /**
+     * @return array<int, Message>
+     */
+    public static function fetchMessages(Bot $bot): array
+    {
+        $messages = [];
+        //
         $maxId = Message::max('id');
         $response = (new TelegramApiService($bot))->getUpdates($maxId + 1);
         $results = Arr::get($response, 'result', []);
@@ -29,14 +41,23 @@ class TelegramService
                 'message_json' => json_encode($content),
             ]);
             //
-            ProcessMessageJob::dispatch($bot, $message);
+            $messages[] = $message;
         }
+
+        return $messages;
+    }
+
+    public static function processMessageJob(Bot $bot, Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): void
+    {
+        $messageProcessor = static::processMessage($bot, $message, $messageProcessorClasses, $defaultMessageProcessorClass);
+
+        SendMessageJob::dispatch($messageProcessor);
     }
 
     /**
      * @param  array<int, MessageProcessorContract>  $messageProcessorClasses
      */
-    public static function processMessage(Bot $bot, Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): void
+    public static function processMessage(Bot $bot, Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): MessageProcessorContract
     {
         $messageProcessor = static::detectMessageProcessor(
             $bot,
@@ -49,7 +70,7 @@ class TelegramService
             'processor' => $messageProcessor::class,
         ]);
 
-        SendMessageJob::dispatch($messageProcessor);
+        return $messageProcessor;
     }
 
     public static function sendMessage(MessageProcessorContract $messageProcessor)
