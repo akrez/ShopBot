@@ -5,11 +5,11 @@ namespace App\Jobs;
 use App\Models\Bot;
 use App\Models\Message;
 use App\Services\TelegramService;
-use App\Supports\DefaultMessageProcessor;
 use App\Supports\MessageProcessors\BotMessageProcessor;
 use App\Supports\MessageProcessors\CartMessageProcessor;
 use App\Supports\MessageProcessors\ContactUsMessageProcessor;
 use App\Supports\MessageProcessors\RequestContactMessageProcessor;
+use App\Supports\MessageProcessors\SearchMessageProcessor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -69,6 +69,6 @@ class ProcessMessageJob implements ShouldBeUnique, ShouldQueue
             RequestContactMessageProcessor::class,
             CartMessageProcessor::class,
             ContactUsMessageProcessor::class,
-        ], DefaultMessageProcessor::class);
+        ], SearchMessageProcessor::class);
     }
 }
