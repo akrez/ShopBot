@@ -43,22 +43,37 @@ class TelegramService
             //
             $messages[] = $message;
         }
-
+        //
         return $messages;
     }
 
-    public static function processMessageJob(Bot $bot, Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): void
-    {
-        $messageProcessor = static::processMessage($bot, $message, $messageProcessorClasses, $defaultMessageProcessorClass);
-
+    /**
+     * @param  array<int, string>  $messageProcessorClasses
+     */
+    public static function processMessageJob(
+        Bot $bot,
+        Message $message,
+        array $messageProcessorClasses,
+        string $defaultMessageProcessorClass
+    ): void {
+        $messageProcessor = static::processMessage(
+            $bot,
+            $message,
+            $messageProcessorClasses,
+            $defaultMessageProcessorClass
+        );
         SendMessageJob::dispatch($messageProcessor);
     }
 
     /**
      * @param  array<int, MessageProcessorContract>  $messageProcessorClasses
      */
-    public static function processMessage(Bot $bot, Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): MessageProcessorContract
-    {
+    public static function processMessage(
+        Bot $bot,
+        Message $message,
+        array $messageProcessorClasses,
+        string $defaultMessageProcessorClass
+    ): MessageProcessorContract {
         $messageProcessor = static::detectMessageProcessor(
             $bot,
             $message,
@@ -81,8 +96,12 @@ class TelegramService
     /**
      * @param  array<int, MessageProcessorContract>  $messageProcessorClasses
      */
-    protected static function detectMessageProcessor(Bot $bot, Message $message, array $messageProcessorClasses, string $defaultMessageProcessorClass): MessageProcessorContract
-    {
+    protected static function detectMessageProcessor(
+        Bot $bot,
+        Message $message,
+        array $messageProcessorClasses,
+        string $defaultMessageProcessorClass
+    ): MessageProcessorContract {
         foreach ($messageProcessorClasses as $messageProcessorClass) {
             $messageProcessor = new $messageProcessorClass($bot, $message);
             if ($messageProcessor->isProcessor()) {
