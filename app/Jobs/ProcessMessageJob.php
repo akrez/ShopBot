@@ -55,7 +55,7 @@ class ProcessMessageJob implements ShouldBeUnique, ShouldQueue
     public function middleware(): array
     {
         return [
-            new WithoutOverlapping($this->bot->id.'-'.$this->message->id),
+            new WithoutOverlapping($this->uniqueId()),
         ];
     }
 

@@ -46,7 +46,7 @@ class DispatchFetchMessagesJob implements ShouldBeUnique, ShouldQueue
     public function middleware(): array
     {
         return [
-            new WithoutOverlapping(),
+            new WithoutOverlapping($this->uniqueId()),
         ];
     }
 

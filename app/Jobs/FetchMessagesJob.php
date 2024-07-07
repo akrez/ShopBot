@@ -47,7 +47,7 @@ class FetchMessagesJob implements ShouldBeUnique, ShouldQueue
     public function middleware(): array
     {
         return [
-            new WithoutOverlapping($this->bot->id),
+            new WithoutOverlapping($this->uniqueId()),
         ];
     }
 
