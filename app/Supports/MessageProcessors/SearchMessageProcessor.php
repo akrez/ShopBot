@@ -10,8 +10,10 @@ class SearchMessageProcessor extends MessageProcessor
     {
         return (new TelegramApiService($this->bot))->sendMessage(
             $this->message->chat_id,
-            $this->message->id,
-            $this->getDefaultReplyMarkup()
+            '<br>جستجو برای</br> '.$this->message->message_text,
+            $this->getDefaultReplyMarkup() + [
+                'parse_mode' => 'HTML',
+            ]
         );
     }
 }
