@@ -19,7 +19,10 @@ class FetchMessagesJob implements ShouldBeUnique, ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(protected Bot $bot) {}
+    public function __construct(protected Bot $bot)
+    {
+        $this->onQueue('FetchMessagesJob');
+    }
 
     /**
      * The number of seconds after which the job's unique lock will be released.

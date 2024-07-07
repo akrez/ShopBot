@@ -28,7 +28,9 @@ class ProcessMessageJob implements ShouldBeUnique, ShouldQueue
     public function __construct(
         private Bot $bot,
         private Message $message
-    ) {}
+    ) {
+        $this->onQueue('ProcessMessageJob');
+    }
 
     /**
      * The number of seconds after which the job's unique lock will be released.

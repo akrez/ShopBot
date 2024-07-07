@@ -18,7 +18,10 @@ class DispatchFetchMessagesJob implements ShouldBeUnique, ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct() {}
+    public function __construct()
+    {
+        $this->onQueue('DispatchFetchMessagesJob');
+    }
 
     /**
      * The number of seconds after which the job's unique lock will be released.

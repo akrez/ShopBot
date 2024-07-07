@@ -19,7 +19,10 @@ class SendMessageJob implements ShouldBeUnique, ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(private MessageProcessorContract $messageProcessor) {}
+    public function __construct(private MessageProcessorContract $messageProcessor)
+    {
+        $this->onQueue('SendMessageJob');
+    }
 
     /**
      * The number of seconds after which the job's unique lock will be released.
