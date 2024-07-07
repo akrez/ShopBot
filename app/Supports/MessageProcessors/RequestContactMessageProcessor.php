@@ -2,9 +2,7 @@
 
 namespace App\Supports\MessageProcessors;
 
-use App\Supports\DefaultMessageProcessor;
-
-class RequestContactMessageProcessor extends DefaultMessageProcessor
+class RequestContactMessageProcessor extends MessageProcessor
 {
     public function shouldProcess()
     {

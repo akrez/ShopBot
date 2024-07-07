@@ -3,9 +3,8 @@
 namespace App\Supports\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
-use App\Supports\DefaultMessageProcessor;
 
-class ContactUsMessageProcessor extends DefaultMessageProcessor
+class ContactUsMessageProcessor extends MessageProcessor
 {
     public function shouldProcess()
     {

@@ -2,9 +2,7 @@
 
 namespace App\Supports\MessageProcessors;
 
-use App\Supports\DefaultMessageProcessor;
-
-class BotMessageProcessor extends DefaultMessageProcessor
+class BotMessageProcessor extends MessageProcessor
 {
     public function shouldProcess()
     {

@@ -3,9 +3,8 @@
 namespace App\Supports\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
-use App\Supports\DefaultMessageProcessor;
 
-class CartMessageProcessor extends DefaultMessageProcessor
+class CartMessageProcessor extends MessageProcessor
 {
     public function shouldProcess()
     {

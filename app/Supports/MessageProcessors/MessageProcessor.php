@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Supports;
+namespace App\Supports\MessageProcessors;
 
 use App\Contracts\MessageProcessorContract;
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Models\Bot;
 use App\Models\Message;
 
-class DefaultMessageProcessor implements MessageProcessorContract
+class MessageProcessor implements MessageProcessorContract
 {
     public function __construct(public Bot $bot, public Message $message) {}
 
