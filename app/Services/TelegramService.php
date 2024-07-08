@@ -10,6 +10,7 @@ use App\Models\Message;
 use App\Supports\MessageProcessors\BotMessageProcessor;
 use App\Supports\MessageProcessors\CartMessageProcessor;
 use App\Supports\MessageProcessors\CategoriesMessageProcessor;
+use App\Supports\MessageProcessors\CategoryMessageProcessor;
 use App\Supports\MessageProcessors\ContactUsMessageProcessor;
 use App\Supports\MessageProcessors\RequestContactMessageProcessor;
 use App\Supports\MessageProcessors\SearchMessageProcessor;
@@ -26,6 +27,7 @@ class TelegramService
         return [
             BotMessageProcessor::class,
             RequestContactMessageProcessor::class,
+            CategoryMessageProcessor::class,
             CategoriesMessageProcessor::class,
             CartMessageProcessor::class,
             ContactUsMessageProcessor::class,
