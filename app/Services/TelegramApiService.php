@@ -73,4 +73,17 @@ class TelegramApiService
             $requiredParameters
         ));
     }
+
+    public function sendMediaGroup($chatId, $mediaArray, $optionalParameters = [])
+    {
+        $requiredParameters = [
+            'chat_id' => $chatId,
+            'media' => json_encode(array_values($mediaArray)),
+        ];
+
+        return $this->sendPostForm('sendMediaGroup', array_replace_recursive(
+            $optionalParameters,
+            $requiredParameters
+        ));
+    }
 }
