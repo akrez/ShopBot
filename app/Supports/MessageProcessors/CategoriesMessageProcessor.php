@@ -5,6 +5,7 @@ namespace App\Supports\MessageProcessors;
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ShopApi;
 use App\Services\TelegramApiService;
+use Illuminate\Support\Arr;
 
 class CategoriesMessageProcessor extends MessageProcessor
 {
@@ -23,9 +24,14 @@ class CategoriesMessageProcessor extends MessageProcessor
     {
         $text = [];
         $commands = [];
-        foreach (resolve(ShopApi::class)->categories() as $categoryIndex => $category) {
-            $text[] = '/'.static::PREFIX.($categoryIndex + 1).' '.$category;
-            $commands[static::PREFIX.($categoryIndex + 1)] = $category;
+
+        $jsonResponse = resolve(ShopApi::class)->json();
+
+        $categories = Arr::get($jsonResponse, 'blog_categories.0.values', []);
+
+        foreach ($categories as $categoryIndex => $category) {
+            $text[] = '/'.static::PREFIX.($categoryIndex).' '.$category;
+            $commands[static::PREFIX.($categoryIndex)] = $category;
         }
 
         (new TelegramApiService($this->bot))->sendMessage(

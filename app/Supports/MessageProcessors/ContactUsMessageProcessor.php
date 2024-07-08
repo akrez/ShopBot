@@ -5,6 +5,7 @@ namespace App\Supports\MessageProcessors;
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ShopApi;
 use App\Services\TelegramApiService;
+use Illuminate\Support\Arr;
 
 class ContactUsMessageProcessor extends MessageProcessor
 {
@@ -20,7 +21,12 @@ class ContactUsMessageProcessor extends MessageProcessor
     public function process()
     {
         $text = [];
-        foreach (resolve(ShopApi::class)->contactUs() as $contactUs) {
+
+        $jsonResponse = resolve(ShopApi::class)->json();
+
+        $contacts = Arr::get($jsonResponse, 'contacts', []);
+
+        foreach ($contacts as $contactUs) {
             $text[] = '<b>'.$contactUs['title'].'</b> '.$contactUs['content'];
         }
 
