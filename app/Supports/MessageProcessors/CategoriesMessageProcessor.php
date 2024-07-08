@@ -36,7 +36,7 @@ class CategoriesMessageProcessor extends MessageProcessor
 
         (new TelegramApiService($this->bot))->sendMessage(
             $this->message->chat_id,
-            implode("\n", $text),
+            implode("\n\n", $text),
             $this->getDefaultReplyMarkup()
         );
 
