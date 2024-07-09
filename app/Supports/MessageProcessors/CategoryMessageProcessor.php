@@ -36,6 +36,7 @@ class CategoryMessageProcessor extends MessageProcessor
 
         $allProducts = Arr::get($jsonResponse, 'products', []);
         $allProductsImages = Arr::get($jsonResponse, 'products_images', []);
+        $allProductsProperties = Arr::get($jsonResponse, 'products_properties', []);
 
         $needleProducts = collect($allProducts)->filter(function ($item) use ($needleProductIds) {
             return in_array($item['id'], $needleProductIds);
@@ -43,6 +44,18 @@ class CategoryMessageProcessor extends MessageProcessor
 
         foreach ($needleProducts as $needleProduct) {
             $caption = ['***'.$needleProduct['title'].'***'];
+
+            $needleProductProperties = collect($allProductsProperties)->filter(function ($item) use ($needleProduct) {
+                return intval($item['model_id']) === intval($needleProduct['id']);
+            })->values();
+            if ($needleProductProperties) {
+                $caption[] = '';
+                foreach ($needleProductProperties as $needleProductProperty) {
+                    if ($needleProductProperty['values']) {
+                        $caption[] = '***'.$needleProductProperty['key'].'***'.' '.implode(', ', $needleProductProperty['values']);
+                    }
+                }
+            }
 
             $needleProductImages = collect($allProductsImages)->filter(function ($item) use ($needleProduct) {
                 return intval($item['model_id']) === intval($needleProduct['id']);
