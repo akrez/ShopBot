@@ -5,6 +5,7 @@ namespace App\Supports\MessageProcessors;
 use App\Services\ShopApi;
 use App\Services\TelegramApiService;
 use App\Traits\MessageProcessorTrait;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class SearchMessageProcessor extends MessageProcessor
@@ -26,7 +27,9 @@ class SearchMessageProcessor extends MessageProcessor
 
         $jsonResponse = resolve(ShopApi::class)->json();
 
-        $filterProductIds = collect($jsonResponse)->filter(function ($item) use ($productTitleFilter) {
+        $apiProducts = Arr::get($jsonResponse, 'products', []);
+
+        $filterProductIds = collect($apiProducts)->filter(function ($item) use ($productTitleFilter) {
             return Str::contains($item['title'], $productTitleFilter, true);
         })->pluck('id')->toArray();
 
