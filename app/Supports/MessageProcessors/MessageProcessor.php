@@ -9,14 +9,18 @@ use App\Models\Message;
 
 class MessageProcessor implements MessageProcessorContract
 {
-    public function __construct(public Bot $bot, public Message $message) {}
+    public function __construct(public Bot $bot, public Message $message)
+    {
+    }
 
     public function shouldProcess()
     {
         return true;
     }
 
-    public function process() {}
+    public function process()
+    {
+    }
 
     public function getDefaultReplyMarkup()
     {
@@ -31,6 +35,7 @@ class MessageProcessor implements MessageProcessorContract
                             'text' => ReplyMarkupEnum::CATEGORIES,
                         ],
                     ],
+                    /*
                     [
                         [
                             'text' => ReplyMarkupEnum::CART,
@@ -42,6 +47,7 @@ class MessageProcessor implements MessageProcessorContract
                             'request_contact' => true,
                         ],
                     ],
+                    */
                 ],
                 'resize_keyboard' => true,
                 'one_time_keyboard' => true,
