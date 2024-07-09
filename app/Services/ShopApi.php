@@ -8,6 +8,8 @@ class ShopApi
 {
     public function json()
     {
-        return Http::get('https://akrez.ir/api/shahabtahrir')->json();
+        return once(function () {
+            return Http::get('https://akrez.ir/api/shahabtahrir')->json();
+        });
     }
 }
