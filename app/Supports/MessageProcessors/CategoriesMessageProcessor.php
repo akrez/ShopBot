@@ -5,11 +5,12 @@ namespace App\Supports\MessageProcessors;
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ShopApi;
 use App\Services\TelegramApiService;
+use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 
 class CategoriesMessageProcessor extends MessageProcessor
 {
-    const PREFIX = 'category_';
+    use MessageProcessorTrait;
 
     public function shouldProcess()
     {
