@@ -69,7 +69,7 @@ class CategoryMessageProcessor extends MessageProcessor
                         'media' => 'https://gallery.akrezing.ir/'.$needleProductImageName,
                     ];
                     if ($caption) {
-                        $medias[$needleProductImageName]['caption'] = implode("\n\n", $caption);
+                        $medias[$needleProductImageName]['caption'] = implode("\n", $caption);
                         $medias[$needleProductImageName]['parse_mode'] = 'MarkdownV2';
                         $caption = null;
                     }
