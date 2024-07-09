@@ -56,7 +56,9 @@ trait MessageProcessorTrait
                 (new TelegramApiService($this->bot))->sendMediaGroup(
                     $this->message->chat_id,
                     $medias,
-                    $this->getDefaultReplyMarkup()
+                    $this->getDefaultReplyMarkup() + [
+                        'parse_mode' => 'MarkdownV2',
+                    ]
                 );
             } else {
 
