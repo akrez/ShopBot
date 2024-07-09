@@ -43,9 +43,7 @@ class CategoriesMessageProcessor extends MessageProcessor
 
         (new TelegramApiService($this->bot))->setMyCommands(
             $commands,
-            $this->getDefaultReplyMarkup() + [
-                'parse_mode' => 'HTML',
-            ]
+            $this->getDefaultReplyMarkup()
         );
     }
 }

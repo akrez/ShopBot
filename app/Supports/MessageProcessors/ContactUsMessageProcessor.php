@@ -30,14 +30,14 @@ class ContactUsMessageProcessor extends MessageProcessor
         $contacts = Arr::get($jsonResponse, 'contacts', []);
 
         foreach ($contacts as $contactUs) {
-            $text[] = '<b>'.$contactUs['title'].'</b> '.$contactUs['content'];
+            $text[] = '***'.$contactUs['title'].'*** '.$contactUs['content'];
         }
 
         return (new TelegramApiService($this->bot))->sendMessage(
             $this->message->chat_id,
             implode("\n", $text),
             $this->getDefaultReplyMarkup() + [
-                'parse_mode' => 'HTML',
+                'parse_mode' => 'MarkdownV2',
             ]
         );
     }

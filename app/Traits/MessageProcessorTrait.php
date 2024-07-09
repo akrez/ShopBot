@@ -64,7 +64,7 @@ trait MessageProcessorTrait
                     $this->message->chat_id,
                     implode("\n\n", $caption),
                     $this->getDefaultReplyMarkup() + [
-                        'parse_mode' => 'HTML',
+                        'parse_mode' => 'MarkdownV2',
                     ]
                 );
             }
