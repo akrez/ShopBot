@@ -23,6 +23,8 @@ class SearchMessageProcessor extends MessageProcessor
                     'parse_mode' => 'MarkdownV2',
                 ]
             );
+
+            return;
         }
 
         $jsonResponse = resolve(ShopApi::class)->json();
