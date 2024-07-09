@@ -9,18 +9,14 @@ use App\Models\Message;
 
 class MessageProcessor implements MessageProcessorContract
 {
-    public function __construct(public Bot $bot, public Message $message)
-    {
-    }
+    public function __construct(public Bot $bot, public Message $message) {}
 
     public function shouldProcess()
     {
         return true;
     }
 
-    public function process()
-    {
-    }
+    public function process() {}
 
     public function getDefaultReplyMarkup()
     {
