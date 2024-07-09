@@ -5,10 +5,13 @@ namespace App\Supports\MessageProcessors;
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ShopApi;
 use App\Services\TelegramApiService;
+use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 
 class ContactUsMessageProcessor extends MessageProcessor
 {
+    use MessageProcessorTrait;
+
     public function shouldProcess()
     {
         if ($this->message->message_text === ReplyMarkupEnum::CONTACT_US->value) {

@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\TelegramApiService;
 use Illuminate\Support\Arr;
 
@@ -68,5 +69,38 @@ trait MessageProcessorTrait
                 );
             }
         }
+    }
+
+    public function getDefaultReplyMarkup()
+    {
+        return [
+            'reply_markup' => json_encode([
+                'keyboard' => [
+                    [
+                        [
+                            'text' => ReplyMarkupEnum::CONTACT_US,
+                        ],
+                        [
+                            'text' => ReplyMarkupEnum::CATEGORIES,
+                        ],
+                    ],
+                    /*
+                    [
+                        [
+                            'text' => ReplyMarkupEnum::CART,
+                        ],
+                    ],
+                    [
+                        [
+                            'text' => ReplyMarkupEnum::REQUEST_CONTACT,
+                            'request_contact' => true,
+                        ],
+                    ],
+                    */
+                ],
+                'resize_keyboard' => true,
+                'one_time_keyboard' => true,
+            ]),
+        ];
     }
 }
