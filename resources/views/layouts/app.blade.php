@@ -9,10 +9,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="{{ url('images/logo.svg') }}">
     <!-- CSS files -->
-    <link href="{{ url('/dist/css/tabler.rtl.min.css') }}" rel="stylesheet" />
-    <link href="{{ url('/dist/css/tabler-flags.rtl.min.css') }}" rel="stylesheet" />
-    <link href="{{ url('/dist/css/tabler-payments.rtl.min.css') }}" rel="stylesheet" />
-    <link href="{{ url('/dist/css/tabler-vendors.rtl.min.css') }}" rel="stylesheet" />
+    <link href="{{ url('/tabler/css/tabler.rtl.min.css') }}" rel="stylesheet" />
+    <link href="{{ url('/tabler/css/tabler-flags.rtl.min.css') }}" rel="stylesheet" />
+    <link href="{{ url('/tabler/css/tabler-payments.rtl.min.css') }}" rel="stylesheet" />
+    <link href="{{ url('/tabler/css/tabler-vendors.rtl.min.css') }}" rel="stylesheet" />
     <link href="{{ url('/vazirmatn/Vazirmatn-font-face.css') }}" rel="stylesheet" />
     <style>
         :root {
@@ -45,7 +45,8 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                             aria-label="Open user menu">
-                            <span class="avatar avatar-sm" style="background-image: url({{ url('images/logo.svg') }})"></span>
+                            <span class="avatar avatar-sm"
+                                style="background-image: url({{ url('images/logo.svg') }})"></span>
                             <div class="d-none d-xl-block ps-2">
                                 <div>AliAkbar Rezaei</div>
                                 <div class="mt-1 small text-secondary">ShahabTahrirBot</div>
@@ -112,7 +113,7 @@
     </div>
     <!-- Libs JS -->
     <!-- Tabler Core -->
-    <script src="{{ url('/dist/js/tabler.min.js') }}" defer></script>
+    <script src="{{ url('/tabler/js/tabler.min.js') }}" defer></script>
 </body>
 
 </html>
