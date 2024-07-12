@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>@yield('title', config('app.name'))</title>
-    <link rel="shortcut icon" href="logo.svg">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="{{ url('images/logo.svg') }}">
     <!-- CSS files -->
     <link href="{{ url('/dist/css/tabler.rtl.min.css') }}" rel="stylesheet" />
     <link href="{{ url('/dist/css/tabler-flags.rtl.min.css') }}" rel="stylesheet" />
@@ -44,14 +45,21 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                             aria-label="Open user menu">
-                            <span class="avatar avatar-sm" style="background-image: url({{ url('logo.svg') }})"></span>
+                            <span class="avatar avatar-sm" style="background-image: url({{ url('images/logo.svg') }})"></span>
                             <div class="d-none d-xl-block ps-2">
                                 <div>AliAkbar Rezaei</div>
                                 <div class="mt-1 small text-secondary">ShahabTahrirBot</div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href="/sign-in.html" class="dropdown-item">Logout</a>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                          document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         </div>
                     </div>
                 </div>
