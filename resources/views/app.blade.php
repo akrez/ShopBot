@@ -11,7 +11,16 @@
     <link href="{{ url('./dist/css/tabler-flags.rtl.min.css') }}" rel="stylesheet" />
     <link href="{{ url('./dist/css/tabler-payments.rtl.min.css') }}" rel="stylesheet" />
     <link href="{{ url('./dist/css/tabler-vendors.rtl.min.css') }}" rel="stylesheet" />
-    <link href="{{ url('./dist/css/demo.rtl.min.css') }}" rel="stylesheet" />
+    <link href="{{ url('./vazirmatn/Vazirmatn-font-face.css') }}" rel="stylesheet" />
+    <style>
+        :root {
+            --tblr-font-sans-serif: 'Vazirmatn';
+        }
+
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+    </style>
 </head>
 
 <body>
@@ -831,7 +840,7 @@
             <!-- Page body -->
             <div class="page-body">
                 <div class="container-xl">
-                   @yield('content')
+                    @yield('content')
                 </div>
             </div>
             <footer class="footer footer-transparent d-print-none">
