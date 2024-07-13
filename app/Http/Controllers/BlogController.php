@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
+    public function __construct(protected BlogService $blogService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +22,7 @@ class BlogController extends Controller
     public function index()
     {
         return view('blogs.index', [
-            'blogs' => (new BlogService())->getLatestUserBlogs(Auth::user()),
+            'blogs' => $this->blogService->getLatestUserBlogs(Auth::user()),
         ]);
     }
 
@@ -40,7 +44,7 @@ class BlogController extends Controller
     // public function store(HttpRequest $request)
     public function store(StoreBlogRequest $request)
     {
-        (new BlogService())->create(Auth::user(), $request->validated());
+        $this->blogService->create(Auth::user(), $request->validated());
 
         return redirect()->route('blogs.index');
     }
@@ -52,7 +56,7 @@ class BlogController extends Controller
      */
     public function edit(int $id)
     {
-        $blog = (new BlogService())->getUserBlog(Auth::user(), $id);
+        $blog = $this->blogService->getUserBlog(Auth::user(), $id);
 
         return view('blogs.edit', [
             'blog' => $blog,
@@ -66,9 +70,9 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, int $id)
     {
-        $blog = (new BlogService())->getUserBlog(Auth::user(), $id);
+        $blog = $this->blogService->getUserBlog(Auth::user(), $id);
 
-        (new BlogService())->update($blog, $request->validated());
+        $this->blogService->update($blog, $request->validated());
 
         return redirect()->route('blogs.index');
     }
@@ -86,9 +90,9 @@ class BlogController extends Controller
     public function active(int $id)
     {
         $user = Auth::user();
-        $blog = (new BlogService())->getUserBlog($user, $id);
+        $blog = $this->blogService->getUserBlog($user, $id);
 
-        (new BlogService())->setUserActiveBlog($user, $blog);
+        $this->blogService->setUserActiveBlog($user, $blog);
 
         return redirect()->route('blogs.index');
     }
