@@ -22,7 +22,7 @@
             'name' => 'blog_status',
             'label' => __('validation.attributes.status'),
             'type' => 'select',
-            'value' => isset($blog) ? $blog->blog_status : '',
+            'value' => isset($blog) ? $blog->blog_status->value : '',
             'selectOptions' => App\Enums\Blog\BlogStatus::translatedValues(),
         ])
         @include('components/formBuilder', [

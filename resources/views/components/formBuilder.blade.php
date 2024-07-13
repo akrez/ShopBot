@@ -67,13 +67,10 @@
                 <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
                     class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
             @elseif ('select' == $type)
-                <select name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}"
-                    value="{{ $inputValue }}">
+                <select name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}">
                     @foreach ($selectOptions as $selectOptionValue => $selectOption)
                         <option value="{{ $selectOptionValue }}"
-                            {{ $inputValue == $selectOptionValue ? ' selected="selected" ' : '' }}>
-                            {{ $selectOption }}
-                        </option>
+                            {{ $inputValue == $selectOptionValue ? ' selected ' : '' }}>{{ $selectOption }}</option>
                     @endforeach
                 </select>
             @else

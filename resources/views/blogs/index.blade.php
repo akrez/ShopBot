@@ -14,13 +14,13 @@
         <div class="card">
             <div class="card-body">
                 <h5>
-                    <span class="{{ $blog->blog_status == App\Enums\Blog\BlogStatus::ACTIVE->value ? 'text-success' : 'text-danger' }}">{{ $blog->name }}</span>
+                    <span class="{{ $blog->blog_status == App\Enums\Blog\BlogStatus::ACTIVE ? 'text-success' : 'text-danger' }}">{{ $blog->name }}</span>
                     <small class="text-muted">{{ $blog->short_description }}</small>
                 </h5>
                 <p class="card-text text-justify">{{ $blog->description }}</p>
                 <div class="row gy-1">
                     <div class="col-md-6">
-                        <a href="{{ route('blogs.edit', ['blog' => $blog->name]) }}" class="btn btn-primary w-100">@lang('Edit')</a>
+                        <a href="{{ route('blogs.edit', ['id' => $blog->id]) }}" class="btn btn-primary w-100">@lang('Edit')</a>
                     </div>
                     <div class="col-md-6">
                         <form enctype="multipart/form-data" method="post" action="{{ route('blogs.active', ['id' => $blog->id]) }}">
