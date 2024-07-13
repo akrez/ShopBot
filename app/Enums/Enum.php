@@ -15,7 +15,7 @@ trait Enum
     {
         $translates = self::translates();
 
-        return collect(self::cases())->pluck('value')->map(function ($value) use ($translates) {
+        return collect(self::cases())->pluck('value', 'value')->map(function ($value) use ($translates) {
             if (isset($translates[$value])) {
                 return $translates[$value];
             }
