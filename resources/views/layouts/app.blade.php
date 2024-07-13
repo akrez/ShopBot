@@ -30,7 +30,7 @@
     @yield('POS_BEGIN')
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg mb-3 z-1030">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">ربات فروشـگاهـی اکــرز</a>
+            <a class="navbar-brand" href="{{ route('home') }}">وبـلاگ فروشـگاهـی اکــرز</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -48,11 +48,9 @@
                     </li>
                     @endif
                     @else
-                    @if (false)
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('blogs') }}">{{ __('Blogs') }}</a>
+                        <a class="nav-link" href="{{ route('blogs.index') }}">{{ __('Blogs') }}</a>
                     </li>
-                    @endif
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ Auth::user()->name }}
