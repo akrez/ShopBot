@@ -15,7 +15,10 @@ class AddActiveBlogToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignIdFor(Blog::class, 'active_blog')->constrained(app(Blog::class)->getTable(), 'id')->cascadeOnDelete();
+            $table->foreignIdFor(Blog::class, 'active_blog')
+                ->nullable()
+                ->constrained(app(Blog::class)->getTable(), 'id')
+                ->cascadeOnDelete();
         });
     }
 
