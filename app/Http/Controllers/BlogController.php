@@ -19,7 +19,7 @@ class BlogController extends Controller
     public function index()
     {
         return view('blogs.index', [
-            'blogs' => Auth::user()->blogs()->orderBy('created_at', 'desc')->get(),
+            'blogs' => (new BlogService())->getLatestUserBlogs(Auth::user()),
         ]);
     }
 
@@ -41,10 +41,7 @@ class BlogController extends Controller
     // public function store(HttpRequest $request)
     public function store(StoreBlogRequest $request)
     {
-        $blog = new Blog($request->validated());
-        $blog->name = $request->name;
-        $blog->created_by = Auth::id();
-        $blog->save();
+        (new BlogService())->create(Auth::user(), $request->validated());
 
         return redirect()->route('blogs.index');
     }
@@ -72,8 +69,7 @@ class BlogController extends Controller
     {
         $blog = (new BlogService())->getUserBlog(Auth::user(), $id);
 
-        $blog->update($request->validated());
-        $blog->save();
+        (new BlogService())->update($blog, $request->validated());
 
         return redirect()->route('blogs.index');
     }
