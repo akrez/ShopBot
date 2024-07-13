@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('bots', function (Blueprint $table) {
             $table->id();
             $table->string('token', 64);
-            $table->string('name', 64)->nullable();
-            $table->string('short_description', 120)->nullable();
-            $table->string('description', 512)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
