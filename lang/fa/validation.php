@@ -271,5 +271,7 @@ return [
         'username' => 'نام کاربری',
         'value' => 'ارزش',
         'year' => 'سال',
+        //
+        'short_description' => 'توضیحات مختصر',
     ],
 ];
