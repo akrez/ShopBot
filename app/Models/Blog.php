@@ -11,6 +11,18 @@ class Blog extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'short_description',
+        'description',
+        'blog_status',
+    ];
+
     protected function casts(): array
     {
         return [
