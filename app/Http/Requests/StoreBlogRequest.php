@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Enums\Blog\BlogStatus as BlogBlogStatus;
-use App\Enums\BlogStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

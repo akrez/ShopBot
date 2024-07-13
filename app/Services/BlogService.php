@@ -26,6 +26,7 @@ class BlogService
     {
         $blog = $user->blogs()->where('id', $id)->first();
         abort_unless($user and $blog, 404);
+
         return $blog;
     }
 

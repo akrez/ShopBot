@@ -20,7 +20,7 @@ class AddActiveBlogToUsersTable extends Migration
                 ->nullable()
                 ->constrained(app(Blog::class)->getTable(), 'id')
                 ->cascadeOnDelete();
-            });
+        });
     }
 
     /**
