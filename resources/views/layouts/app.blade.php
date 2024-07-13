@@ -50,7 +50,7 @@
                     @else
                     @if (false)
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('blogs) }}">{{ __('Blogs') }}</a>
+                        <a class="nav-link" href="{{ route('blogs') }}">{{ __('Blogs') }}</a>
                     </li>
                     @endif
                     <li class="nav-item dropdown">
