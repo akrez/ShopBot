@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('short_description', 120)->nullable();
             $table->string('description', 512)->nullable();
             $table->foreignIdFor(User::class, 'created_by')->constrained(app(User::class)->getTable(), 'id')->cascadeOnDelete();
-            $table->enum('blog_status',[
+            $table->enum('blog_status', [
                 BlogStatus::ACTIVE->value,
                 BlogStatus::DEACTIVE->value,
             ])->nullable();
