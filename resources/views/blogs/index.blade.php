@@ -23,7 +23,7 @@
                         <a href="{{ route('blogs.edit', ['blog' => $blog->name]) }}" class="btn btn-primary w-100">@lang('Edit')</a>
                     </div>
                     <div class="col-md-6">
-                        <form enctype="multipart/form-data" method="post" action="{{ route('blogs.active', ['blog_id' => $blog->id]) }}">
+                        <form enctype="multipart/form-data" method="post" action="{{ route('blogs.active', ['id' => $blog->id]) }}">
                             @csrf
                             @method('PATCH')
                             <input type="submit" class="btn btn-primary w-100" value="@lang('Select')">
