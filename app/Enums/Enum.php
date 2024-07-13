@@ -15,16 +15,15 @@ trait Enum
     {
         $translates = self::translates();
 
-        //
-        return collect(self::cases())->pluck('value', 'name')->map(function ($item, $key) use ($translates) {
-            if (isset($translates[$item])) {
-                return $translates[$item];
+        return collect(self::cases())->pluck('value')->map(function ($value) use ($translates) {
+            if (isset($translates[$value])) {
+                return $translates[$value];
             }
-            if (Lang::has($item)) {
-                return __($item);
+            if (Lang::has($value)) {
+                return __($value);
             }
 
-            return $key;
+            return $value;
         })->toArray();
     }
 
