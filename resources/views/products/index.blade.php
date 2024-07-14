@@ -32,7 +32,7 @@
                     <td>{{ $product->created_at }}</td>
                     <td>{{ $product->updated_at }}</td>
                     <td>
-                        <a class="btn btn-info border border-dark w-100" href="{{ route('products.edit',['id' => $product->id]) }}">
+                        <a class="btn btn-light border border-dark w-100" href="{{ route('products.edit',['id' => $product->id]) }}">
                             @lang('Edit')
                         </a>
                     </td>
