@@ -18,11 +18,6 @@
     <link rel="stylesheet" href="{{ url('libs/fontawesome/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ url('app.css') }}">
 
-    <style>
-        body {
-            font-family: "vazirmatn";
-        }
-    </style>
     @yield('POS_HEAD')
 </head>
 
