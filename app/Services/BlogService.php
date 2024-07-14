@@ -32,7 +32,6 @@ class BlogService
 
     public function setUserActiveBlog(User $user, Blog $blog)
     {
-        $user->active_blog = $blog->id;
-        $user->save();
+        resolve(UserService::class)->setActiveBlog($user, $blog);
     }
 }
