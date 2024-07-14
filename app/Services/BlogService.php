@@ -31,7 +31,7 @@ class BlogService
         return $blog;
     }
 
-    public function findOrFailUserActiveBlog()
+    public function findOrFailActiveBlog()
     {
         $blog = ActiveBlog::get();
         abort_unless($blog, 404);
