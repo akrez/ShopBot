@@ -10,14 +10,14 @@
 
     <link rel="shortcut icon" href="{{ asset('favicon.svg') }}">
 
-    @sectionMissing('title')
-        @sectionMissing('header')
-            <title>{{ config('app.name') }}</title>
-        @else
-            <title>@yield('header')</title>
-        @endif
-    @else
+    @hasSection('title')
         <title>@yield('title')</title>
+    @else
+        @hasSection('header')
+            <title>@yield('header')</title>
+        @else
+            <title>{{ config('app.name') }}</title>
+        @endif
     @endif
 
     <!-- CSS files -->
