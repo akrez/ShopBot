@@ -11,20 +11,29 @@ trait Enum
         return [];
     }
 
-    public static function translatedValues(): array
+    public static function toArray(): array
     {
         $translates = self::translates();
 
-        return collect(self::cases())->pluck('value', 'value')->map(function ($value) use ($translates) {
-            if (isset($translates[$value])) {
-                return $translates[$value];
-            }
-            if (Lang::has($value)) {
-                return __($value);
-            }
+        return once(function () use ($translates) {
+            return collect(self::cases())->pluck('value', 'value')->map(function ($value) use ($translates) {
+                if (isset($translates[$value])) {
+                    return $translates[$value];
+                }
+                if (Lang::has($value)) {
+                    return __($value);
+                }
 
-            return $value;
-        })->toArray();
+                return $value;
+            })->toArray();
+        });
+    }
+
+    public function trans()
+    {
+        $translates = self::toArray();
+
+        return empty($translates[$this->value]) ? '' : $translates[$this->value];
     }
 
     public static function values(): array
