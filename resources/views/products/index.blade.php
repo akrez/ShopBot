@@ -5,7 +5,9 @@
 @section('content')
 <div class="row mb-2">
     <div class="col-md-2 pull-right">
-        <a class="btn btn-light border border-dark w-100" href="{{ route('products.create') }}">@lang("Create :name", ['name' => __('Product')])</a>
+        <a class="btn btn-light border border-dark w-100" href="{{ route('products.create') }}">
+            @lang("Create :name", ['name' => __('Product')])
+        </a>
     </div>
 </div>
 <div class="row">
@@ -26,11 +28,13 @@
                 <tr>
                     <td>{{ $product->code }}</td>
                     <td>{{ $product->name }}</td>
-                    <td>{{ __($product->product_status->value) }}</td>
+                    <td>{{ $product->product_status->trans() }}</td>
                     <td>{{ $product->created_at }}</td>
                     <td>{{ $product->updated_at }}</td>
                     <td>
-                        <a class="btn btn-info border border-dark w-100" href="{{ route('products.edit',['id' => $product->id]) }}"> @lang('Edit')</a>
+                        <a class="btn btn-info border border-dark w-100" href="{{ route('products.edit',['id' => $product->id]) }}">
+                            @lang('Edit')
+                        </a>
                     </td>
                 </tr>
                 @endforeach
