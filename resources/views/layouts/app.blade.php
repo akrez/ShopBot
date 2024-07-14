@@ -8,14 +8,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link href="favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
     <link rel="shortcut icon" href="{{ asset('favicon.svg') }}">
     <title>@yield('title', config('app.name'))</title>
 
     <!-- CSS files -->
     <link rel="stylesheet" href="{{ url('libs/bootstrap/dist/css/bootstrap.rtl.min.css') }}" />
     <link rel="stylesheet" href="{{ url('libs/vazirmatn/Vazirmatn-font-face.css') }}" />
-    <link rel="stylesheet" href="{{ url('libs/fontawesome/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('libs/@fortawesome/fontawesome-free/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ url('app.css') }}">
 
     @yield('POS_HEAD')
@@ -36,6 +35,11 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ \App\Facades\ActiveBlog::name() }}
                         </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('products.index') }}">
+                                {{ __('Products') }}
+                            </a>
+                        </div>
                     </li>
                     @endif
                 </ul>
