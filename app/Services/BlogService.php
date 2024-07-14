@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Facades\ActiveBlog;
 use App\Models\Blog;
 use App\Models\User;
 
@@ -22,10 +23,18 @@ class BlogService
         $blog->update($data);
     }
 
-    public function getUserBlog(User $user, int $id)
+    public function findOrFailUserBlog(User $user, int $id)
     {
         $blog = $user->blogs()->where('id', $id)->first();
         abort_unless($user and $blog, 404);
+
+        return $blog;
+    }
+
+    public function findOrFailUserActiveBlog()
+    {
+        $blog = ActiveBlog::get();
+        abort_unless($blog, 404);
 
         return $blog;
     }

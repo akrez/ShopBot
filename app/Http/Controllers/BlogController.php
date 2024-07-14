@@ -56,7 +56,7 @@ class BlogController extends Controller
      */
     public function edit(int $id)
     {
-        $blog = $this->blogService->getUserBlog(Auth::user(), $id);
+        $blog = $this->blogService->findOrFailUserBlog(Auth::user(), $id);
 
         return view('blogs.edit', [
             'blog' => $blog,
@@ -70,7 +70,7 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, int $id)
     {
-        $blog = $this->blogService->getUserBlog(Auth::user(), $id);
+        $blog = $this->blogService->findOrFailUserBlog(Auth::user(), $id);
 
         $this->blogService->update($blog, $request->validated());
 
@@ -90,7 +90,7 @@ class BlogController extends Controller
     public function active(int $id)
     {
         $user = Auth::user();
-        $blog = $this->blogService->getUserBlog($user, $id);
+        $blog = $this->blogService->findOrFailUserBlog($user, $id);
 
         $this->blogService->setUserActiveBlog($user, $blog);
 
