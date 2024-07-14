@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
-    public function __construct(protected BlogService $blogService)
-    {
-    }
+    public function __construct(protected BlogService $blogService) {}
 
     /**
      * Display a listing of the resource.

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Facades\ActiveBlog;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class ActiveBlogMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! \App\Facades\ActiveBlog::has()) {
+        if (! ActiveBlog::has()) {
             return redirect()->route('blogs.index');
         }
 
