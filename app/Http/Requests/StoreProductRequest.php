@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Product\ProductStatus;
 use App\Facades\ActiveBlog;
-use App\Rules\CommandRule;
+use App\Rules\BotCommandRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -37,7 +37,7 @@ class StoreProductRequest extends FormRequest
 
         return [
             'name' => ['required', 'max:64'],
-            'code' => ['required', 'max:32', new CommandRule, $uniqueRule],
+            'code' => ['required', 'max:32', new BotCommandRule, $uniqueRule],
             'product_status' => [Rule::in(ProductStatus::values())],
         ];
     }
