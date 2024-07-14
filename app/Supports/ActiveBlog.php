@@ -1,50 +1,40 @@
 <?php
 
-namespace App\Support;
+namespace App\Supports;
 
-use App\Models\Blog;
+use App\Models\User;
 
 class ActiveBlog
 {
-    protected static $blog;
+    protected $blog;
 
-    protected static $finded = false;
-
-    public static function set($user, $force = false)
+    public function __construct(?User $user)
     {
-        if ($force or false === static::$finded) {
-            if ($user) {
-                static::$blog = Blog::userCreated($user->id)
-                    ->where('name', $user->active_blog)
-                    ->first();
-            }
-            static::$finded = true;
-        }
+        $this->set($user);
     }
 
-    public static function get()
+    public function set($user)
     {
-        return static::$blog;
+        return $this->blog = ($user ? $user->activeBlog()->first() : null);
     }
 
-    public static function has()
+    public function get()
     {
-        $blog = static::get();
-        return $blog !== null;
+        return $this->blog;
     }
 
-    public static function attr($attribute)
+    public function has()
     {
-        $blog = static::get();
-        if ($blog) {
-            return $blog->$attribute;
-        }
-
-        return null;
+        return $this->get() !== null;
     }
 
-    public static function name()
+    public function attr($attribute)
     {
-        return static::attr('name');
+        return $this->get() ? $this->get()->$attribute : null;
+    }
+
+    public function name()
+    {
+        return $this->attr('name');
     }
 }
