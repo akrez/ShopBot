@@ -9,7 +9,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" href="{{ asset('favicon.svg') }}">
-    <title>@yield('title', config('app.name'))</title>
+
+    @sectionMissing('title')
+        @sectionMissing('header')
+            <title>{{ config('app.name') }}</title>
+        @else
+            <title>@yield('header')</title>
+        @endif
+    @else
+        <title>@yield('title')</title>
+    @endif
 
     <!-- CSS files -->
     <link rel="stylesheet" href="{{ url('libs/bootstrap/dist/css/bootstrap.rtl.min.css') }}" />
@@ -84,7 +93,8 @@
     </nav>
     <div class="container">
         @hasSection('header')
-            <h1 class="fs-2 my-4">@yield('header')
+            <h1 class="fs-2 my-4">
+                @yield('header')
                 @hasSection('subheader')
                     <small class="text-muted">@yield('subheader')</small>
                 @endif
