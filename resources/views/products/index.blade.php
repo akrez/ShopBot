@@ -12,7 +12,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <table class="table table-striped table-hover table-bordered align-middle rounded-3 overflow-hidden">
+        <table class="table table-striped table-hover table-bordered align-middle rounded-3">
             <thead class="table-dark">
                 <tr>
                     <th scope="col">@lang('validation.attributes.code')</th>
