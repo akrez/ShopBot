@@ -15,7 +15,7 @@ class ActiveBlogMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! resolve('ActiveBlog')->has()) {
+        if (! \App\Facades\ActiveBlog::has()) {
             return redirect()->route('blogs.index');
         }
 

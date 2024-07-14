@@ -2,6 +2,7 @@
 
 namespace App\Supports;
 
+use App\Models\Blog;
 use App\Models\User;
 
 class ActiveBlog
@@ -13,27 +14,27 @@ class ActiveBlog
         $this->set($user);
     }
 
-    public function set($user)
+    public function set(?User $user): ?Blog
     {
         return $this->blog = ($user ? $user->activeBlog()->first() : null);
     }
 
-    public function get()
+    public function get(): ?Blog
     {
         return $this->blog;
     }
 
-    public function has()
+    public function has(): bool
     {
         return $this->get() !== null;
     }
 
-    public function attr($attribute)
+    public function attr(string $attribute): mixed
     {
         return $this->get() ? $this->get()->$attribute : null;
     }
 
-    public function name()
+    public function name(): ?string
     {
         return $this->attr('name');
     }

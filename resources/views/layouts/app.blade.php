@@ -31,10 +31,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    @if (app('ActiveBlog')->has())
+                    @if (\App\Facades\ActiveBlog::has())
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ app('ActiveBlog')->name() }}
+                            {{ \App\Facades\ActiveBlog::name() }}
                         </a>
                     </li>
                     @endif
