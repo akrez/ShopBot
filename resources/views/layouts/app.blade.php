@@ -31,30 +31,15 @@
 
 <body dir="rtl">
     @yield('POS_BEGIN')
-    <nav class="navbar navbar-dark bg-dark navbar-expand-lg mb-3 z-1030">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg z-1030">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">وبـلاگ فروشـگاهـی اکــرز</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                data-bs-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    @if (\App\Facades\ActiveBlog::has())
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ \App\Facades\ActiveBlog::name() }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('products.index') }}">
-                                    {{ __('Products') }}
-                                </a>
-                            </div>
-                        </li>
-                    @endif
-                </ul>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent1">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     @guest
                         @if (Route::has('login'))
@@ -91,7 +76,28 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+    @if (\App\Facades\ActiveBlog::has())
+        <nav class="navbar navbar-light bg-light navbar-expand-lg z-1030">
+            <div class="container">
+                <a class="navbar-brand" href="{{ route('home') }}">{{ \App\Facades\ActiveBlog::name() }}</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ route('products.index') }}">
+                                {{ __('Products') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    @endif
+    <div class="container mt-3">
         @hasSection('header')
             <h1 class="fs-2 my-4">
                 @yield('header')
