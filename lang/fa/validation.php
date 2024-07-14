@@ -273,5 +273,6 @@ return [
         'year' => 'سال',
         //
         'short_description' => 'توضیحات مختصر',
+        'code' => 'کد'
     ],
 ];
