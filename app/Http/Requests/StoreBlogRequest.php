@@ -25,6 +25,11 @@ class StoreBlogRequest extends FormRequest
      */
     public function rules()
     {
+        return static::getRules($this);
+    }
+
+    public static function getRules(FormRequest $request, bool $isStore = true)
+    {
         return [
             'name' => 'required|max:64',
             'short_description' => 'required|max:120',
