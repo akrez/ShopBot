@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->bind('ActiveBlog', function () {
+        $this->app->singleton('ActiveBlog', function () {
             return new ActiveBlog(Auth::user());
         });
     }
