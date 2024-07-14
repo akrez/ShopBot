@@ -51,8 +51,7 @@ class ProductController extends Controller
      */
     public function edit(int $id)
     {
-        $blog = $this->blogService->findOrFailActiveBlog();
-        $product = $this->productService->findOrFailBlogProduct($blog, $id);
+        $product = $this->productService->findOrFailActiveBlogProduct($id);
 
         return view('products.edit', [
             'product' => $product,
@@ -64,8 +63,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, int $id)
     {
-        $blog = $this->blogService->findOrFailActiveBlog();
-        $product = $this->productService->findOrFailBlogProduct($blog, $id);
+        $product = $this->productService->findOrFailActiveBlogProduct($id);
 
         $this->productService->update($product, $request->validated());
 

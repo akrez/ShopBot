@@ -22,11 +22,12 @@ class ProductService
         $product->update($data);
     }
 
-    public function findOrFailBlogProduct(Blog $blog, int $id)
+    public function findOrFailActiveBlogProduct($productId)
     {
-        $blog = $blog->products()->where('id', $id)->first();
-        abort_unless($blog, 404);
+        $blog = resolve(BlogService::class)->findOrFailActiveBlog();
+        $product = $blog->products()->where('id', $productId)->first();
+        abort_unless($blog and $product, 404);
 
-        return $blog;
+        return $product;
     }
 }
