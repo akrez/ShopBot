@@ -2,6 +2,7 @@
 
 namespace App\Supports;
 
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as XlsxWriter;
 
@@ -36,5 +37,21 @@ class Excel
         };
 
         return response()->streamDownload($callback, $fileName, $headers);
+    }
+
+    public function read($path)
+    {
+        $result = [];
+        //
+        $reader = new XlsxReader();
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($path);
+        //
+        foreach ($spreadsheet->getSheetNames() as $sheetName) {
+            $result[$sheetName] = $spreadsheet->getSheetByName($sheetName)->toArray();
+        }
+
+        //
+        return $result;
     }
 }
