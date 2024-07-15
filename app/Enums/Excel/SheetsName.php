@@ -8,5 +8,5 @@ enum SheetsName: string
 {
     use Enum;
 
-    case PRODUCTS = 'products';
+    case PRODUCTS = 'Products';
 }
