@@ -11,7 +11,7 @@ class ProductDTO extends DTO
 {
     public Blog $blog;
 
-    public ?int $id;
+    public ?int $id = null;
 
     public function __construct(
         public $code,
