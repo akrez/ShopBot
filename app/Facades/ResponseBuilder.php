@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static mixed getData();
  * @method static \App\Supports\ResponseBuilder errors(mixed $errors);
  * @method static mixed getErrors();
- * @method static \App\Supports\Response build();
  * @method static \Illuminate\Http\Response toResponse(\Illuminate\Http\Request $request);
  */
 class ResponseBuilder extends Facade

@@ -2,10 +2,10 @@
 
 namespace App\Supports;
 
-use App\Contracts\ResponseBuilderContract;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\Lang;
 
-class ResponseBuilder implements ResponseBuilderContract
+class ResponseBuilder implements Responsable
 {
     private int $status;
 
@@ -78,16 +78,12 @@ class ResponseBuilder implements ResponseBuilderContract
         return $this->errors;
     }
 
-    public function build(): \App\Supports\Response
-    {
-        $response = new Response($this);
-        $this->reset();
-
-        return $response;
-    }
-
     public function toResponse($request): \Illuminate\Http\Response
     {
-        return $this->build()->toResponse($request);
+        return response([
+            'message' => $this->getMessage(),
+            'data' => $this->getData(),
+            'errors' => $this->getErrors(),
+        ], $this->getStatus());
     }
 }
