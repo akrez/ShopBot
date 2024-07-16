@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SiteController;
 use App\Http\Middleware\ActiveBlogMiddleware;
@@ -18,6 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('blogs/{id}/active', [BlogController::class, 'active'])->name('blogs.active');
     Route::resource('blogs', BlogController::class)->parameter('blogs', 'id');
     Route::middleware(ActiveBlogMiddleware::class)->group(function () {
+        Route::get('port', [PortController::class, 'index'])->name('port.index');
+        Route::post('port/import', [PortController::class, 'import'])->name('port.import');
+        Route::get('port/export', [PortController::class, 'export'])->name('port.export');
         Route::resource('products', ProductController::class)->parameter('products', 'id');
     });
 });
