@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Supports\ActiveBlog;
-use App\Supports\ResponseBuilder;
+use App\Support\ActiveBlog;
+use App\Support\ResponseBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 

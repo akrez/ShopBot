@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Supports\MessageProcessors;
+namespace App\Support\MessageProcessors;
 
 use App\Contracts\MessageProcessorContract;
 use App\Models\Bot;

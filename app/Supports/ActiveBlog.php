@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Supports;
+namespace App\Support;
 
 use App\Models\Blog;
 use App\Models\User;

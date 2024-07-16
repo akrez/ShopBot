@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Supports;
+namespace App\Support;
 
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\Lang;

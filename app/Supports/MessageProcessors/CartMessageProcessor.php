@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Supports\MessageProcessors;
+namespace App\Support\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 

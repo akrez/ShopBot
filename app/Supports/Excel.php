@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Supports;
+namespace App\Support;
 
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;

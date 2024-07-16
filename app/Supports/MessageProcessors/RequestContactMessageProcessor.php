@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Supports\MessageProcessors;
+namespace App\Support\MessageProcessors;
 
 class RequestContactMessageProcessor extends MessageProcessor
 {

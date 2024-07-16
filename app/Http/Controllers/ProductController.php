@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\DTO\ProductDTO;
 use App\Services\BlogService;
 use App\Services\ProductService;
-use App\Supports\WebResponse;
+use App\Support\WebResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller

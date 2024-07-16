@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Excel\SheetsName;
 use App\Services\BlogService;
 use App\Services\ProductService;
-use App\Supports\Excel;
+use App\Support\Excel;
 use Illuminate\Http\Request;
 
 class PortController extends Controller
