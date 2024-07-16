@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DTO\ProductDTO;
+use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
 
@@ -12,14 +14,51 @@ class ProductService
         return $blog->products()->latest('created_at')->get();
     }
 
-    public function create(Blog $blog, array $data)
+    public function create(Blog $blog, ProductDTO $productDto)
     {
-        $blog->products()->create($data);
+        $validation = $productDto->validate(true, [
+            'blog' => $blog,
+        ]);
+
+        if ($validation->errors()->isNotEmpty()) {
+            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+        }
+
+        $isSuccessful = $blog->products()->create([
+            'code' => $productDto->code,
+            'name' => $productDto->name,
+            'product_status' => $productDto->product_status,
+        ]);
+
+        if (!$isSuccessful) {
+            return ResponseBuilder::status(500);
+        }
+
+        return ResponseBuilder::status(200);
     }
 
-    public function update(Product $product, array $data)
+    public function update(Blog $blog, Product $product, ProductDTO $productDto)
     {
-        $product->update($data);
+        $validation = $productDto->validate(false, [
+            'blog' => $blog,
+            'id' => $product->id,
+        ]);
+
+        if ($validation->errors()->isNotEmpty()) {
+            return ResponseBuilder::data($product)->status(402)->errors($validation->errors()->toArray());
+        }
+
+        $isSuccessful = $product->update([
+            'code' => $productDto->code,
+            'name' => $productDto->name,
+            'product_status' => $productDto->product_status,
+        ]);
+
+        if (!$isSuccessful) {
+            return ResponseBuilder::data($product)->status(500);
+        }
+
+        return ResponseBuilder::data($product)->status(200);
     }
 
     public function findOrFailActiveBlogProduct($productId)
@@ -29,5 +68,61 @@ class ProductService
         abort_unless($blog and $product, 404);
 
         return $product;
+    }
+
+    public function findProductByCode(Blog $blog, string $code): ?Product
+    {
+        if (strlen($code)) {
+            return $blog->products()->where('code', $code)->first();
+        }
+
+        return null;
+    }
+
+    public function export(Blog $blog, $includeHeader = true)
+    {
+        $source = [];
+
+        if ($includeHeader) {
+            $source[] = [
+                __('validation.attributes.code'),
+                __('validation.attributes.name'),
+                __('validation.attributes.status'),
+            ];
+        }
+
+        $products = $this->getLatestBlogProducts($blog);
+        foreach ($products as $product) {
+            $source[] = [
+                $product->code,
+                $product->name,
+                $product->product_status->value,
+            ];
+        }
+
+        return $source;
+    }
+
+    public function import(Blog $blog, array $rows)
+    {
+        $skipedRow = 0;
+        foreach ($rows as $row) {
+            if ($skipedRow < 1) {
+                $skipedRow++;
+
+                continue;
+            }
+            //
+            $row = ((array) $row) + array_fill(0, 3, null);
+            $productDTO = new ProductDTO($row[0], $row[1], $row[2]);
+            //
+            $product = $this->findProductByCode($blog, $productDTO->code);
+            //
+            if ($product) {
+                $this->update($blog, $product, $productDTO);
+            } else {
+                $this->create($blog, $productDTO);
+            }
+        }
     }
 }
