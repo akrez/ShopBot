@@ -20,7 +20,7 @@ class ResponseBuilder implements ResponseBuilderContract
         $this->reset();
     }
 
-    public function reset()
+    public function reset(): self
     {
         $this->status = 200;
         $this->message = 'OK';
@@ -30,55 +30,55 @@ class ResponseBuilder implements ResponseBuilderContract
         return $this;
     }
 
-    public function status($status): self
+    public function status(int $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
 
-    public function message($message): self
+    public function message(?string $message): self
     {
         $this->message = (Lang::has($message) ? __($message) : $message);
 
         return $this;
     }
 
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
 
-    public function data($data): self
+    public function data(mixed $data): self
     {
         $this->data = $data;
 
         return $this;
     }
 
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }
 
-    public function errors($errors): self
+    public function errors(mixed $errors): self
     {
         $this->errors = $errors;
 
         return $this;
     }
 
-    public function getErrors()
+    public function getErrors(): mixed
     {
         return $this->errors;
     }
 
-    public function build()
+    public function build(): \App\Supports\Response
     {
         $response = new Response($this);
         $this->reset();
@@ -86,7 +86,7 @@ class ResponseBuilder implements ResponseBuilderContract
         return $response;
     }
 
-    public function toResponse($request)
+    public function toResponse($request): \Illuminate\Http\Response
     {
         return $this->build()->toResponse($request);
     }
