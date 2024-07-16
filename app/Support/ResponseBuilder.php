@@ -78,6 +78,11 @@ class ResponseBuilder implements Responsable
         return $this->errors;
     }
 
+    public function isSuccessful(): bool
+    {
+        return $this->getStatus() >= 200 and $this->getStatus() < 300;
+    }
+
     public function toResponse($request): \Illuminate\Http\Response
     {
         return response([
