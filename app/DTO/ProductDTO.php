@@ -21,9 +21,14 @@ class ProductDTO extends DTO
 
     public function rules(bool $isStore = true)
     {
-        $uniqueRule = Rule::unique('products', 'code')->where('blog_id', $this->blog->id);
+        return static::getRules($isStore, $this->blog, $this->id);
+    }
+
+    public static function getRules(bool $isStore, Blog $blog, ?int $id = null)
+    {
+        $uniqueRule = Rule::unique('products', 'code')->where('blog_id', $blog->id);
         if (! $isStore) {
-            $uniqueRule = $uniqueRule->ignore($this->id);
+            $uniqueRule = $uniqueRule->ignore($id);
         }
 
         return [

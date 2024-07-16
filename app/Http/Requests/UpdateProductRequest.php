@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\DTO\ProductDTO;
+use App\Facades\ActiveBlog;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProductRequest extends FormRequest
@@ -21,6 +23,6 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        return StoreProductRequest::getRules($this, false);
+        return ProductDTO::getRules(false, ActiveBlog::get(), $this->id);
     }
 }
