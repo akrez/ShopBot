@@ -3,6 +3,13 @@
 @section('header', __('Products'))
 
 @section('content')
+    <div class="row mb-2">
+        <div class="col-md-2 mt-1">
+            <a class="btn btn-light border border-dark w-100" href="{{ route('products.create') }}">
+                @lang('Create :name', ['name' => __('Product')])
+            </a>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12 table-responsive">
             <table class="table table-striped table-hover table-bordered align-middle rounded-3">
