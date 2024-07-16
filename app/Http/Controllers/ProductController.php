@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\DTO\ProductDTO;
 use App\Services\BlogService;
 use App\Services\ProductService;
+use App\Supports\WebResponse;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -37,13 +38,17 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request)
     {
         $blog = $this->blogService->findOrFailActiveBlog();
 
-        $this->productService->create($blog, $request->validated());
+        $response = $this->productService->create($blog, new ProductDTO(
+            $request->code,
+            $request->name,
+            $request->product_status
+        ));
 
-        return redirect()->route('products.index');
+        return new WebResponse($response, route('products.index'));
     }
 
     /**
@@ -61,13 +66,18 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
+        $blog = $this->blogService->findOrFailActiveBlog();
         $product = $this->productService->findOrFailActiveBlogProduct($id);
 
-        $this->productService->update($product, $request->validated());
+        $response = $this->productService->update($blog, $product, new ProductDTO(
+            $request->code,
+            $request->name,
+            $request->product_status
+        ));
 
-        return redirect()->route('products.index');
+        return new WebResponse($response, route('products.index'));
     }
 
     /**
