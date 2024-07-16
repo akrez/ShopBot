@@ -45,15 +45,8 @@ class PortController extends Controller
             ];
 
             $this->productService->import($blog, $source[SheetsName::PRODUCTS->value]);
-        } else {
-            $result = null;
         }
 
-        $response = back()->withInput();
-        if ($result) {
-            $response->withErrors($result->messages);
-        }
-
-        return $response;
+        return back();
     }
 }
