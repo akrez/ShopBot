@@ -30,7 +30,7 @@ class ProductService
             'product_status' => $productDto->product_status,
         ]);
 
-        if (! $isSuccessful) {
+        if (!$isSuccessful) {
             return ResponseBuilder::status(500);
         }
 
@@ -54,7 +54,7 @@ class ProductService
             'product_status' => $productDto->product_status,
         ]);
 
-        if (! $isSuccessful) {
+        if (!$isSuccessful) {
             return ResponseBuilder::data($product)->status(500);
         }
 
@@ -70,7 +70,7 @@ class ProductService
         return $product;
     }
 
-    public function findProductByCode(Blog $blog, string $code): ?Product
+    public function firstProductByCode(Blog $blog, string $code): ?Product
     {
         if (strlen($code)) {
             return $blog->products()->where('code', $code)->first();
@@ -114,7 +114,7 @@ class ProductService
             $row = ((array) $row) + array_fill(0, 3, null);
             $productDTO = new ProductDTO($row[0], $row[1], $row[2]);
             //
-            $product = $this->findProductByCode($blog, $productDTO->code);
+            $product = $this->firstProductByCode($blog, $productDTO->code);
             //
             if ($product) {
                 $this->update($blog, $product, $productDTO);

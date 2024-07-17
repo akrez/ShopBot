@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->foreignId('blog_id')->constrained()->cascadeOnDelete();
-            $table->string('name')->primary();
+            $table->string('name', 32);
             $table->softDeletes();
             $table->timestamps();
+            
+            $table->primary(['blog_id', 'name']);
         });
     }
 
