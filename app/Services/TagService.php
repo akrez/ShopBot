@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Blog;
-use App\Models\Product;
 
 class TagService
 {
@@ -14,7 +13,7 @@ class TagService
                 $query->with('tags', function ($query) {
                     $query->latest('created_at');
                 })->latest('created_at');
-            }
+            },
         ]);
 
         return $blog->products;
