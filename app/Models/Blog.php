@@ -40,4 +40,9 @@ class Blog extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
 }
