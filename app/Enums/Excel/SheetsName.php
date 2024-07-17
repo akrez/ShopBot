@@ -9,4 +9,5 @@ enum SheetsName: string
     use Enum;
 
     case PRODUCTS = 'Products';
+    case TAGS = 'Tags';
 }

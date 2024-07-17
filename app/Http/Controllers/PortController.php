@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Excel\SheetsName;
 use App\Services\BlogService;
 use App\Services\ProductService;
+use App\Services\TagService;
 use App\Support\Excel;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,8 @@ class PortController extends Controller
     public function __construct(
         protected Excel $excel,
         protected BlogService $blogService,
-        protected ProductService $productService
+        protected ProductService $productService,
+        protected TagService $tagService,
     ) {}
 
     public function index(Request $request)
@@ -29,6 +31,7 @@ class PortController extends Controller
 
         return $this->excel->export($fileName, [
             SheetsName::PRODUCTS->value => $this->productService->export($blog),
+            SheetsName::TAGS->value => $this->tagService->export($blog),
         ]);
     }
 
@@ -42,6 +45,7 @@ class PortController extends Controller
 
             $source = $this->excel->read($path) + [
                 SheetsName::PRODUCTS->value => [],
+                SheetsName::TAGS->value => [],
             ];
 
             $this->productService->import($blog, $source[SheetsName::PRODUCTS->value]);

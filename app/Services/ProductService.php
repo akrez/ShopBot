@@ -79,17 +79,15 @@ class ProductService
         return null;
     }
 
-    public function export(Blog $blog, $includeHeader = true)
+    public function export(Blog $blog)
     {
         $source = [];
 
-        if ($includeHeader) {
-            $source[] = [
-                __('validation.attributes.code'),
-                __('validation.attributes.name'),
-                __('validation.attributes.status'),
-            ];
-        }
+        $source[] = [
+            __('validation.attributes.code'),
+            __('validation.attributes.name'),
+            __('validation.attributes.status'),
+        ];
 
         $products = $this->getLatestBlogProducts($blog);
         foreach ($products as $product) {
