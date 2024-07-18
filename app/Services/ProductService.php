@@ -30,7 +30,7 @@ class ProductService
             'product_status' => $productDto->product_status,
         ]);
 
-        if (!$isSuccessful) {
+        if (! $isSuccessful) {
             return ResponseBuilder::status(500);
         }
 
@@ -54,7 +54,7 @@ class ProductService
             'product_status' => $productDto->product_status,
         ]);
 
-        if (!$isSuccessful) {
+        if (! $isSuccessful) {
             return ResponseBuilder::data($product)->status(500);
         }
 
