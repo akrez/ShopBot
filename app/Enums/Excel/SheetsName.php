@@ -8,6 +8,6 @@ enum SheetsName: string
 {
     use Enum;
 
-    case PRODUCTS = 'Products';
-    case TAGS = 'Tags';
+    case PRODUCT = 'Product';
+    case PRODUCT_TAG = 'ProductTag';
 }
