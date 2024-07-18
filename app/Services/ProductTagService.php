@@ -22,51 +22,55 @@ class ProductTagService
         return $blog->products;
     }
 
-    public function getLatestProductTags(Product $product)
+    public function getLatestProductTags(Product $product): \Illuminate\Database\Eloquent\Collection
     {
-        $product->load(['productTags']);
+        $product->load([
+            'productTags' => function ($query) {
+                $query->latest('created_at');
+            },
+        ]);
 
         return $product->productTags;
     }
 
-    public function firstOrCreate(Blog $blog, Product $product, ProductTagDTO $productTagDTO)
+    public function delete(Product $product)
     {
-        $validation = $productTagDTO->validate();
-
-        if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
-        }
-
-        $tag = $blog->productTags()->firstOrCreate([
-            'tag_name' => $productTagDTO->name,
-            'blog_id' => $blog->id,
-        ], [
-            'product_id' => $product->id,
-        ]);
-
-        if ($tag and $tag->tag_name) {
-            return ResponseBuilder::status($tag->wasRecentlyCreated ? 201 : 200)->data($tag->toArray());
-        }
-
-        return ResponseBuilder::status(500);
+        $product->productTags()->delete();
     }
 
-    public function syncProductTags(Blog $blog, Product $product, array $tags, bool $deleteOld = true)
+    public function filter(array $tags)
     {
-        if ($deleteOld) {
-            $product->productTags()->delete();
-        }
+        return collect($tags)
+            ->map(fn ($item) => trim($item))
+            ->filter()
+            ->unique()
+            ->filter(fn ($tag) => (new ProductTagDTO($tag))
+                ->validate()
+                ->errors()
+                ->isEmpty())
+            ->toArray();
+    }
 
+    public function insert(Blog $blog, Product $product, array $tags)
+    {
+        $data = [];
         foreach ($tags as $tag) {
-            if (! $tag) {
-                continue;
-            }
-
-            $tagResponse = $this->firstOrCreate($blog, $product, new ProductTagDTO($tag));
-            if ($tagResponse->isSuccessful()) {
-                $validTags[] = $tagResponse->getData()['name'];
-            }
+            $data[] = $blog->productTags()->create([
+                'tag_name' => $tag,
+                'product_id' => $product->id,
+            ])->toArray();
         }
+
+        return $data;
+    }
+
+    public function sync(Blog $blog, Product $product, array $tags)
+    {
+        $this->delete($product);
+        $safeTags = $this->filter($tags);
+        $data = $this->insert($blog, $product, $safeTags);
+
+        return ResponseBuilder::status(count($safeTags) == count($data) ? 201 : 500)->data($data);
     }
 
     public function export(Blog $blog)
@@ -108,7 +112,7 @@ class ProductTagService
             $product = resolve(ProductService::class)->firstProductByCode($blog, $row[0]);
             //
             if ($product) {
-                $this->syncProductTags($blog, $product, array_slice($row, 2));
+                $this->sync($blog, $product, array_slice($row, 2));
             }
         }
     }
