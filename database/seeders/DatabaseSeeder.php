@@ -6,7 +6,7 @@ use App\Enums\Blog\BlogStatus;
 use App\Enums\Product\ProductStatus;
 use App\Models\Blog;
 use App\Models\Product;
-use App\Models\Tag;
+use App\Models\ProductTag;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -51,17 +51,25 @@ class DatabaseSeeder extends Seeder
             'product_status' => ProductStatus::ACTIVE,
         ]);
 
-        $tagPayeChasb = Tag::create([
-            'name' => 'پایه چسب',
+        ProductTag::create([
             'blog_id' => $blog->id,
+            'product_id' => $product1->id,
+            'tag_name' => 'پایه چسب',
         ]);
-        $tagChasb = Tag::create([
-            'name' => 'چسب',
+        ProductTag::create([
             'blog_id' => $blog->id,
+            'product_id' => $product2->id,
+            'tag_name' => 'پایه چسب',
         ]);
-
-        $product1->tags()->sync([$tagPayeChasb->name], false);
-        $product2->tags()->sync([$tagPayeChasb->name], false);
-        $product3->tags()->sync([$tagPayeChasb->name, $tagChasb->name], false);
+        ProductTag::create([
+            'blog_id' => $blog->id,
+            'product_id' => $product3->id,
+            'tag_name' => 'پایه چسب',
+        ]);
+        ProductTag::create([
+            'blog_id' => $blog->id,
+            'product_id' => $product3->id,
+            'tag_name' => 'چسب',
+        ]);
     }
 }
