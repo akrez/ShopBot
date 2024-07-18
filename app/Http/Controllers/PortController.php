@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Excel\SheetsName;
 use App\Services\BlogService;
 use App\Services\ProductService;
-use App\Services\TagService;
+use App\Services\ProductTagService;
 use App\Support\Excel;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class PortController extends Controller
         protected Excel $excel,
         protected BlogService $blogService,
         protected ProductService $productService,
-        protected TagService $tagService,
+        protected ProductTagService $productTagService,
     ) {}
 
     public function index(Request $request)
@@ -30,8 +30,8 @@ class PortController extends Controller
         $fileName = date('Y-m-d-H-i-s').'.xlsx';
 
         return $this->excel->export($fileName, [
-            SheetsName::PRODUCTS->value => $this->productService->export($blog),
-            SheetsName::TAGS->value => $this->tagService->export($blog),
+            SheetsName::PRODUCT->value => $this->productService->export($blog),
+            SheetsName::PRODUCT_TAG->value => $this->productTagService->export($blog),
         ]);
     }
 
@@ -44,12 +44,12 @@ class PortController extends Controller
         if ($port and $path = $port->getRealPath()) {
 
             $source = $this->excel->read($path) + [
-                SheetsName::PRODUCTS->value => [],
-                SheetsName::TAGS->value => [],
+                SheetsName::PRODUCT->value => [],
+                SheetsName::PRODUCT_TAG->value => [],
             ];
 
-            $this->productService->import($blog, $source[SheetsName::PRODUCTS->value]);
-            $this->tagService->import($blog, $source[SheetsName::TAGS->value]);
+            $this->productService->import($blog, $source[SheetsName::PRODUCT->value]);
+            $this->productTagService->import($blog, $source[SheetsName::PRODUCT_TAG->value]);
         }
 
         return back();
