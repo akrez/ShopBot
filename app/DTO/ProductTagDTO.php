@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class TagDTO extends DTO
+class ProductTagDTO extends DTO
 {
     public function __construct(
         public $name
