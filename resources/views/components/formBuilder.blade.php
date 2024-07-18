@@ -57,25 +57,32 @@
     @endif
     <div class="col-md-{{ $size }} mt-{{ $mt }}">
         <div class="form-group">
-            @if ($label)
-                <label class="form-label" for="{{ $id }}">{{ $label }}</label>
-            @endif
-            @if ('textarea' == $type)
-                <textarea name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}"
-                    rows="{{ $textareaRows }}">{{ $inputValue }}</textarea>
-            @elseif ('file' == $type)
-                <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
-                    class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
-            @elseif ('select' == $type)
-                <select name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}">
-                    @foreach ($selectOptions as $selectOptionValue => $selectOption)
-                        <option value="{{ $selectOptionValue }}"
-                            {{ $inputValue == $selectOptionValue ? ' selected ' : '' }}>{{ $selectOption }}</option>
-                    @endforeach
-                </select>
+            @if ('submit' == $type)
+                <button name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
+                    class="{{ implode(' ', $inputClass) }}">{{ $label }}</button>
             @else
-                <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
-                    class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
+                @if ($label)
+                    <label class="form-label" for="{{ $id }}">{{ $label }}</label>
+                @endif
+                @if ('textarea' == $type)
+                    <textarea name="{{ $name }}" id="{{ $id }}" class="{{ implode(' ', $inputClass) }}"
+                        rows="{{ $textareaRows }}">{{ $inputValue }}</textarea>
+                @elseif ('file' == $type)
+                    <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
+                        class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
+                @elseif ('select' == $type)
+                    <select name="{{ $name }}" id="{{ $id }}"
+                        class="{{ implode(' ', $inputClass) }}">
+                        @foreach ($selectOptions as $selectOptionValue => $selectOption)
+                            <option value="{{ $selectOptionValue }}"
+                                {{ $inputValue == $selectOptionValue ? ' selected ' : '' }}>{{ $selectOption }}
+                            </option>
+                        @endforeach
+                    </select>
+                @else
+                    <input name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
+                        class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
+                @endif
             @endif
             @foreach ($errorsArray as $error)
                 <div class="invalid-feedback">{{ $error }}</div>
