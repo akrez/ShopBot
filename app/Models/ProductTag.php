@@ -7,26 +7,36 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class ProductTag
  *
+ * @property int $id
+ * @property int $blog_id
  * @property int $product_id
  * @property string $tag_name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Product $product
- * @property Tag $tag
+ * @property Blog $blog
  */
 class ProductTag extends Model
 {
+    use HasFactory;
+
     protected $table = 'product_tag';
 
-    public $incrementing = false;
-
-    protected $casts = [
-        'product_id' => 'int',
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'product_id',
+        'tag_name',
     ];
 
     public function product()
@@ -34,8 +44,8 @@ class ProductTag extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function tag()
+    public function blog(): BelongsTo
     {
-        return $this->belongsTo(Tag::class, 'tag_name');
+        return $this->belongsTo(Blog::class);
     }
 }

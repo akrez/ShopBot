@@ -47,9 +47,9 @@ class Product extends Model
         ];
     }
 
-    public function tags()
+    public function productTags()
     {
-        return $this->belongsToMany(Tag::class, 'product_tag', 'product_id', 'tag_name')->withTimestamps();
+        return $this->hasMany(ProductTag::class, 'product_id', 'id');
     }
 
     public function blog(): BelongsTo

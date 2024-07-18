@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * @property User $user
  * @property Collection|Product[] $products
- * @property Collection|Tag[] $tags
+ * @property Collection|ProductTag[] $productTags
  * @property Collection|User[] $users
  */
 class Blog extends Model
@@ -55,9 +55,9 @@ class Blog extends Model
         return $this->hasMany(Product::class);
     }
 
-    public function tags()
+    public function productTags()
     {
-        return $this->hasMany(Tag::class);
+        return $this->hasMany(ProductTag::class);
     }
 
     public function users()
