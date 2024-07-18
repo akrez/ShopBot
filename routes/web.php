@@ -4,6 +4,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTagController;
 use App\Http\Controllers\SiteController;
 use App\Http\Middleware\ActiveBlogMiddleware;
 use App\Providers\AppServiceProvider;
@@ -23,5 +24,7 @@ Route::middleware('auth')->group(function () {
         Route::post('port/import', [PortController::class, 'import'])->name('port.import');
         Route::get('port/export', [PortController::class, 'export'])->name('port.export');
         Route::resource('products', ProductController::class)->parameter('products', 'id');
+        Route::get('products/{product_id}/product_tags', [ProductTagController::class, 'create'])->name('products.product_tags.create');
+        Route::post('products/{product_id}/product_tags', [ProductTagController::class, 'store'])->name('products.product_tags.store');
     });
 });
