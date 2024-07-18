@@ -22,6 +22,13 @@ class ProductTagService
         return $blog->products;
     }
 
+    public function getLatestProductTags(Product $product)
+    {
+        $product->load(['productTags']);
+
+        return $product->productTags;
+    }
+
     public function firstOrCreate(Blog $blog, Product $product, ProductTagDTO $productTagDTO)
     {
         $validation = $productTagDTO->validate();
@@ -37,7 +44,7 @@ class ProductTagService
             'product_id' => $product->id,
         ]);
 
-        if ($tag and $tag->name) {
+        if ($tag and $tag->tag_name) {
             return ResponseBuilder::status($tag->wasRecentlyCreated ? 201 : 200)->data($tag->toArray());
         }
 
