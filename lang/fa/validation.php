@@ -274,5 +274,6 @@ return [
         //
         'short_description' => 'توضیحات مختصر',
         'code' => 'کد',
+        'tag_name' => 'نام برچسب',
     ],
 ];
