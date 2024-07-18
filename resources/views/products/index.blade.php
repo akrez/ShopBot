@@ -21,6 +21,7 @@
                         <th scope="col">@lang('validation.attributes.created_at')</th>
                         <th scope="col">@lang('validation.attributes.updated_at')</th>
                         <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,6 +32,12 @@
                             <td>{{ $product->product_status->trans() }}</td>
                             <td>{{ $product->created_at }}</td>
                             <td>{{ $product->updated_at }}</td>
+                            <td>
+                                <a class="btn btn-light border border-dark w-100"
+                                    href="{{ route('products.product_tags.index', ['product_id' => $product->id]) }}">
+                                    @lang('Tags')
+                                </a>
+                            </td>
                             <td>
                                 <a class="btn btn-light border border-dark w-100"
                                     href="{{ route('products.edit', ['id' => $product->id]) }}">
