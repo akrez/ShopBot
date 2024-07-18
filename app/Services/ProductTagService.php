@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
-use App\DTO\TagDTO;
+use App\DTO\ProductTagDTO;
 use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
 
-class TagService
+class ProductTagService
 {
     public function getLatestProductsWithTags(Blog $blog)
     {
         $blog->load([
             'products' => function ($query) {
-                $query->with('tags', function ($query) {
+                $query->with('productTags', function ($query) {
                     $query->latest('created_at');
                 })->latest('created_at');
             },
@@ -22,16 +22,19 @@ class TagService
         return $blog->products;
     }
 
-    public function firstOrCreate(Blog $blog, TagDTO $tagDto)
+    public function firstOrCreate(Blog $blog, Product $product, ProductTagDTO $productTagDTO)
     {
-        $validation = $tagDto->validate();
+        $validation = $productTagDTO->validate();
 
         if ($validation->errors()->isNotEmpty()) {
             return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
         }
 
-        $tag = $blog->tags()->firstOrCreate([
-            'name' => $tagDto->name,
+        $tag = $blog->productTags()->firstOrCreate([
+            'tag_name' => $productTagDTO->name,
+            'blog_id' => $blog->id,
+        ], [
+            'product_id' => $product->id,
         ]);
 
         if ($tag and $tag->name) {
@@ -41,21 +44,22 @@ class TagService
         return ResponseBuilder::status(500);
     }
 
-    public function syncProductTags(Blog $blog, Product $product, array $tags)
+    public function syncProductTags(Blog $blog, Product $product, array $tags, bool $deleteOld = true)
     {
-        $validTags = [];
+        if ($deleteOld) {
+            $product->productTags()->delete();
+        }
+
         foreach ($tags as $tag) {
-            if (!$tag) {
+            if (! $tag) {
                 continue;
             }
 
-            $tagResponse = $this->firstOrCreate($blog, new TagDTO($tag));
+            $tagResponse = $this->firstOrCreate($blog, $product, new ProductTagDTO($tag));
             if ($tagResponse->isSuccessful()) {
                 $validTags[] = $tagResponse->getData()['name'];
             }
         }
-
-        $product->tags()->sync($validTags, false);
     }
 
     public function export(Blog $blog)
@@ -73,8 +77,8 @@ class TagService
                 $product->code,
                 $product->name,
             ];
-            foreach ($product->tags as $tag) {
-                $row[] = $tag->name;
+            foreach ($product->productTags as $productTag) {
+                $row[] = $productTag->tag_name;
             }
             $source[] = $row;
         }
