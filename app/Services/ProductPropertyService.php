@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\DTO\ProductPropertyDTO;
-use App\Facades\ArrayHelper;
-use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
 
@@ -53,29 +51,26 @@ class ProductPropertyService
         $product->productProperties()->delete();
     }
 
-    public function filter(array $keysValues)
+    public function filter(array $keyValueLines)
     {
-        $safeKeyValues = [];
-        foreach ($keysValues as $keyValues) {
-            $keyValues = ((array) $keyValues) + array_fill(0, 1, null);
+        $keyValues = [];
+        foreach ($keyValueLines as $keyValueLine) {
+            $keyValueLine = (array) $keyValueLine;
+            $keyValueLine += array_fill(0, 1, null);
             //
-            $key = trim($keyValues[0]);
+            $key = trim($keyValueLine[0]);
             //
-            if (!isset($safeKeyValues[$key])) {
-                $safeKeyValues[$key] = [];
-            }
-            $safeKeyValues[$key] = array_merge(
-                $safeKeyValues[$key],
-                array_slice($keyValues, 1)
-            );
+            $keyValues[$key][] = array_slice($keyValueLine, 1);
         }
-        //
-        foreach ($safeKeyValues as $safeKey => $safeValues) {
-            $safeKeyValues[$safeKey] = collect($safeValues)
-                ->map(fn ($item) => trim($item))
+
+        $safeKeyValues = [];
+        foreach ($keyValues as $key => $values) {
+            $safeKeyValues[$key] = collect($values)
+                ->flatten()
+                ->map(fn ($value) => trim($value))
                 ->filter()
                 ->unique()
-                ->filter(fn ($tag) => (new ProductPropertyDTO($safeKey, $tag))
+                ->filter(fn ($tag) => (new ProductPropertyDTO($key, $tag))
                     ->validate()
                     ->errors()
                     ->isEmpty())
@@ -107,18 +102,6 @@ class ProductPropertyService
         $this->delete($product);
         $safeProperties = $this->filter($keysValues);
         $data = $this->insert($blog, $product, $safeProperties);
-    }
-
-    public function syncProducts(Blog $blog, array $productsKeysValues)
-    {
-        foreach ($productsKeysValues as $productCode => $keysValues) {
-            $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
-            if ($product) {
-                $this->syncProduct($blog, $product, $keysValues);
-            }
-        }
-
-        return ResponseBuilder::status(201)->data([]);
     }
 
     public function export(Blog $blog)
@@ -169,6 +152,11 @@ class ProductPropertyService
             $productsKeysValues[$code][] = array_slice($row, 2);
         }
         //
-        $this->syncProducts($blog, $productsKeysValues);
+        foreach ($productsKeysValues as $productCode => $keyValueLines) {
+            $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
+            if ($product) {
+                $this->syncProduct($blog, $product, $keyValueLines);
+            }
+        }
     }
 }

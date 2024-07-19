@@ -18,8 +18,7 @@ class PortController extends Controller
         protected ProductService $productService,
         protected ProductTagService $productTagService,
         protected ProductPropertyService $productPropertyService
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
@@ -30,7 +29,7 @@ class PortController extends Controller
     {
         $blog = $this->blogService->findOrFailActiveBlog();
 
-        $fileName = date('Y-m-d-H-i-s') . '.xlsx';
+        $fileName = date('Y-m-d-H-i-s').'.xlsx';
 
         return $this->excel->export($fileName, [
             SheetsName::PRODUCT->value => $this->productService->export($blog),

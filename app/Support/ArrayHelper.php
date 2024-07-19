@@ -6,7 +6,7 @@ class ArrayHelper
 {
     public function iexplode($delimiters, $string, $limit = PHP_INT_MAX)
     {
-        if (!is_array($delimiters)) {
+        if (! is_array($delimiters)) {
             $delimiters = [$delimiters];
         }
         $delimiter = reset($delimiters);
