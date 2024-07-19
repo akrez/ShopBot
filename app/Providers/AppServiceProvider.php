@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Support\ActiveBlog;
+use App\Support\ArrayHelper;
 use App\Support\ResponseBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton('ActiveBlog', function () {
             return new ActiveBlog(Auth::user());
+        });
+        $this->app->singleton('ArrayHelper', function () {
+            return new ArrayHelper();
         });
     }
 }
