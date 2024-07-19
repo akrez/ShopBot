@@ -57,6 +57,11 @@ class Blog extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function productProperties()
+    {
+        return $this->hasMany(ProductProperty::class);
+    }
+
     public function productTags()
     {
         return $this->hasMany(ProductTag::class);

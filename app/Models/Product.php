@@ -52,6 +52,11 @@ class Product extends Model
         return $this->hasMany(ProductTag::class, 'product_id', 'id');
     }
 
+    public function productProperties()
+    {
+        return $this->hasMany(ProductProperty::class, 'product_id', 'id');
+    }
+
     public function blog(): BelongsTo
     {
         return $this->belongsTo(Blog::class);

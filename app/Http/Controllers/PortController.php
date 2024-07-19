@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Excel\SheetsName;
 use App\Services\BlogService;
+use App\Services\ProductPropertyService;
 use App\Services\ProductService;
 use App\Services\ProductTagService;
 use App\Support\Excel;
@@ -16,7 +17,9 @@ class PortController extends Controller
         protected BlogService $blogService,
         protected ProductService $productService,
         protected ProductTagService $productTagService,
-    ) {}
+        protected ProductPropertyService $productPropertyService
+    ) {
+    }
 
     public function index(Request $request)
     {
@@ -27,11 +30,12 @@ class PortController extends Controller
     {
         $blog = $this->blogService->findOrFailActiveBlog();
 
-        $fileName = date('Y-m-d-H-i-s').'.xlsx';
+        $fileName = date('Y-m-d-H-i-s') . '.xlsx';
 
         return $this->excel->export($fileName, [
             SheetsName::PRODUCT->value => $this->productService->export($blog),
             SheetsName::PRODUCT_TAG->value => $this->productTagService->export($blog),
+            SheetsName::PRODUCT_PROPERTY->value => $this->productPropertyService->export($blog),
         ]);
     }
 
@@ -43,13 +47,17 @@ class PortController extends Controller
 
         if ($port and $path = $port->getRealPath()) {
 
-            $source = $this->excel->read($path) + [
+            $source = $this->excel->read($path);
+
+            $source += [
                 SheetsName::PRODUCT->value => [],
                 SheetsName::PRODUCT_TAG->value => [],
+                SheetsName::PRODUCT_PROPERTY->value => [],
             ];
 
             $this->productService->import($blog, $source[SheetsName::PRODUCT->value]);
             $this->productTagService->import($blog, $source[SheetsName::PRODUCT_TAG->value]);
+            $this->productPropertyService->import($blog, $source[SheetsName::PRODUCT_PROPERTY->value]);
         }
 
         return back();
