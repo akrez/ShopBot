@@ -5,7 +5,7 @@ namespace App\DTO;
 class ProductTagDTO extends DTO
 {
     public function __construct(
-        public $name
+        public $tag_name
     ) {}
 
     public function rules(bool $isStore = true)
@@ -16,7 +16,7 @@ class ProductTagDTO extends DTO
     public static function getRules(bool $isStore)
     {
         return [
-            'name' => ['required', 'max:32'],
+            'tag_name' => ['required', 'max:32'],
         ];
     }
 }
