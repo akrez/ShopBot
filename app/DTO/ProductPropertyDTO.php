@@ -2,6 +2,8 @@
 
 namespace App\DTO;
 
+use App\Services\ProductPropertyService;
+
 class ProductPropertyDTO extends DTO
 {
     public function __construct(
@@ -18,8 +20,8 @@ class ProductPropertyDTO extends DTO
     public static function getRules(bool $isStore)
     {
         return [
-            'property_key' => ['required', 'max:32'],
-            'property_value' => ['required', 'max:32'],
+            'property_key' => ['required', 'max:' . ProductPropertyService::MAX_LENGTH],
+            'property_value' => ['required', 'max:' . ProductPropertyService::MAX_LENGTH],
         ];
     }
 }
