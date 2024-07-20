@@ -23,6 +23,7 @@
                         <th scope="col"></th>
                         <th scope="col"></th>
                         <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,6 +44,12 @@
                                 <a class="btn btn-light border border-dark w-100"
                                     href="{{ route('products.product_tags.create', ['product_id' => $product->id]) }}">
                                     @lang('Tags')
+                                </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-light border border-dark w-100"
+                                    href="{{ route('products.product_images.index', ['product_id' => $product->id]) }}">
+                                    @lang('product_images')
                                 </a>
                             </td>
                             <td>
