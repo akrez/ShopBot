@@ -4,6 +4,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductPropertyController;
 use App\Http\Controllers\ProductTagController;
 use App\Http\Controllers\SiteController;
@@ -29,5 +30,6 @@ Route::middleware('auth')->group(function () {
         Route::post('products/{product_id}/product_tags', [ProductTagController::class, 'store'])->name('products.product_tags.store');
         Route::get('products/{product_id}/product_properties', [ProductPropertyController::class, 'create'])->name('products.product_properties.create');
         Route::post('products/{product_id}/product_properties', [ProductPropertyController::class, 'store'])->name('products.product_properties.store');
+        Route::resource('products/{product_id}/product_images', ProductImageController::class, ['as' => 'products'])->parameter('product_images', 'name');
     });
 });
