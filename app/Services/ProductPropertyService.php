@@ -13,7 +13,7 @@ class ProductPropertyService
 
     const SEPARATOR_LINES = [PHP_EOL];
 
-    const SEPARATOR_KEY_VALUES = [':', "\t", ',', '،'];
+    const SEPARATOR_KEY_VALUES = [':', ',', '،', "\t"];
 
     const GLUE_LINES = PHP_EOL;
 
@@ -43,6 +43,93 @@ class ProductPropertyService
         ]);
 
         return $product->productProperties;
+    }
+
+    public function getAsStringWithKey(Product $product)
+    {
+        $metas = $this->getLatestProductProperties($product);
+
+        $keyValues = [];
+        foreach ($metas as $meta) {
+            $keyValues[$meta->property_key][$meta->property_value] = $meta->property_value;
+        }
+
+        $keyValue = [];
+        foreach ($keyValues as $key => $values) {
+            $keyValue[$key] = implode(static::GLUE_VALUES, $values);
+        }
+
+        $lines = [];
+        foreach ($keyValue as $key => $values) {
+            $lines[] = $key . static::GLUE_KEY_VALUES . $values;
+        }
+
+        return implode(static::GLUE_LINES, $lines);
+    }
+
+    public function export(Blog $blog)
+    {
+        $source = [];
+
+        $source[] = [
+            __('validation.attributes.code'),
+            __('validation.attributes.name'),
+            __('validation.attributes.property_key'),
+        ];
+
+        $products = $this->getLatestProductsWithProperties($blog);
+        foreach ($products as $product) {
+            $properties = $product->productProperties()->get()->groupBy('property_key');
+            if ($properties->isEmpty()) {
+                $source[] = [
+                    $product->code,
+                    $product->name,
+                ];
+            } else {
+                foreach ($properties as $propertyKey => $property) {
+                    $source[] = [
+                        $product->code,
+                        $product->name,
+                        $propertyKey,
+                        ...$property->pluck('property_value')->toArray(),
+                    ];
+                }
+            }
+        }
+
+        return $source;
+    }
+
+    public function import(Blog $blog, array $rows)
+    {
+        $rows = $rows + [0 => []];
+        unset($rows[0]);
+
+        $productsKeysValues = [];
+        foreach ($rows as $row) {
+            $row = (array) $row;
+            $row += array_fill(0, 3, null);
+            //
+            $code = trim($row[0]);
+            //
+            $productsKeysValues[$code][] = array_slice($row, 2);
+        }
+        //
+        foreach ($productsKeysValues as $productCode => $lines) {
+            $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
+            if ($product) {
+                $this->syncProduct($blog, $product, $lines);
+            }
+        }
+    }
+
+    public function syncProduct(Blog $blog, Product $product, array $lines)
+    {
+        $this->delete($product);
+        $dtos = $this->filter($lines);
+        $data = $this->insert($blog, $product, $dtos);
+
+        return $data;
     }
 
     public function delete(Product $product)
@@ -104,92 +191,5 @@ class ProductPropertyService
         }
 
         return $result;
-    }
-
-    public function syncProduct(Blog $blog, Product $product, array $lines)
-    {
-        $this->delete($product);
-        $dtos = $this->filter($lines);
-        $data = $this->insert($blog, $product, $dtos);
-
-        return $data;
-    }
-
-    public function export(Blog $blog)
-    {
-        $source = [];
-
-        $source[] = [
-            __('validation.attributes.code'),
-            __('validation.attributes.name'),
-            __('validation.attributes.property_key'),
-        ];
-
-        $products = $this->getLatestProductsWithProperties($blog);
-        foreach ($products as $product) {
-            $properties = $product->productProperties()->get()->groupBy('property_key');
-            if ($properties->isEmpty()) {
-                $source[] = [
-                    $product->code,
-                    $product->name,
-                ];
-            } else {
-                foreach ($properties as $propertyKey => $property) {
-                    $source[] = [
-                        $product->code,
-                        $product->name,
-                        $propertyKey,
-                        ...$property->pluck('property_value')->toArray(),
-                    ];
-                }
-            }
-        }
-
-        return $source;
-    }
-
-    public function import(Blog $blog, array $rows)
-    {
-        $rows = $rows + [0 => []];
-        unset($rows[0]);
-
-        $productsKeysValues = [];
-        foreach ($rows as $row) {
-            $row = (array) $row;
-            $row += array_fill(0, 3, null);
-            //
-            $code = trim($row[0]);
-            //
-            $productsKeysValues[$code][] = array_slice($row, 2);
-        }
-        //
-        foreach ($productsKeysValues as $productCode => $lines) {
-            $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
-            if ($product) {
-                $this->syncProduct($blog, $product, $lines);
-            }
-        }
-    }
-
-    public function getAsStringWithKey(Product $product)
-    {
-        $metas = $this->getLatestProductProperties($product);
-
-        $keyValues = [];
-        foreach ($metas as $meta) {
-            $keyValues[$meta->property_key][$meta->property_value] = $meta->property_value;
-        }
-
-        $keyValue = [];
-        foreach ($keyValues as $key => $values) {
-            $keyValue[$key] = implode(static::GLUE_VALUES, $values);
-        }
-
-        $lines = [];
-        foreach ($keyValue as $key => $values) {
-            $lines[] = $key.static::GLUE_KEY_VALUES.$values;
-        }
-
-        return implode(static::GLUE_LINES, $lines);
     }
 }
