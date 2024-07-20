@@ -13,9 +13,7 @@ class ProductPropertyService
 
     const SEPARATOR_LINES = [PHP_EOL];
 
-    const SEPARATOR_KEY_VALUES = [':', "\t"];
-
-    const SEPARATOR_VALUES = [',', '،', "\t"];
+    const SEPARATOR_KEY_VALUES = [':', "\t", ',', '،'];
 
     const GLUE_LINES = PHP_EOL;
 
@@ -52,65 +50,67 @@ class ProductPropertyService
         $product->productProperties()->delete();
     }
 
-    public function filter(array $keyValueLines)
+    public function filter(array $lines)
     {
         $keyValues = [];
-        foreach ($keyValueLines as $keyValueLine) {
-            if (is_string($keyValueLine)) {
-                $separators = array_merge(
-                    static::SEPARATOR_KEY_VALUES,
-                    static::SEPARATOR_VALUES
-                );
-                $keyValueLine = ArrayHelper::iexplode($separators, $keyValueLine);
+        foreach ($lines as $line) {
+            //
+            if (is_array($line)) {
+                $lineAsString = collect($line)->flatten()->implode(static::GLUE_VALUES);
             } else {
-                $keyValueLine = (array) $keyValueLine;
+                $lineAsString = strval($line);
             }
-            $keyValueLine += array_fill(0, 1, null);
             //
-            $key = trim($keyValueLine[0]);
+            $lineAsArray = ArrayHelper::iexplode(static::SEPARATOR_KEY_VALUES, $lineAsString);
+            $lineAsArray += array_fill(0, 1, null);
             //
-            $keyValues[$key][] = array_slice($keyValueLine, 1);
+            $key = trim($lineAsArray[0]);
+            //
+            $keyValues[$key][] = array_slice($lineAsArray, 1);
         }
 
-        $safeKeyValues = [];
+        $dtos = [];
         foreach ($keyValues as $key => $values) {
-            $safeKeyValues[$key] = collect($values)
+            $safeValues = collect($values)
                 ->flatten()
                 ->map(fn ($value) => trim($value))
                 ->filter()
                 ->unique()
-                ->filter(fn ($tag) => (new ProductPropertyDTO($key, $tag))
-                    ->validate()
-                    ->errors()
-                    ->isEmpty())
                 ->toArray();
-        }
-
-        //
-        return $safeKeyValues;
-    }
-
-    public function insert(Blog $blog, Product $product, array $safeKeyValues)
-    {
-        $data = [];
-        foreach ($safeKeyValues as $safeKey => $safeValues) {
             foreach ($safeValues as $safeValue) {
-                $data[] = $blog->productProperties()->create([
-                    'property_key' => $safeKey,
-                    'property_value' => $safeValue,
-                    'product_id' => $product->id,
-                ])->toArray();
+                $dto = new ProductPropertyDTO($key, $safeValue);
+                if ($dto->validate()->errors()->isEmpty()) {
+                    $dtos[] = $dto;
+                }
             }
         }
 
-        return $data;
+        //
+        return $dtos;
     }
 
-    public function syncProduct(Blog $blog, Product $product, array $keysValues)
+    /**
+     * @param  array<int, ProductPropertyDTO>  $dtos
+     */
+    public function insert(Blog $blog, Product $product, array $productPropertyDtos): array
+    {
+        $result = [];
+        foreach ($productPropertyDtos as $productPropertyDto) {
+            $result[] = $blog->productProperties()->create([
+                'property_key' => $productPropertyDto->property_key,
+                'property_value' => $productPropertyDto->property_value,
+                'product_id' => $product->id,
+            ])->toArray();
+        }
+
+        return $result;
+    }
+
+    public function syncProduct(Blog $blog, Product $product, array $lines)
     {
         $this->delete($product);
-        $safeProperties = $this->filter($keysValues);
-        $data = $this->insert($blog, $product, $safeProperties);
+        $dtos = $this->filter($lines);
+        $data = $this->insert($blog, $product, $dtos);
 
         return $data;
     }
@@ -163,10 +163,10 @@ class ProductPropertyService
             $productsKeysValues[$code][] = array_slice($row, 2);
         }
         //
-        foreach ($productsKeysValues as $productCode => $keyValueLines) {
+        foreach ($productsKeysValues as $productCode => $lines) {
             $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
             if ($product) {
-                $this->syncProduct($blog, $product, $keyValueLines);
+                $this->syncProduct($blog, $product, $lines);
             }
         }
     }
