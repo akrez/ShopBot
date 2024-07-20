@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('header', __('Edit :name', ['name' => __('Product')]))
+@section('header', __('Edit :name', ['name' => __('product_image')]))
 @section('subheader', $product->name)
 
 @section('content')

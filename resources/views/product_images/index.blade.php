@@ -20,7 +20,7 @@
                     <th scope="col">@lang('validation.attributes.name')</th>
                     <th scope="col">@lang('validation.attributes.is_selected')</th>
                     <th scope="col">@lang('validation.attributes.gallery_order')</th>
-                    <th scope="col">@lang('validation.attributes.gallery_order')</th>
+                    <th scope="col">@lang('validation.attributes.created_at')</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                 </tr>
