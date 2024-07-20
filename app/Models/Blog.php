@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property User $user
  * @property Collection|Product[] $products
  * @property Collection|ProductTag[] $productTags
+ * @property Collection|ProductProperty[] $productProperties
+ * @property Collection|Gallery[] $galleries
  * @property Collection|User[] $users
  */
 class Blog extends Model
@@ -65,6 +67,11 @@ class Blog extends Model
     public function productTags()
     {
         return $this->hasMany(ProductTag::class);
+    }
+
+    public function galleries()
+    {
+        return $this->hasMany(Gallery::class);
     }
 
     public function users()

@@ -61,4 +61,9 @@ class Product extends Model
     {
         return $this->belongsTo(Blog::class);
     }
+
+    public function images()
+    {
+        return $this->morphMany(Gallery::class, 'gallery');
+    }
 }
