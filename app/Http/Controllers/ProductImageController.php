@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\DTO\GalleryDTO;
-use App\DTO\ProductDTO;
 use App\Enums\Gallery\GalleryCategory;
 use App\Services\BlogService;
 use App\Services\GalleryService;
@@ -55,7 +54,7 @@ class ProductImageController extends Controller
         $blog = $this->blogService->findOrFailActiveBlog();
         $product = $this->productService->findOrFailActiveBlogProduct($product_id);
 
-        $response = $this->galleryService->create($blog, $product::class, $product->id, GalleryCategory::PRODUCT_IMAGE, new GalleryDTO(
+        $response = $this->galleryService->store($blog, $product::class, $product->id, GalleryCategory::PRODUCT_IMAGE, new GalleryDTO(
             $request->file('file'),
             $request->gallery_order,
             $request->is_selected
@@ -67,30 +66,33 @@ class ProductImageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit(Request $request, int $product_id, string $name)
     {
-        $product = $this->productService->findOrFailActiveBlogProduct($id);
+        $product = $this->productService->findOrFailActiveBlogProduct($product_id);
+        $gallery = $this->galleryService->findOrFailActiveBlogGallery($name);
 
         return view('product_images.edit', [
             'product' => $product,
+            'gallery' => $gallery,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $product_id, string $name)
     {
         $blog = $this->blogService->findOrFailActiveBlog();
-        $product = $this->productService->findOrFailActiveBlogProduct($id);
+        $product = $this->productService->findOrFailActiveBlogProduct($product_id);
+        $gallery = $this->galleryService->findOrFailActiveBlogGallery($name);
 
-        $response = $this->productService->update($blog, $product, new ProductDTO(
-            $request->code,
-            $request->name,
-            $request->product_status
+        $response = $this->galleryService->update($blog, $gallery, new GalleryDTO(
+            null,
+            $request->gallery_order,
+            $request->is_selected
         ));
 
-        return new WebResponse($response, route('product_images.index'));
+        return new WebResponse($response, route('products.product_images.index', ['product_id' => $product_id]));
     }
 
     /**

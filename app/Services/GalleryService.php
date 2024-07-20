@@ -25,7 +25,36 @@ class GalleryService
             ->orderDefault();
     }
 
-    public function create(Blog $blog, string $galleryType, string $galleryId, GalleryCategory $galleryCategory, GalleryDTO $galleryDTO)
+    public function findOrFailActiveBlogGallery($name)
+    {
+        $blog = resolve(BlogService::class)->findOrFailActiveBlog();
+        $gallery = $blog->galleries()->where('name', $name)->first();
+        abort_unless($blog and $gallery, 404);
+
+        return $gallery;
+    }
+
+    public function update(Blog $blog, Gallery $gallery, GalleryDTO $galleryDTO)
+    {
+        $validation = $galleryDTO->validate(false);
+        if ($validation->errors()->isNotEmpty()) {
+            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+        }
+
+        $isSelected = ($galleryDTO->is_selected ? now()->format('Y-m-d H:i:s.u') : null);
+
+        $gallery->gallery_order = $galleryDTO->gallery_order;
+        $gallery->selected_at = $isSelected;
+        if (! $gallery->save()) {
+            return ResponseBuilder::status(500);
+        }
+
+        $this->resetSelected($blog, $gallery);
+
+        return ResponseBuilder::status(200);
+    }
+
+    public function store(Blog $blog, string $galleryType, string $galleryId, GalleryCategory $galleryCategory, GalleryDTO $galleryDTO)
     {
         $validation = $galleryDTO->validate();
         if ($validation->errors()->isNotEmpty()) {
@@ -50,16 +79,43 @@ class GalleryService
 
         $isUploaded = $this->upload(
             $galleryDTO->file->getRealPath(),
-            static::getBaseUri($gallery->name)
+            $this->getBaseUri($gallery->name)
         );
 
         if (! $isUploaded) {
             return ResponseBuilder::status(500);
         }
 
-        // static::resetSelected($gallery);
+        $this->resetSelected($blog, $gallery);
 
         return ResponseBuilder::status(200);
+    }
+
+    private function resetSelected(Blog $blog, Gallery $gallery)
+    {
+        $shouldSelect = $this->getLatestQuery(
+            $blog,
+            $gallery->gallery_type,
+            $gallery->gallery_id,
+            $gallery->gallery_category->value
+        )->first();
+
+        if (empty($shouldSelect->selected_at)) {
+            $shouldSelect->selected_at = now()->format('Y-m-d H:i:s.u');
+            $shouldSelect->save();
+        }
+
+        $shouldNotSelects = $this->getLatestQuery(
+            $blog,
+            $gallery->gallery_type,
+            $gallery->gallery_id,
+            $gallery->gallery_category->value
+        )->whereNotNull('selected_at')->where('name', '<>', $shouldSelect->name)->get();
+
+        foreach ($shouldNotSelects as $shouldNotSelect) {
+            $shouldNotSelect->selected_at = null;
+            $shouldNotSelect->save();
+        }
     }
 
     private function upload(string $readFilePath, string $writeFilePath): bool
@@ -70,7 +126,7 @@ class GalleryService
         return Storage::put($writeFilePath, $image->encode());
     }
 
-    public static function generateImageFileName($ext)
+    private function generateImageFileName($ext)
     {
         do {
             $name = substr(uniqid(rand(), true), 0, 12).'.'.$ext;
@@ -79,7 +135,7 @@ class GalleryService
         return $name;
     }
 
-    public static function getBaseUri($name)
+    private function getBaseUri($name)
     {
         return implode('/', [
             $name,

@@ -14,6 +14,12 @@ class Gallery extends Model
 
     protected $table = 'galleries';
 
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
+    protected $primaryKey = 'name';
+
     protected $casts = [
         'gallery_category' => GalleryCategory::class,
         'selected_at' => 'datetime',
