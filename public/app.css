@@ -5,3 +5,8 @@ body {
 .text-justify {
     text-align: justify;
 }
+
+.max-width-32-px {
+    max-width: 32px;
+    max-height: 32px;
+}
