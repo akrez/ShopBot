@@ -61,7 +61,7 @@ class ProductPropertyService
 
         $lines = [];
         foreach ($keyValue as $key => $values) {
-            $lines[] = $key . static::GLUE_KEY_VALUES . $values;
+            $lines[] = $key.static::GLUE_KEY_VALUES.$values;
         }
 
         return implode(static::GLUE_LINES, $lines);
@@ -118,6 +118,7 @@ class ProductPropertyService
             //
             $result[$groupKey][] = array_slice($rowAsArray, $devideIndex);
         }
+
         //
         return $result;
     }

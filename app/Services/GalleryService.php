@@ -8,11 +8,9 @@ use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Gallery;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class GalleryService
 {
@@ -46,7 +44,7 @@ class GalleryService
         $gallery->gallery_category = $galleryCategory;
         $gallery->gallery_type = $galleryType;
         $gallery->gallery_id = $galleryId;
-        if (!$gallery->save()) {
+        if (! $gallery->save()) {
             return ResponseBuilder::status(500);
         }
 
@@ -55,7 +53,7 @@ class GalleryService
             static::getBaseUri($gallery->name)
         );
 
-        if (!$isUploaded) {
+        if (! $isUploaded) {
             return ResponseBuilder::status(500);
         }
 
@@ -68,13 +66,14 @@ class GalleryService
     {
         $manager = new ImageManager(new Driver());
         $image = $manager->read($readFilePath);
+
         return Storage::put($writeFilePath, $image->encode());
     }
 
     public static function generateImageFileName($ext)
     {
         do {
-            $name = substr(uniqid(rand(), true), 0, 12) . '.' . $ext;
+            $name = substr(uniqid(rand(), true), 0, 12).'.'.$ext;
         } while (Gallery::query()->where('name', $name)->first());
 
         return $name;
