@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\ResponseBuilder;
 use App\Services\BlogService;
 use App\Services\ProductPropertyService;
 use App\Services\ProductService;
@@ -25,7 +26,7 @@ class ProductPropertyController extends Controller
 
         return view('product_properties.create', [
             'product' => $product,
-            'productProperties' => $this->productPropertyService->getLatestProductProperties($product),
+            'productPropertiesText' => $this->productPropertyService->getAsStringWithKey($product),
         ]);
     }
 
@@ -37,8 +38,8 @@ class ProductPropertyController extends Controller
         $blog = $this->blogService->findOrFailActiveBlog();
         $product = $this->productService->findOrFailActiveBlogProduct($product_id);
 
-        $response = $this->productPropertyService->syncProducts($blog, $product, explode("\n", $request->property_names));
+        $response = $this->productPropertyService->syncProduct($blog, $product, explode("\n", $request->property_value));
 
-        return new WebResponse($response);
+        return new WebResponse(ResponseBuilder::status(200));
     }
 }

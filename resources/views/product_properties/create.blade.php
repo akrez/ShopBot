@@ -6,6 +6,6 @@
 @section('content')
     @include('product_properties._form', [
         'product' => $product,
-        'productProperties' => $productProperties,
+        'productPropertiesText' => $productPropertiesText,
     ])
 @endsection

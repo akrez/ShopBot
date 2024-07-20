@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\ProductPropertyDTO;
+use App\Facades\ArrayHelper;
 use App\Models\Blog;
 use App\Models\Product;
 
@@ -55,7 +56,15 @@ class ProductPropertyService
     {
         $keyValues = [];
         foreach ($keyValueLines as $keyValueLine) {
-            $keyValueLine = (array) $keyValueLine;
+            if (is_string($keyValueLine)) {
+                $separators = array_merge(
+                    static::SEPARATOR_KEY_VALUES,
+                    static::SEPARATOR_VALUES
+                );
+                $keyValueLine = ArrayHelper::iexplode($separators, $keyValueLine);
+            } else {
+                $keyValueLine = (array) $keyValueLine;
+            }
             $keyValueLine += array_fill(0, 1, null);
             //
             $key = trim($keyValueLine[0]);
@@ -102,6 +111,8 @@ class ProductPropertyService
         $this->delete($product);
         $safeProperties = $this->filter($keysValues);
         $data = $this->insert($blog, $product, $safeProperties);
+
+        return $data;
     }
 
     public function export(Blog $blog)
@@ -158,5 +169,27 @@ class ProductPropertyService
                 $this->syncProduct($blog, $product, $keyValueLines);
             }
         }
+    }
+
+    public function getAsStringWithKey(Product $product)
+    {
+        $metas = $this->getLatestProductProperties($product);
+
+        $keyValues = [];
+        foreach ($metas as $meta) {
+            $keyValues[$meta->property_key][$meta->property_value] = $meta->property_value;
+        }
+
+        $keyValue = [];
+        foreach ($keyValues as $key => $values) {
+            $keyValue[$key] = implode(static::GLUE_VALUES, $values);
+        }
+
+        $lines = [];
+        foreach ($keyValue as $key => $values) {
+            $lines[] = $key.static::GLUE_KEY_VALUES.$values;
+        }
+
+        return implode(static::GLUE_LINES, $lines);
     }
 }
