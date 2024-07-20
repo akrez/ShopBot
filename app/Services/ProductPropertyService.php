@@ -45,7 +45,7 @@ class ProductPropertyService
         return $product->productProperties;
     }
 
-    public function getAsStringWithKey(Product $product)
+    public function getTextAreaInputString(Product $product)
     {
         $metas = $this->getLatestProductProperties($product);
 

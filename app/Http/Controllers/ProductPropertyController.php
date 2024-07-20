@@ -26,7 +26,7 @@ class ProductPropertyController extends Controller
 
         return view('product_properties.create', [
             'product' => $product,
-            'productPropertiesText' => $this->productPropertyService->getAsStringWithKey($product),
+            'productPropertiesText' => $this->productPropertyService->getTextAreaInputString($product),
         ]);
     }
 
