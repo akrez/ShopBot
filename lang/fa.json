@@ -241,7 +241,9 @@
     "Product": "محصول",
     "Properties": "مشخصات",
     "Property": "مشخصات",
-    "Port":"ورودی و خروجی اکسل",
+    "Port": "ورودی و خروجی اکسل",
+    "product_images": "تصاویر محصول",
+    "product_image": "تصویر محصول",
     "active": "فعال",
     "deactive": "غیر فعال"
 }

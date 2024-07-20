@@ -277,5 +277,8 @@ return [
         'tag_name' => 'نام برچسب',
         'property_key' => 'عنوان خصوصیت',
         'property_value' => 'مقدار خصوصیت',
+        'gallery_order' => 'ترتیب',
+        'is_selected' => 'عکس اصلی',
+        'file' => 'فایل',
     ],
 ];
