@@ -75,6 +75,7 @@ class ProductPropertyService
             __('validation.attributes.code'),
             __('validation.attributes.name'),
             __('validation.attributes.property_key'),
+            __('validation.attributes.property_value'),
         ];
 
         $products = $this->getLatestProductsWithProperties($blog);
