@@ -59,7 +59,7 @@
         <div class="form-group">
             @if ('submit' == $type)
                 <button name="{{ $name }}" type="{{ $type }}" id="{{ $id }}"
-                    class="{{ implode(' ', $inputClass) }}">{{ $label }}</button>
+                    class="{{ implode(' ', $inputClass) }}">{{ $label ? $label : $value }}</button>
             @else
                 @if ($label)
                     <label class="form-label" for="{{ $id }}">{{ $label }}</label>
