@@ -100,20 +100,33 @@ class ProductPropertyService
         return $source;
     }
 
+    public function getSubArrayGrouped($rows, $devideIndex, $groupByIndex = 0)
+    {
+        $result = [];
+        foreach ($rows as $row) {
+            if (is_array($row)) {
+                $rowAsString = collect($row)->flatten()->implode(static::GLUE_VALUES);
+            } else {
+                $rowAsString = strval($row);
+            }
+            //
+            $rowAsArray = ArrayHelper::iexplode(static::SEPARATOR_KEY_VALUES, $rowAsString);
+            $rowAsArray += array_fill(0, $devideIndex + 1, null);
+            //
+            $groupKey = trim($rowAsArray[$groupByIndex]);
+            //
+            $result[$groupKey][] = array_slice($rowAsArray, $devideIndex);
+        }
+        //
+        return $result;
+    }
+
     public function import(Blog $blog, array $rows)
     {
         $rows = $rows + [0 => []];
         unset($rows[0]);
 
-        $productsKeysValues = [];
-        foreach ($rows as $row) {
-            $row = (array) $row;
-            $row += array_fill(0, 3, null);
-            //
-            $code = trim($row[0]);
-            //
-            $productsKeysValues[$code][] = array_slice($row, 2);
-        }
+        $productsKeysValues = $this->getSubArrayGrouped($rows, 2, 0);
         //
         foreach ($productsKeysValues as $productCode => $lines) {
             $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
@@ -139,22 +152,7 @@ class ProductPropertyService
 
     public function filter(array $lines)
     {
-        $keyValues = [];
-        foreach ($lines as $line) {
-            //
-            if (is_array($line)) {
-                $lineAsString = collect($line)->flatten()->implode(static::GLUE_VALUES);
-            } else {
-                $lineAsString = strval($line);
-            }
-            //
-            $lineAsArray = ArrayHelper::iexplode(static::SEPARATOR_KEY_VALUES, $lineAsString);
-            $lineAsArray += array_fill(0, 1, null);
-            //
-            $key = trim($lineAsArray[0]);
-            //
-            $keyValues[$key][] = array_slice($lineAsArray, 1);
-        }
+        $keyValues = $this->getSubArrayGrouped($lines, 1, 0);
 
         $dtos = [];
         foreach ($keyValues as $key => $values) {
