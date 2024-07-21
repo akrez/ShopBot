@@ -36,7 +36,12 @@ class GalleryService
 
     public function destroy(Blog $blog, Gallery $gallery)
     {
-        if ($gallery->delete() and $this->deleteFromStorage($gallery)) {
+        $path = static::getGalleryPath($gallery->name);
+
+        if (
+            $gallery->delete() and
+            Storage::delete($path)
+        ) {
             $this->resetSelected($blog, $gallery);
 
             return ResponseBuilder::status(200);
@@ -73,7 +78,9 @@ class GalleryService
         }
 
         $ext = $galleryDTO->file->extension();
-        $name = $this->generateImageFileName($ext);
+        do {
+            $name = substr(uniqid(rand(), true), 0, 12).'.'.$ext;
+        } while (Gallery::query()->where('name', $name)->first());
         $isSelected = ($galleryDTO->is_selected ? now()->format('Y-m-d H:i:s.u') : null);
 
         $gallery = $blog->galleries()->make();
@@ -88,11 +95,12 @@ class GalleryService
             return ResponseBuilder::status(500);
         }
 
-        $isUploaded = $this->upload(
-            $galleryDTO->file->getRealPath(),
-            $gallery
-        );
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($galleryDTO->file->getRealPath());
 
+        $path = static::getGalleryPath($gallery->name);
+
+        $isUploaded = Storage::put($path, $image->encode());
         if (! $isUploaded) {
             return ResponseBuilder::status(500);
         }
@@ -133,50 +141,14 @@ class GalleryService
         }
     }
 
-    private function upload(string $readFilePath, Gallery $gallery): bool
+    public function getGalleryUrl(Gallery $gallery)
     {
-        $manager = new ImageManager(new Driver());
-        $image = $manager->read($readFilePath);
+        $path = static::getGalleryPath($gallery->name);
 
-        return $this->putInStorage($gallery->name, $image->encode());
+        return Storage::url($path);
     }
 
-    /**
-     * @param  string  $path
-     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $contents
-     * @param  mixed  $options
-     */
-    private function putInStorage($galleryName, $contents, $options = []): bool
-    {
-        $path = static::getBaseUri($galleryName);
-
-        return Storage::put($path, $contents, $options);
-    }
-
-    private function deleteFromStorage(Gallery $gallery): bool
-    {
-        $path = static::getBaseUri($gallery->name);
-
-        return Storage::delete($path);
-    }
-
-    public function getUrl(Gallery $gallery)
-    {
-        $url = static::getBaseUri($gallery->name);
-
-        return Storage::url($url);
-    }
-
-    private function generateImageFileName($ext)
-    {
-        do {
-            $name = substr(uniqid(rand(), true), 0, 12).'.'.$ext;
-        } while (Gallery::query()->where('name', $name)->first());
-
-        return $name;
-    }
-
-    private function getBaseUri($fileName)
+    private function getGalleryPath($fileName)
     {
         return implode('/', [
             'gallery',
