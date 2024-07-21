@@ -65,7 +65,7 @@ class ProductService
     {
         $blog = resolve(BlogService::class)->findOrFailActiveBlog();
         $product = $blog->products()->where('id', $productId)->first();
-        abort_unless($blog and $product, 404);
+        abort_unless($product, 404);
 
         return $product;
     }

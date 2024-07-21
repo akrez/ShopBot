@@ -18,7 +18,7 @@ class ContactService
     {
         $blog = resolve(BlogService::class)->findOrFailActiveBlog();
         $contact = $blog->contacts()->where('id', $contactId)->first();
-        abort_unless($blog and $contact, 404);
+        abort_unless($contact, 404);
 
         return $contact;
     }

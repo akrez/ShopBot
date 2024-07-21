@@ -29,7 +29,7 @@ class GalleryService
     {
         $blog = resolve(BlogService::class)->findOrFailActiveBlog();
         $gallery = $blog->galleries()->where('name', $name)->first();
-        abort_unless($blog and $gallery, 404);
+        abort_unless($gallery, 404);
 
         return $gallery;
     }
