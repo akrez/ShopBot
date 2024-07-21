@@ -29,7 +29,8 @@
                 </thead>
                 <tbody>
                     @foreach ($products as $product)
-                        <tr>
+                        <tr
+                            class="{{ $product->product_status->value === \App\Enums\Product\ProductStatus::DEACTIVE->value ? 'table-danger' : '' }}">
                             <td>
                                 @foreach ($product->images as $productImage)
                                     <a href="{{ $productImage->getUrl() }}" target="_blank">
