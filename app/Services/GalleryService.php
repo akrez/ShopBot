@@ -34,6 +34,17 @@ class GalleryService
         return $gallery;
     }
 
+    public function destroy(Blog $blog, Gallery $gallery)
+    {
+        if ($gallery->delete() and $this->deleteFromStorage($gallery)) {
+            $this->resetSelected($blog, $gallery);
+
+            return ResponseBuilder::status(200);
+        }
+
+        return ResponseBuilder::status(500);
+    }
+
     public function update(Blog $blog, Gallery $gallery, GalleryDTO $galleryDTO)
     {
         $validation = $galleryDTO->validate(false);
@@ -79,7 +90,7 @@ class GalleryService
 
         $isUploaded = $this->upload(
             $galleryDTO->file->getRealPath(),
-            $this->getBaseUri($gallery->name)
+            $gallery
         );
 
         if (! $isUploaded) {
@@ -100,6 +111,10 @@ class GalleryService
             $gallery->gallery_category->value
         )->first();
 
+        if (! $shouldSelect) {
+            return;
+        }
+
         if (empty($shouldSelect->selected_at)) {
             $shouldSelect->selected_at = now()->format('Y-m-d H:i:s.u');
             $shouldSelect->save();
@@ -118,12 +133,38 @@ class GalleryService
         }
     }
 
-    private function upload(string $readFilePath, string $writeFilePath): bool
+    private function upload(string $readFilePath, Gallery $gallery): bool
     {
         $manager = new ImageManager(new Driver());
         $image = $manager->read($readFilePath);
 
-        return Storage::put($writeFilePath, $image->encode());
+        return $this->putInStorage($gallery->name, $image->encode());
+    }
+
+    /**
+     * @param  string  $path
+     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $contents
+     * @param  mixed  $options
+     */
+    private function putInStorage($galleryName, $contents, $options = []): bool
+    {
+        $path = static::getBaseUri($galleryName);
+
+        return Storage::put($path, $contents, $options);
+    }
+
+    private function deleteFromStorage(Gallery $gallery): bool
+    {
+        $path = static::getBaseUri($gallery->name);
+
+        return Storage::delete($path);
+    }
+
+    public function getUrl(Gallery $gallery)
+    {
+        $url = static::getBaseUri($gallery->name);
+
+        return Storage::url($url);
     }
 
     private function generateImageFileName($ext)
@@ -135,10 +176,11 @@ class GalleryService
         return $name;
     }
 
-    private function getBaseUri($name)
+    private function getBaseUri($fileName)
     {
         return implode('/', [
-            $name,
+            'gallery',
+            $fileName,
         ]);
     }
 }
