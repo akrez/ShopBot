@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Support;
 
 use App\Models\Bot;
 use Illuminate\Support\Facades\Http;
