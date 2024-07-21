@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Bot;
 use Illuminate\Support\Facades\Http;
 
-class TelegramApiService
+class TelegramApi
 {
     public function __construct(protected Bot $bot) {}
 

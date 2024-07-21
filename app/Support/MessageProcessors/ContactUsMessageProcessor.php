@@ -4,7 +4,7 @@ namespace App\Support\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ShopApi;
-use App\Services\TelegramApiService;
+use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 
@@ -33,7 +33,7 @@ class ContactUsMessageProcessor extends MessageProcessor
             $text[] = '***'.$contactUs['title'].'*** '.$contactUs['content'];
         }
 
-        return (new TelegramApiService($this->bot))->sendMessage(
+        return (new TelegramApi($this->bot))->sendMessage(
             $this->message->chat_id,
             implode("\n", $text),
             $this->getDefaultReplyMarkup() + [

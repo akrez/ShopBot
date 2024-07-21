@@ -14,6 +14,7 @@ use App\Support\MessageProcessors\CategoryMessageProcessor;
 use App\Support\MessageProcessors\ContactUsMessageProcessor;
 use App\Support\MessageProcessors\RequestContactMessageProcessor;
 use App\Support\MessageProcessors\SearchMessageProcessor;
+use App\Support\TelegramApi;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 
@@ -62,7 +63,7 @@ class TelegramService
         $messages = [];
         //
         $maxId = Message::where('bot_id', $bot->id)->max('id');
-        $response = (new TelegramApiService($bot))->getUpdates($maxId + 1);
+        $response = (new TelegramApi($bot))->getUpdates($maxId + 1);
         $results = Arr::get($response, 'result', []);
         //
         foreach ($results as $result) {

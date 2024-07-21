@@ -4,7 +4,7 @@ namespace App\Support\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ShopApi;
-use App\Services\TelegramApiService;
+use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 
@@ -35,13 +35,13 @@ class CategoriesMessageProcessor extends MessageProcessor
             $commands[static::PREFIX.($categoryIndex)] = $category;
         }
 
-        (new TelegramApiService($this->bot))->sendMessage(
+        (new TelegramApi($this->bot))->sendMessage(
             $this->message->chat_id,
             implode("\n\n", $text),
             $this->getDefaultReplyMarkup()
         );
 
-        (new TelegramApiService($this->bot))->setMyCommands(
+        (new TelegramApi($this->bot))->setMyCommands(
             $commands,
             $this->getDefaultReplyMarkup()
         );

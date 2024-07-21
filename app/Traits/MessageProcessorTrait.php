@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
-use App\Services\TelegramApiService;
+use App\Support\TelegramApi;
 use Illuminate\Support\Arr;
 
 trait MessageProcessorTrait
@@ -53,7 +53,7 @@ trait MessageProcessorTrait
                     }
                 }
 
-                (new TelegramApiService($this->bot))->sendMediaGroup(
+                (new TelegramApi($this->bot))->sendMediaGroup(
                     $this->message->chat_id,
                     $medias,
                     $this->getDefaultReplyMarkup() + [
@@ -62,7 +62,7 @@ trait MessageProcessorTrait
                 );
             } else {
 
-                (new TelegramApiService($this->bot))->sendMessage(
+                (new TelegramApi($this->bot))->sendMessage(
                     $this->message->chat_id,
                     implode("\n\n", $caption),
                     $this->getDefaultReplyMarkup() + [

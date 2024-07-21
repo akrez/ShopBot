@@ -3,7 +3,7 @@
 namespace App\Support\MessageProcessors;
 
 use App\Services\ShopApi;
-use App\Services\TelegramApiService;
+use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -16,7 +16,7 @@ class SearchMessageProcessor extends MessageProcessor
     {
         $productTitleFilter = Str::trim($this->message->message_text);
         if (! $productTitleFilter) {
-            (new TelegramApiService($this->bot))->sendMessage(
+            (new TelegramApi($this->bot))->sendMessage(
                 $this->message->chat_id,
                 'لطفا قسمتی از عنوان محصول مورد نظر خود را وارد کنید',
                 $this->getDefaultReplyMarkup() + [
@@ -38,7 +38,7 @@ class SearchMessageProcessor extends MessageProcessor
         if ($filterProductIds) {
             $this->filterProcess($jsonResponse, $filterProductIds);
         } else {
-            (new TelegramApiService($this->bot))->sendMessage(
+            (new TelegramApi($this->bot))->sendMessage(
                 $this->message->chat_id,
                 'محصول با عنوانی که شامل ***'.$productTitleFilter.'*** باشد یافت نشد',
                 $this->getDefaultReplyMarkup() + [
