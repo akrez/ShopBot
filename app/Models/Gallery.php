@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Gallery\GalleryCategory;
+use App\Services\GalleryService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,11 @@ class Gallery extends Model
      * @var array<int, string>
      */
     protected $fillable = [];
+
+    public function getUrl(): string
+    {
+        return resolve(GalleryService::class)->getUrl($this);
+    }
 
     public function blog(): BelongsTo
     {
