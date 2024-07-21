@@ -12,7 +12,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 table-responsive">
-            <table class="table table-striped table-hover table-bordered align-middle rounded-3">
+            <table class="table table-hover table-bordered align-middle rounded-3">
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">@lang('product_images')</th>
