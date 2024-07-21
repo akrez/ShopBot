@@ -9,9 +9,9 @@ use App\Models\Product;
 
 class ProductService
 {
-    public function getLatestBlogProducts(Blog $blog)
+    public function getLatestBlogProductsQuery(Blog $blog)
     {
-        return $blog->products()->latest('created_at')->get();
+        return $blog->products()->latest('created_at');
     }
 
     public function create(Blog $blog, ProductDTO $productDto)
@@ -89,8 +89,7 @@ class ProductService
             __('validation.attributes.status'),
         ];
 
-        $products = $this->getLatestBlogProducts($blog);
-        foreach ($products as $product) {
+        foreach ($this->getLatestBlogProductsQuery($blog)->get() as $product) {
             $source[] = [
                 $product->code,
                 $product->name,

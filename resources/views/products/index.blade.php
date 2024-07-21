@@ -15,6 +15,7 @@
             <table class="table table-striped table-hover table-bordered align-middle rounded-3">
                 <thead class="table-dark">
                     <tr>
+                        <th scope="col">@lang('product_images')</th>
                         <th scope="col">@lang('validation.attributes.code')</th>
                         <th scope="col">@lang('validation.attributes.name')</th>
                         <th scope="col">@lang('validation.attributes.status')</th>
@@ -29,6 +30,13 @@
                 <tbody>
                     @foreach ($products as $product)
                         <tr>
+                            <td>
+                                @foreach ($product->images as $productImage)
+                                    <a href="{{ $productImage->getUrl() }}" target="_blank">
+                                        <img src="{{ $productImage->getUrl() }}" class="img-fluid max-width-38-px">
+                                    </a>
+                                @endforeach
+                            </td>
                             <td>{{ $product->code }}</td>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->product_status->trans() }}</td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTO\ProductDTO;
+use App\Enums\Gallery\GalleryCategory;
 use App\Services\BlogService;
 use App\Services\ProductService;
 use App\Support\WebResponse;
@@ -23,7 +24,10 @@ class ProductController extends Controller
         $blog = $this->blogService->findOrFailActiveBlog();
 
         return view('products.index', [
-            'products' => $this->productService->getLatestBlogProducts($blog),
+            'products' => $this->productService->getLatestBlogProductsQuery($blog)
+                ->with(['images' => function ($query) {
+                    return $query->where('gallery_category', GalleryCategory::PRODUCT_IMAGE->value);
+                }])->get(),
         ]);
     }
 
