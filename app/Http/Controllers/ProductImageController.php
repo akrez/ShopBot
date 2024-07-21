@@ -98,8 +98,14 @@ class ProductImageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(Request $request, int $product_id, string $name)
     {
-        //
+        $blog = $this->blogService->findOrFailActiveBlog();
+        $product = $this->productService->findOrFailActiveBlogProduct($product_id);
+        $gallery = $this->galleryService->findOrFailActiveBlogGallery($name);
+
+        $response = $this->galleryService->destroy($blog, $gallery);
+
+        return new WebResponse($response, route('products.product_images.index', ['product_id' => $product_id]));
     }
 }
