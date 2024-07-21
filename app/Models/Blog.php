@@ -78,4 +78,9 @@ class Blog extends Model
     {
         return $this->hasMany(User::class, 'active_blog');
     }
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
 }

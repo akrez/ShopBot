@@ -241,9 +241,17 @@
     "Product": "محصول",
     "Properties": "مشخصات",
     "Property": "مشخصات",
+    "Contacts": "راه‌های ارتباطی",
+    "Contact": "راه ارتباطی",
     "Port": "ورودی و خروجی اکسل",
     "product_images": "تصاویر محصول",
     "product_image": "تصویر محصول",
     "active": "فعال",
-    "deactive": "غیر فعال"
+    "deactive": "غیر فعال",
+    "address": "آدرس",
+    "email": "ایمیل",
+    "telegram": "تلگرام",
+    "whatsapp": "واتساپ",
+    "phone": "تلفن",
+    "instagram": "اینستاگرام"
 }
