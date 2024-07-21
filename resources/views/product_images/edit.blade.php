@@ -6,7 +6,7 @@
 @section('content')
     @include('product_images._form', [
         'product' => $product,
-        'gallery' => $product,
+        'gallery' => $gallery,
         'action' => route('products.product_images.update', ['product_id' => $product->id, 'name' => $gallery->name]),
     ])
 @endsection
