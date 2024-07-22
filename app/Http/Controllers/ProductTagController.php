@@ -37,7 +37,7 @@ class ProductTagController extends Controller
         $blog = $this->blogService->findOrFailActiveBlog();
         $product = $this->productService->findOrFailActiveBlogProduct($product_id);
 
-        $response = $this->productTagService->sync($blog, $product, explode("\n", $request->tag_names));
+        $response = $this->productTagService->importFromTextArea($blog, $product, explode("\n", $request->tag_names));
 
         return new WebResponse($response);
     }

@@ -3,12 +3,25 @@
 namespace App\Services;
 
 use App\DTO\ProductTagDTO;
+use App\Facades\ArrayHelper;
 use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
 
 class ProductTagService
 {
+    const MAX_LENGTH = 32;
+
+    const SEPARATOR_LINES = [PHP_EOL];
+
+    const SEPARATOR_KEY_VALUES = [':', ',', '،', "\t"];
+
+    const GLUE_LINES = PHP_EOL;
+
+    const GLUE_KEY_VALUES = ':';
+
+    const GLUE_VALUES = ',';
+
     public function getLatestProductsWithTags(Blog $blog)
     {
         $blog->load([
@@ -40,6 +53,10 @@ class ProductTagService
 
     public function filter(array $tags)
     {
+        $stringLine = implode(static::GLUE_VALUES, collect($tags)->flatten()->toArray());
+
+        $tags = ArrayHelper::iexplode(static::SEPARATOR_KEY_VALUES, $stringLine);
+
         return collect($tags)
             ->map(fn ($item) => trim($item))
             ->filter()
@@ -64,7 +81,7 @@ class ProductTagService
         return $data;
     }
 
-    public function sync(Blog $blog, Product $product, array $tags)
+    public function importFromTextArea(Blog $blog, Product $product, array $tags)
     {
         $this->delete($product);
         $safeTags = $this->filter($tags);
@@ -97,7 +114,7 @@ class ProductTagService
         return $source;
     }
 
-    public function import(Blog $blog, array $rows)
+    public function importFromExcel(Blog $blog, array $rows)
     {
         $skipedRow = 0;
         foreach ($rows as $row) {
@@ -112,7 +129,7 @@ class ProductTagService
             $product = resolve(ProductService::class)->firstProductByCode($blog, $row[0]);
             //
             if ($product) {
-                $this->sync($blog, $product, array_slice($row, 2));
+                $this->importFromTextArea($blog, $product, array_slice($row, 2));
             }
         }
     }
