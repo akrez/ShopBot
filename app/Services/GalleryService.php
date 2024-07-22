@@ -36,7 +36,7 @@ class GalleryService
 
     public function destroy(Blog $blog, Gallery $gallery)
     {
-        $path = static::getGalleryPath($gallery->name);
+        $path = static::getGalleryPath($gallery);
 
         if (
             $gallery->delete() and
@@ -61,7 +61,7 @@ class GalleryService
 
         $gallery->gallery_order = $galleryDTO->gallery_order;
         $gallery->selected_at = $isSelected;
-        if (! $gallery->save()) {
+        if (!$gallery->save()) {
             return ResponseBuilder::status(500);
         }
 
@@ -79,7 +79,7 @@ class GalleryService
 
         $ext = $galleryDTO->file->extension();
         do {
-            $name = substr(uniqid(rand(), true), 0, 12).'.'.$ext;
+            $name = substr(uniqid(rand(), true), 0, 12) . '.' . $ext;
         } while (Gallery::query()->where('name', $name)->first());
         $isSelected = ($galleryDTO->is_selected ? now()->format('Y-m-d H:i:s.u') : null);
 
@@ -91,17 +91,17 @@ class GalleryService
         $gallery->gallery_category = $galleryCategory;
         $gallery->gallery_type = $galleryType;
         $gallery->gallery_id = $galleryId;
-        if (! $gallery->save()) {
+        if (!$gallery->save()) {
             return ResponseBuilder::status(500);
         }
 
         $manager = new ImageManager(new Driver());
         $image = $manager->read($galleryDTO->file->getRealPath());
 
-        $path = static::getGalleryPath($gallery->name);
+        $path = static::getGalleryPath($gallery);
 
         $isUploaded = Storage::put($path, $image->encode());
-        if (! $isUploaded) {
+        if (!$isUploaded) {
             return ResponseBuilder::status(500);
         }
 
@@ -119,7 +119,7 @@ class GalleryService
             $gallery->gallery_category->value
         )->first();
 
-        if (! $shouldSelect) {
+        if (!$shouldSelect) {
             return;
         }
 
@@ -143,16 +143,17 @@ class GalleryService
 
     public function getGalleryUrl(Gallery $gallery)
     {
-        $path = static::getGalleryPath($gallery->name);
+        $path = static::getGalleryPath($gallery);
 
         return Storage::url($path);
     }
 
-    private function getGalleryPath($fileName)
+    private function getGalleryPath(Gallery $gallery)
     {
         return implode('/', [
             'gallery',
-            $fileName,
+            $gallery->gallery_category->value,
+            $gallery->name,
         ]);
     }
 }
