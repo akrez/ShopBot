@@ -47,21 +47,16 @@ class ProductPropertyService
 
     public function exportToTextArea(Product $product)
     {
-        $metas = $this->getLatestProductProperties($product);
+        $properties = $this->getLatestProductProperties($product);
 
-        $keyValues = [];
-        foreach ($metas as $meta) {
-            $keyValues[$meta->property_key][$meta->property_value] = $meta->property_value;
-        }
-
-        $keyValue = [];
-        foreach ($keyValues as $key => $values) {
-            $keyValue[$key] = implode(static::GLUE_VALUES, $values);
+        $keyToValues = [];
+        foreach ($properties as $property) {
+            $keyToValues[$property->property_key][$property->property_value] = $property->property_value;
         }
 
         $lines = [];
-        foreach ($keyValue as $key => $values) {
-            $lines[] = $key.static::GLUE_KEY_VALUES.$values;
+        foreach ($keyToValues as $key => $values) {
+            $lines[] = $key.static::GLUE_KEY_VALUES.' '.implode(static::GLUE_VALUES.' ', $values);
         }
 
         return implode(static::GLUE_LINES, $lines);
@@ -139,7 +134,7 @@ class ProductPropertyService
             //
             $key = trim($keyAndValues[0]);
             //
-            if (!array_key_exists($key, $keyToValuesArray)) {
+            if (! array_key_exists($key, $keyToValuesArray)) {
                 $keyToValuesArray[$key] = [];
             }
             //
