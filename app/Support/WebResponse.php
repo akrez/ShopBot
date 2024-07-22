@@ -19,8 +19,7 @@ class WebResponse implements Responsable
         ) {
             return back()
                 ->with('message', $this->responseBuilder->getMessage())
-                ->withErrors($this->responseBuilder->getErrors())
-                ->withInput($request->input());
+                ->withErrors($this->responseBuilder->getErrors());
         }
 
         return redirect()
