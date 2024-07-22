@@ -26,7 +26,7 @@ class ProductPropertyController extends Controller
 
         return view('product_properties.create', [
             'product' => $product,
-            'productPropertiesText' => $this->productPropertyService->getTextAreaInputString($product),
+            'productPropertiesText' => $this->productPropertyService->exportToTextArea($product),
         ]);
     }
 
@@ -38,7 +38,7 @@ class ProductPropertyController extends Controller
         $blog = $this->blogService->findOrFailActiveBlog();
         $product = $this->productService->findOrFailActiveBlogProduct($product_id);
 
-        $response = $this->productPropertyService->syncProduct($blog, $product, explode("\n", $request->property_value));
+        $response = $this->productPropertyService->importFromTextArea($blog, $product, explode("\n", $request->property_value));
 
         return new WebResponse(ResponseBuilder::status(200));
     }

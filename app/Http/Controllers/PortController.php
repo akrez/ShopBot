@@ -34,7 +34,7 @@ class PortController extends Controller
         return $this->excel->export($fileName, [
             SheetsName::PRODUCT->value => $this->productService->export($blog),
             SheetsName::PRODUCT_TAG->value => $this->productTagService->export($blog),
-            SheetsName::PRODUCT_PROPERTY->value => $this->productPropertyService->export($blog),
+            SheetsName::PRODUCT_PROPERTY->value => $this->productPropertyService->exportToExcel($blog),
         ]);
     }
 
@@ -56,7 +56,7 @@ class PortController extends Controller
 
             $this->productService->import($blog, $source[SheetsName::PRODUCT->value]);
             $this->productTagService->import($blog, $source[SheetsName::PRODUCT_TAG->value]);
-            $this->productPropertyService->import($blog, $source[SheetsName::PRODUCT_PROPERTY->value]);
+            $this->productPropertyService->importFromExcel($blog, $source[SheetsName::PRODUCT_PROPERTY->value]);
         }
 
         return back();

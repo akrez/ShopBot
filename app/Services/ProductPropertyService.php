@@ -45,7 +45,7 @@ class ProductPropertyService
         return $product->productProperties;
     }
 
-    public function getTextAreaInputString(Product $product)
+    public function exportToTextArea(Product $product)
     {
         $metas = $this->getLatestProductProperties($product);
 
@@ -67,7 +67,7 @@ class ProductPropertyService
         return implode(static::GLUE_LINES, $lines);
     }
 
-    public function export(Blog $blog)
+    public function exportToExcel(Blog $blog)
     {
         $source = [];
 
@@ -101,70 +101,76 @@ class ProductPropertyService
         return $source;
     }
 
-    public function getSubArrayGrouped($rows, $devideIndex, $groupByIndex = 0)
-    {
-        $result = [];
-        foreach ($rows as $row) {
-            if (is_array($row)) {
-                $rowAsString = collect($row)->flatten()->implode(static::GLUE_VALUES);
-            } else {
-                $rowAsString = strval($row);
-            }
-            //
-            $rowAsArray = ArrayHelper::iexplode(static::SEPARATOR_KEY_VALUES, $rowAsString);
-            $rowAsArray += array_fill(0, $devideIndex + 1, null);
-            //
-            $groupKey = trim($rowAsArray[$groupByIndex]);
-            //
-            $result[$groupKey][] = array_slice($rowAsArray, $devideIndex);
-        }
-
-        //
-        return $result;
-    }
-
-    public function import(Blog $blog, array $rows)
+    public function importFromExcel(Blog $blog, array $rows)
     {
         $rows = $rows + [0 => []];
         unset($rows[0]);
-
-        $productsKeysValues = $this->getSubArrayGrouped($rows, 2, 0);
         //
-        foreach ($productsKeysValues as $productCode => $lines) {
+        $stringLinesArrays = [];
+        foreach ($rows as $row) {
+            $row += array_fill(0, 3, '');
+            //
+            $productCode = trim($row[0]);
+            $stringLinesArrays[$productCode][] = array_slice($row, 2);
+        }
+        //
+        foreach ($stringLinesArrays as $productCode => $keyAndValuesArray) {
             $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
             if ($product) {
-                $this->syncProduct($blog, $product, $lines);
+                $this->importfromArray($blog, $product, $keyAndValuesArray);
             }
         }
     }
 
-    public function syncProduct(Blog $blog, Product $product, array $lines)
+    public function importFromTextArea(Blog $blog, Product $product, array $stringLines)
     {
-        $this->delete($product);
-        $dtos = $this->filter($lines);
-        $data = $this->insert($blog, $product, $dtos);
-
-        return $data;
+        $keyAndValuesArray = [];
+        foreach ($stringLines as $stringLine) {
+            $keyAndValuesArray[] = ArrayHelper::iexplode(static::SEPARATOR_KEY_VALUES, $stringLine);
+        }
+        $this->importfromArray($blog, $product, $keyAndValuesArray);
     }
 
-    public function delete(Product $product)
+    public function importfromArray(Blog $blog, Product $product, array $keyAndValuesArray)
+    {
+        $keyToValuesArray = [];
+        foreach ($keyAndValuesArray as $keyAndValues) {
+            $keyAndValues += array_fill(0, 2, '');
+            //
+            $key = trim($keyAndValues[0]);
+            //
+            if (!array_key_exists($key, $keyToValuesArray)) {
+                $keyToValuesArray[$key] = [];
+            }
+            //
+            $keyToValuesArray[$key] = array_merge($keyToValuesArray[$key], array_slice($keyAndValues, 1));
+        }
+        $this->import($blog, $product, $keyToValuesArray);
+    }
+
+    protected function import(Blog $blog, Product $product, array $keyToValuesArray)
+    {
+        $this->delete($product);
+        $dtos = $this->filter($keyToValuesArray);
+        $this->insert($blog, $product, $dtos);
+    }
+
+    protected function delete(Product $product)
     {
         $product->productProperties()->delete();
     }
 
-    public function filter(array $lines)
+    protected function filter(array $keyToValuesArray)
     {
-        $keyValues = $this->getSubArrayGrouped($lines, 1, 0);
-
         $dtos = [];
-        foreach ($keyValues as $key => $values) {
-            $safeValues = collect($values)
+        foreach ($keyToValuesArray as $key => $values) {
+            $keyToValuesArray[$key] = collect($values)
                 ->flatten()
                 ->map(fn ($value) => trim($value))
                 ->filter()
                 ->unique()
                 ->toArray();
-            foreach ($safeValues as $safeValue) {
+            foreach ($keyToValuesArray[$key] as $safeValue) {
                 $dto = new ProductPropertyDTO($key, $safeValue);
                 if ($dto->validate()->errors()->isEmpty()) {
                     $dtos[] = $dto;
@@ -172,14 +178,13 @@ class ProductPropertyService
             }
         }
 
-        //
         return $dtos;
     }
 
     /**
      * @param  array<int, ProductPropertyDTO>  $dtos
      */
-    public function insert(Blog $blog, Product $product, array $productPropertyDtos): array
+    protected function insert(Blog $blog, Product $product, array $productPropertyDtos): array
     {
         $result = [];
         foreach ($productPropertyDtos as $productPropertyDto) {
