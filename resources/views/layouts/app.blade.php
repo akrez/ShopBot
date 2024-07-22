@@ -96,6 +96,11 @@
                             {{ __('Contacts') }}
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ route('blog_logos.index') }}">
+                            {{ __('blog_logos') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
