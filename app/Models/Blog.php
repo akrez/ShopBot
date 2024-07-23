@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * Class Blog
@@ -82,5 +83,15 @@ class Blog extends Model
     public function contacts()
     {
         return $this->hasMany(Contact::class);
+    }
+
+    public function logo(): MorphOne
+    {
+        return $this->morphOne(Gallery::class, 'gallery');
+    }
+
+    public function logoUrl(): ?string
+    {
+        return $this->logo()?->filterIsSelected()->first()?->getUrl();
     }
 }

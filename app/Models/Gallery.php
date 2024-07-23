@@ -43,6 +43,11 @@ class Gallery extends Model
         return $this->belongsTo(Blog::class);
     }
 
+    public function scopeFilterIsSelected(Builder $query)
+    {
+        $query = $query->whereNotNull('selected_at');
+    }
+
     public function scopeOrderDefault(Builder $query)
     {
         $query = $query

@@ -76,7 +76,9 @@
     <nav class="navbar navbar-light bg-light navbar-expand-lg z-1030">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img class="pe-3" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" height="28">
+                @if (\App\Facades\ActiveBlog::get()->logoUrl())
+                <img class="pe-3 max-height-28-px" src="{{ \App\Facades\ActiveBlog::get()->logoUrl() }}">
+                @endif
                 {{ \App\Facades\ActiveBlog::name() }}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
