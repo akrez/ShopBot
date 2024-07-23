@@ -6,21 +6,10 @@ use App\DTO\ProductPropertyDTO;
 use App\Facades\ArrayHelper;
 use App\Models\Blog;
 use App\Models\Product;
+use App\Support\ArrayHelper as SupportArrayHelper;
 
 class ProductPropertyService
 {
-    const MAX_LENGTH = 32;
-
-    const SEPARATOR_LINES = [PHP_EOL];
-
-    const SEPARATOR_KEY_VALUES = [':', ',', '،', "\t"];
-
-    const GLUE_LINES = PHP_EOL;
-
-    const GLUE_KEY_VALUES = ':';
-
-    const GLUE_VALUES = ',';
-
     public function getLatestProductsWithProperties(Blog $blog)
     {
         $blog->load([
@@ -56,10 +45,10 @@ class ProductPropertyService
 
         $lines = [];
         foreach ($keyToValues as $key => $values) {
-            $lines[] = $key.static::GLUE_KEY_VALUES.' '.implode(static::GLUE_VALUES.' ', $values);
+            $lines[] = $key.SupportArrayHelper::GLUE_KEY_VALUES.' '.implode(SupportArrayHelper::GLUE_VALUES.' ', $values);
         }
 
-        return implode(static::GLUE_LINES, $lines);
+        return implode(SupportArrayHelper::GLUE_LINES, $lines);
     }
 
     public function exportToExcel(Blog $blog)
@@ -121,7 +110,7 @@ class ProductPropertyService
     {
         $keyAndValuesArray = [];
         foreach ($stringLines as $stringLine) {
-            $keyAndValuesArray[] = ArrayHelper::iexplode(static::SEPARATOR_KEY_VALUES, $stringLine);
+            $keyAndValuesArray[] = ArrayHelper::iexplode(SupportArrayHelper::SEPARATOR_KEY_VALUES, $stringLine);
         }
         $this->importfromArray($blog, $product, $keyAndValuesArray);
     }

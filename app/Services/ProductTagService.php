@@ -7,21 +7,10 @@ use App\Facades\ArrayHelper;
 use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
+use App\Support\ArrayHelper as SupportArrayHelper;
 
 class ProductTagService
 {
-    const MAX_LENGTH = 32;
-
-    const SEPARATOR_LINES = [PHP_EOL];
-
-    const SEPARATOR_KEY_VALUES = [':', ',', '،', "\t"];
-
-    const GLUE_LINES = PHP_EOL;
-
-    const GLUE_KEY_VALUES = ':';
-
-    const GLUE_VALUES = ',';
-
     public function getLatestProductsWithTags(Blog $blog)
     {
         $blog->load([
@@ -53,9 +42,9 @@ class ProductTagService
 
     public function filter(array $tags)
     {
-        $stringLine = implode(static::GLUE_VALUES, collect($tags)->flatten()->toArray());
+        $stringLine = implode(SupportArrayHelper::GLUE_VALUES, collect($tags)->flatten()->toArray());
 
-        $tags = ArrayHelper::iexplode(static::SEPARATOR_KEY_VALUES, $stringLine);
+        $tags = ArrayHelper::iexplode(SupportArrayHelper::SEPARATOR_KEY_VALUES, $stringLine);
 
         return collect($tags)
             ->map(fn ($item) => trim($item))
