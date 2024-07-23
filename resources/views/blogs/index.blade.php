@@ -10,7 +10,7 @@
 </div>
 <div class="row">
     @foreach ($blogs as $blog)
-    <div class="col-md-3">
+    <div class="col-md-3 my-3">
         <div class="card h-100">
             <div class="card-body d-flex flex-column">
                 <h5 class="m-0">
