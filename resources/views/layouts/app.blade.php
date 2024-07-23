@@ -75,30 +75,44 @@
     @if (\App\Facades\ActiveBlog::has())
     <nav class="navbar navbar-light bg-light navbar-expand-lg z-1030">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">{{ \App\Facades\ActiveBlog::name() }}</a>
+            <a class="navbar-brand" href="{{ route('home') }}">
+                <img class="pe-3" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" height="28">
+                {{ \App\Facades\ActiveBlog::name() }}
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent2">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('port.index') }}">
-                            {{ __('Port') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ route('products.index') }}">
                             {{ __('Products') }}
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('contacts.index') }}">
-                            {{ __('Contacts') }}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ __('Blog') }}
                         </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('contacts.index') }}">{{ __('Contacts') }}</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('blog_logos.index') }}">{{ __('blog_logos') }}</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('blogs.edit', ['id'=>\App\Facades\ActiveBlog::attr('id')]) }}">{{ __('Edit') }}</a>
+                            </li>
+                        </ul>
                     </li>
+                </ul>
+                <ul class="navbar-nav mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('blog_logos.index') }}">
-                            {{ __('blog_logos') }}
+                        <a class="nav-link active" aria-current="page" href="{{ route('port.index') }}">
+                            {{ __('Port') }}
                         </a>
                     </li>
                 </ul>
