@@ -24,6 +24,6 @@ class WebResponse implements Responsable
 
         return redirect()
             ->to($this->successfulRedirectTo)
-            ->with('message', $this->responseBuilder->getMessage());
+            ->with('swal-success', $this->responseBuilder->getMessage());
     }
 }

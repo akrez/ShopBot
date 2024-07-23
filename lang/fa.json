@@ -235,6 +235,8 @@
     "Yes": "بله",
     "You are logged in!": "شما وارد شده‌اید!",
     "You are receiving this email because we received a password reset request for your account.": "شما این ایمیل را به دلیل درخواست رمزعبور جدید دریافت کرده‌اید.",
+    ":name is created successfully": ":name با موفقیت ایجاد شد",
+    ":name is updated successfully": ":name با موفقیت بروزرسانی شد!",
     "Blogs": "وبلاگ‌ها",
     "Blog": "وبلاگ",
     "Products": "محصولات",

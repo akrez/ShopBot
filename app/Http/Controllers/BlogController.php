@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBlogRequest;
-use App\Http\Requests\UpdateBlogRequest;
+use App\DTO\BlogDTO;
 use App\Models\Blog;
 use App\Services\BlogService;
+use App\Support\WebResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
@@ -40,11 +41,16 @@ class BlogController extends Controller
      * @return \Illuminate\Http\Response
      */
     // public function store(HttpRequest $request)
-    public function store(StoreBlogRequest $request)
+    public function store(Request $request)
     {
-        $this->blogService->create(Auth::user(), $request->validated());
+        $response = $this->blogService->store(Auth::user(), new BlogDTO(
+            $request->name,
+            $request->short_description,
+            $request->description,
+            $request->blog_status,
+        ));
 
-        return redirect()->route('blogs.index');
+        return new WebResponse($response, route('blogs.index'));
     }
 
     /**
@@ -66,13 +72,18 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBlogRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
         $blog = $this->blogService->findOrFailUserBlog(Auth::user(), $id);
 
-        $this->blogService->update($blog, $request->validated());
+        $response = $this->blogService->update($blog, new BlogDTO(
+            $request->name,
+            $request->short_description,
+            $request->description,
+            $request->blog_status,
+        ));
 
-        return redirect()->route('blogs.index');
+        return new WebResponse($response, route('blogs.index'));
     }
 
     /**
@@ -90,8 +101,8 @@ class BlogController extends Controller
         $user = Auth::user();
         $blog = $this->blogService->findOrFailUserBlog($user, $id);
 
-        $this->blogService->setUserActiveBlog($user, $blog);
+        $response = $this->blogService->setUserActiveBlog($user, $blog);
 
-        return redirect()->route('blogs.index');
+        return new WebResponse($response, route('blogs.index'));
     }
 }

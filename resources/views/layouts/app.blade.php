@@ -22,6 +22,7 @@
 
     <!-- CSS files -->
     <link rel="stylesheet" href="{{ url('libs/bootstrap/dist/css/bootstrap.rtl.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('libs/sweetalert2/dist/sweetalert2.min.css') }}" />
     <link rel="stylesheet" href="{{ url('libs/vazirmatn/Vazirmatn-font-face.css') }}" />
     <link rel="stylesheet" href="{{ url('libs/@fortawesome/fontawesome-free/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ url('app.css') }}">
@@ -34,7 +35,9 @@
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg z-1030">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">وبـلاگ فروشـگاهـی اکــرز</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent1">
@@ -55,11 +58,13 @@
                         <a class="nav-link" href="{{ route('blogs.index') }}">{{ __('Blogs') }}</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -81,7 +86,9 @@
                 @endif
                 {{ \App\Facades\ActiveBlog::name() }}
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent2">
@@ -92,7 +99,8 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
                             {{ __('Blog') }}
                         </a>
                         <ul class="dropdown-menu">
@@ -100,13 +108,16 @@
                                 <a class="dropdown-item" href="{{ route('contacts.index') }}">{{ __('Contacts') }}</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('blog_logos.index') }}">{{ __('blog_logos') }}</a>
+                                <a class="dropdown-item" href="{{ route('blog_logos.index') }}">{{ __('blog_logos')
+                                    }}</a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('blogs.edit', ['id'=>\App\Facades\ActiveBlog::attr('id')]) }}">{{ __('Edit') }}</a>
+                                <a class="dropdown-item"
+                                    href="{{ route('blogs.edit', ['id'=>\App\Facades\ActiveBlog::attr('id')]) }}">{{
+                                    __('Edit') }}</a>
                             </li>
                         </ul>
                     </li>
@@ -134,6 +145,19 @@
         @yield('content')
     </div>
     <script src="{{ asset('libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('libs/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script>
+        @if(session('swal-success'))
+        Swal.fire({{ Illuminate\Support\Js::from([
+            'text' => session('swal-success')
+            , 'icon' => "success"
+            , 'timer' => 5000
+            , 'showCloseButton' => true
+            , 'showConfirmButton' => false
+            , 'timerProgressBar' => true
+        ]) }});
+        @endif
+    </script>
     @yield('POS_END')
 </body>
 

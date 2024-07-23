@@ -31,7 +31,7 @@ class ProductService
         ]);
 
         if (! $isSuccessful) {
-            return ResponseBuilder::status(500);
+            return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
         return ResponseBuilder::status(200);
@@ -55,7 +55,7 @@ class ProductService
         ]);
 
         if (! $isSuccessful) {
-            return ResponseBuilder::data($product)->status(500);
+            return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
         return ResponseBuilder::data($product)->status(200);

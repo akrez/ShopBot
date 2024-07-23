@@ -33,7 +33,7 @@ class ContactService
 
         $isSuccessful = $blog->contacts()->create($contactDTO->data());
         if (! $isSuccessful) {
-            return ResponseBuilder::status(500);
+            return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
         return ResponseBuilder::status(200);
@@ -49,7 +49,7 @@ class ContactService
 
         $isSuccessful = $contact->update($contactDTO->data());
         if (! $isSuccessful) {
-            return ResponseBuilder::status(500);
+            return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
         return ResponseBuilder::status(200);
@@ -61,6 +61,6 @@ class ContactService
             return ResponseBuilder::status(200);
         }
 
-        return ResponseBuilder::status(500);
+        return ResponseBuilder::status(500)->message('Internal Server Error');
     }
 }

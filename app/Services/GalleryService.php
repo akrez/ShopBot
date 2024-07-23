@@ -47,7 +47,7 @@ class GalleryService
             return ResponseBuilder::status(200);
         }
 
-        return ResponseBuilder::status(500);
+        return ResponseBuilder::status(500)->message('Internal Server Error');
     }
 
     public function update(Blog $blog, Gallery $gallery, GalleryDTO $galleryDTO)
@@ -62,7 +62,7 @@ class GalleryService
         $gallery->gallery_order = $galleryDTO->gallery_order;
         $gallery->selected_at = $isSelected;
         if (! $gallery->save()) {
-            return ResponseBuilder::status(500);
+            return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
         $this->resetSelected($blog, $gallery);
@@ -92,7 +92,7 @@ class GalleryService
         $gallery->gallery_type = $galleryType;
         $gallery->gallery_id = $galleryId;
         if (! $gallery->save()) {
-            return ResponseBuilder::status(500);
+            return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
         $manager = new ImageManager(new Driver());
@@ -102,7 +102,7 @@ class GalleryService
 
         $isUploaded = Storage::put($path, $image->encode());
         if (! $isUploaded) {
-            return ResponseBuilder::status(500);
+            return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
         $this->resetSelected($blog, $gallery);
