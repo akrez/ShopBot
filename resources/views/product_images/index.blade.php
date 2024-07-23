@@ -30,7 +30,7 @@
                     @foreach ($productImages as $productImage)
                         <tr dir="ltr">
                             <td><a href="{{ $productImage->getUrl() }}" target="_blank"><img
-                                        src="{{ $productImage->getUrl() }}" class="img-fluid max-width-38-px"></a></td>
+                                        src="{{ $productImage->getUrl() }}" class="img-fluid max-height-38-px"></a></td>
                             <td>{{ $productImage->name }}</td>
                             <td>{{ $productImage->selected_at ? '✔️' : '❌' }}</td>
                             <td>{{ $productImage->gallery_order }}</td>

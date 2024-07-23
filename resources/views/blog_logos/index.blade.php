@@ -30,7 +30,7 @@
                     @foreach ($blogLogos as $blogLogo)
                         <tr dir="ltr">
                             <td><a href="{{ $blogLogo->getUrl() }}" target="_blank"><img
-                                        src="{{ $blogLogo->getUrl() }}" class="img-fluid max-width-38-px"></a></td>
+                                        src="{{ $blogLogo->getUrl() }}" class="img-fluid max-height-38-px"></a></td>
                             <td>{{ $blogLogo->name }}</td>
                             <td>{{ $blogLogo->selected_at ? '✔️' : '❌' }}</td>
                             <td>{{ $blogLogo->gallery_order }}</td>
