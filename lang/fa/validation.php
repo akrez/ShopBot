@@ -150,6 +150,7 @@ return [
     'uppercase' => 'فیلد :attribute باید با حروف بزرگ باشد.',
     'url' => ':Attribute معتبر نمی‌باشد.',
     'uuid' => ':Attribute باید یک UUID معتبر باشد.',
+    'code' => ':Attribute باید حداکثر 32 کاراکتر باشد و فقط می تواند شامل حروف کوچک انگلیسی، اعداد و زیرخط (_) باشد.',
     'attributes' => [
         'address' => 'نشانی',
         'affiliate_url' => 'URL وابسته',

@@ -23,7 +23,7 @@ class ResponseBuilder implements Responsable
     public function reset(): self
     {
         $this->status = 200;
-        $this->message = 'OK';
+        $this->message = '';
         $this->data = [];
         $this->errors = [];
 

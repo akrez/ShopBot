@@ -8,6 +8,6 @@ enum ProductStatus: string
 {
     use Enum;
 
-    case DEACTIVE = 'deactive';
     case ACTIVE = 'active';
+    case DEACTIVE = 'deactive';
 }

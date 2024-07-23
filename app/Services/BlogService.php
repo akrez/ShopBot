@@ -23,13 +23,13 @@ class BlogService
             return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
         }
 
-        $isSuccessful = $user->blogs()->create($validation->getData());
+        $blog = $user->blogs()->create($validation->getData());
 
-        if (! $isSuccessful) {
+        if (! $blog) {
             return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(201)->message(__(':name is created successfully', [
+        return ResponseBuilder::status(201)->data($blog)->message(__(':name is created successfully', [
             'name' => __('Blog'),
         ]));
     }
@@ -39,7 +39,7 @@ class BlogService
         $validation = $blogDto->validate(false);
 
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::data($blog)->status(402)->errors($validation->errors()->toArray());
+            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
         }
 
         $isSuccessful = $blog->update($validation->getData());
@@ -48,7 +48,9 @@ class BlogService
             return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::data($blog)->status(200);
+        return ResponseBuilder::data($blog)->status(200)->message(__(':name is updated successfully', [
+            'name' => __('Blog'),
+        ]));
     }
 
     public function findOrFailUserBlog(User $user, int $id)
@@ -71,6 +73,8 @@ class BlogService
     {
         resolve(UserService::class)->setActiveBlog($user, $blog);
 
-        return ResponseBuilder::data($blog)->status(200);
+        return ResponseBuilder::data($blog)->message(__(':name is selected successfully', [
+            'name' => __('Blog'),
+        ]))->status(200);
     }
 }

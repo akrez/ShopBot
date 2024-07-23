@@ -60,8 +60,9 @@ class ProductService
             return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::data($product)->status(200);
-    }
+        return ResponseBuilder::data($product)->status(200)->message(__(':name is updated successfully', [
+            'name' => __('Product'),
+        ]));    }
 
     public function findOrFailActiveBlogProduct($productId)
     {
@@ -120,7 +121,7 @@ class ProductService
             if ($product) {
                 $this->update($blog, $product, $productDTO);
             } else {
-                $this->create($blog, $productDTO);
+                $this->store($blog, $productDTO);
             }
         }
     }
