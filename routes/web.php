@@ -3,7 +3,6 @@
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogLogoController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
@@ -20,7 +19,7 @@ Auth::routes();
 Route::get('/', [SiteController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
-    Route::get(AppServiceProvider::HOME, [HomeController::class, 'index'])->name('home');
+    Route::get(AppServiceProvider::HOME, [BlogController::class, 'index'])->name('home');
     Route::patch('blogs/{id}/active', [BlogController::class, 'active'])->name('blogs.active');
     Route::resource('blogs', BlogController::class)->parameter('blogs', 'id');
     Route::middleware(ActiveBlogMiddleware::class)->group(function () {
