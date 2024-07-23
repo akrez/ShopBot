@@ -46,7 +46,7 @@ class ProductController extends Controller
     {
         $blog = $this->blogService->findOrFailActiveBlog();
 
-        $response = $this->productService->create($blog, new ProductDTO(
+        $response = $this->productService->store($blog, new ProductDTO(
             $request->code,
             $request->name,
             $request->product_status

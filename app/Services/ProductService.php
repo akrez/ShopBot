@@ -14,7 +14,7 @@ class ProductService
         return $blog->products()->latest('created_at');
     }
 
-    public function create(Blog $blog, ProductDTO $productDto)
+    public function store(Blog $blog, ProductDTO $productDto)
     {
         $validation = $productDto->validate(true, [
             'blog' => $blog,
@@ -34,7 +34,9 @@ class ProductService
             return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(200);
+        return ResponseBuilder::status(201)->message(__(':name is created successfully', [
+            'name' => __('Product'),
+        ]));
     }
 
     public function update(Blog $blog, Product $product, ProductDTO $productDto)
