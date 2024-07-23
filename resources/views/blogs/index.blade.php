@@ -11,13 +11,13 @@
 <div class="row">
     @foreach ($blogs as $blog)
     <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="m-0">
                     <span class="{{ $blog->blog_status == App\Enums\Blog\BlogStatus::ACTIVE ? 'text-success' : 'text-danger' }}">{{ $blog->name }}</span>
                     <small class="text-muted">{{ $blog->short_description }}</small>
                 </h5>
-                <p class="card-text text-justify">{{ $blog->description }}</p>
+                <p class="card-text text-justify py-2 mb-auto">{{ $blog->description }}</p>
                 <div class="row gy-1">
                     <div class="col-md-6">
                         <a href="{{ route('blogs.edit', ['id' => $blog->id]) }}" class="btn btn-primary w-100">@lang('Edit')</a>
