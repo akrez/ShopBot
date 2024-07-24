@@ -109,6 +109,9 @@
                                         href="{{ route('contacts.index') }}">{{ __('Contacts') }}</a>
                                 </li>
                                 <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
                                     <a class="dropdown-item"
                                         href="{{ route('blog_logos.index') }}">{{ __('blog_logos') }}</a>
                                 </li>
