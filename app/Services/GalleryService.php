@@ -34,40 +34,11 @@ class GalleryService
         return $gallery;
     }
 
-    public function destroy(Blog $blog, Gallery $gallery)
+    public function getGalleryUrl(Gallery $gallery)
     {
         $path = static::getGalleryPath($gallery);
 
-        if (
-            $gallery->delete() and
-            Storage::delete($path)
-        ) {
-            $this->resetSelected($blog, $gallery);
-
-            return ResponseBuilder::status(200);
-        }
-
-        return ResponseBuilder::status(500)->message('Internal Server Error');
-    }
-
-    public function update(Blog $blog, Gallery $gallery, GalleryDTO $galleryDTO)
-    {
-        $validation = $galleryDTO->validate(false);
-        if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
-        }
-
-        $isSelected = ($galleryDTO->is_selected ? now()->format('Y-m-d H:i:s.u') : null);
-
-        $gallery->gallery_order = $galleryDTO->gallery_order;
-        $gallery->selected_at = $isSelected;
-        if (! $gallery->save()) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
-        }
-
-        $this->resetSelected($blog, $gallery);
-
-        return ResponseBuilder::status(200);
+        return Storage::url($path);
     }
 
     public function store(Blog $blog, string $galleryType, string $galleryId, GalleryCategory $galleryCategory, GalleryDTO $galleryDTO)
@@ -110,6 +81,42 @@ class GalleryService
         return ResponseBuilder::status(200);
     }
 
+    public function update(Blog $blog, Gallery $gallery, GalleryDTO $galleryDTO)
+    {
+        $validation = $galleryDTO->validate(false);
+        if ($validation->errors()->isNotEmpty()) {
+            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+        }
+
+        $isSelected = ($galleryDTO->is_selected ? now()->format('Y-m-d H:i:s.u') : null);
+
+        $gallery->gallery_order = $galleryDTO->gallery_order;
+        $gallery->selected_at = $isSelected;
+        if (! $gallery->save()) {
+            return ResponseBuilder::status(500)->message('Internal Server Error');
+        }
+
+        $this->resetSelected($blog, $gallery);
+
+        return ResponseBuilder::status(200);
+    }
+
+    public function destroy(Blog $blog, Gallery $gallery)
+    {
+        $path = static::getGalleryPath($gallery);
+
+        if (
+            $gallery->delete() and
+            Storage::delete($path)
+        ) {
+            $this->resetSelected($blog, $gallery);
+
+            return ResponseBuilder::status(200);
+        }
+
+        return ResponseBuilder::status(500)->message('Internal Server Error');
+    }
+
     private function resetSelected(Blog $blog, Gallery $gallery)
     {
         $shouldSelect = $this->getLatestQuery(
@@ -139,13 +146,6 @@ class GalleryService
             $shouldNotSelect->selected_at = null;
             $shouldNotSelect->save();
         }
-    }
-
-    public function getGalleryUrl(Gallery $gallery)
-    {
-        $path = static::getGalleryPath($gallery);
-
-        return Storage::url($path);
     }
 
     private function getGalleryPath(Gallery $gallery)
