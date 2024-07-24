@@ -13,14 +13,16 @@ class WebResponse implements Responsable
 
     public function toResponse($request)
     {
-        if (
-            $this->successfulRedirectTo === null or
-            ! $this->responseBuilder->isSuccessful()
-        ) {
+        if (! $this->responseBuilder->isSuccessful()) {
             return back()
                 ->with('message', $this->responseBuilder->getMessage())
                 ->withInput($request->input())
                 ->withErrors($this->responseBuilder->getErrors());
+        }
+
+        if ($this->successfulRedirectTo === null) {
+            return back()
+                ->with('swal-success', $this->responseBuilder->getMessage());
         }
 
         return redirect()

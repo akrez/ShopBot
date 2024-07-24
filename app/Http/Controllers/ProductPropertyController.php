@@ -6,7 +6,6 @@ use App\Facades\ResponseBuilder;
 use App\Services\BlogService;
 use App\Services\ProductPropertyService;
 use App\Services\ProductService;
-use App\Support\ArrayHelper;
 use App\Support\WebResponse;
 use Illuminate\Http\Request;
 
@@ -39,7 +38,7 @@ class ProductPropertyController extends Controller
         $blog = $this->blogService->findOrFailActiveBlog();
         $product = $this->productService->findOrFailActiveBlogProduct($product_id);
 
-        $response = $this->productPropertyService->importFromTextArea($blog, $product, explode(ArrayHelper::GLUE_LINES, $request->property_value));
+        $response = $this->productPropertyService->importFromTextArea($blog, $product, $request->property_value);
 
         return new WebResponse(ResponseBuilder::status(200));
     }

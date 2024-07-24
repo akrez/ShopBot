@@ -70,13 +70,31 @@ class ProductTagService
         return $data;
     }
 
-    public function importFromTextArea(Blog $blog, Product $product, array $tags)
+    public function importFromTextArea(Blog $blog, Product $product, ?string $content)
+    {
+        return $this->import($blog, $product, explode(SupportArrayHelper::GLUE_LINES, $content));
+    }
+
+    private function import(Blog $blog, Product $product, array $tags)
     {
         $this->delete($product);
         $safeTags = $this->filter($tags);
         $data = $this->insert($blog, $product, $safeTags);
 
-        return ResponseBuilder::status(count($safeTags) == count($data) ? 201 : 500)->data($data);
+        if (count($safeTags) == count($data)) {
+            if (count($safeTags) == 0) {
+                return ResponseBuilder::status(201)->data($data)->message(__('All :names removed', [
+                    'names' => __('Tags'),
+                ]));
+            }
+
+            return ResponseBuilder::status(201)->data($data)->message(__(':count :names are created successfully', [
+                'count' => count($safeTags),
+                'names' => __('Tag'),
+            ]));
+        }
+
+        return ResponseBuilder::status(500);
     }
 
     public function export(Blog $blog)
@@ -118,7 +136,7 @@ class ProductTagService
             $product = resolve(ProductService::class)->firstProductByCode($blog, $row[0]);
             //
             if ($product) {
-                $this->importFromTextArea($blog, $product, array_slice($row, 2));
+                $this->import($blog, $product, array_slice($row, 2));
             }
         }
     }

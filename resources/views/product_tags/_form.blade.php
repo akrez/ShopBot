@@ -12,6 +12,10 @@
             'name' => 'tag_names',
             'value' => $productTagsCollection->pluck('tag_name')->implode("\n"),
             'label' => '',
+            'hint' => __('Separate :names using :characters characters', [
+                'names' => __('Tags'),
+                'characters' => implode(' ', \App\Support\ArrayHelper::SEPARATOR_KEY_VALUES + ["\t" => 'Tab', "\n" => 'Enter']),
+            ]),
         ])
         @include('components/formBuilder', [
             'type' => 'submit',

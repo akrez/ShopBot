@@ -62,7 +62,8 @@ class ProductService
 
         return ResponseBuilder::data($product)->status(200)->message(__(':name is updated successfully', [
             'name' => __('Product'),
-        ]));    }
+        ]));
+    }
 
     public function findOrFailActiveBlogProduct($productId)
     {

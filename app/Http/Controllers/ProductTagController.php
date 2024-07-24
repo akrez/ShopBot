@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Services\BlogService;
 use App\Services\ProductService;
 use App\Services\ProductTagService;
-use App\Support\ArrayHelper;
 use App\Support\WebResponse;
 use Illuminate\Http\Request;
 
@@ -38,7 +37,7 @@ class ProductTagController extends Controller
         $blog = $this->blogService->findOrFailActiveBlog();
         $product = $this->productService->findOrFailActiveBlogProduct($product_id);
 
-        $response = $this->productTagService->importFromTextArea($blog, $product, explode(ArrayHelper::GLUE_LINES, $request->tag_names));
+        $response = $this->productTagService->importFromTextArea($blog, $product, $request->tag_names);
 
         return new WebResponse($response);
     }

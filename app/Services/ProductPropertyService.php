@@ -106,9 +106,10 @@ class ProductPropertyService
         }
     }
 
-    public function importFromTextArea(Blog $blog, Product $product, array $stringLines)
+    public function importFromTextArea(Blog $blog, Product $product, ?string $content)
     {
         $keyAndValuesArray = [];
+        $stringLines = explode(SupportArrayHelper::GLUE_LINES, $content);
         foreach ($stringLines as $stringLine) {
             $keyAndValuesArray[] = ArrayHelper::iexplode(SupportArrayHelper::SEPARATOR_KEY_VALUES, $stringLine);
         }
