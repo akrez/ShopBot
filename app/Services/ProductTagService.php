@@ -79,6 +79,8 @@ class ProductTagService
 
     public function importFromExcel(Blog $blog, array $rows)
     {
+        $result = [];
+        //
         $skipedRow = 0;
         foreach ($rows as $row) {
             if ($skipedRow < 1) {
@@ -92,9 +94,11 @@ class ProductTagService
             $product = resolve(ProductService::class)->firstProductByCode($blog, $row[0]);
             //
             if ($product) {
-                $this->import($blog, $product, array_slice($row, 2));
+                $result[] = $this->import($blog, $product, array_slice($row, 2));
             }
         }
+
+        return $result;
     }
 
     public function importFromTextArea(Blog $blog, Product $product, ?string $content)

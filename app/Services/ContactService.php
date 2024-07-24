@@ -109,6 +109,7 @@ class ContactService
 
     public function importFromExcel(Blog $blog, array $rows)
     {
+        $result = [];
         //
         $skipedRow = 0;
         foreach ($rows as $row) {
@@ -132,10 +133,12 @@ class ContactService
             $contact = $this->firstContactById($blog, $id);
             //
             if ($contact) {
-                $this->update($blog, $contact, $contactDTO);
+                $result[] = $this->update($blog, $contact, $contactDTO);
             } else {
-                $this->store($blog, $contactDTO);
+                $result[] = $this->store($blog, $contactDTO);
             }
         }
+
+        return $result;
     }
 }

@@ -106,6 +106,8 @@ class ProductService
 
     public function importFromExcel(Blog $blog, array $rows)
     {
+        $result = [];
+        //
         $skipedRow = 0;
         foreach ($rows as $row) {
             if ($skipedRow < 1) {
@@ -120,10 +122,12 @@ class ProductService
             $product = $this->firstProductByCode($blog, $productDTO->code);
             //
             if ($product) {
-                $this->update($blog, $product, $productDTO);
+                $result[] = $this->update($blog, $product, $productDTO);
             } else {
-                $this->store($blog, $productDTO);
+                $result[] = $this->store($blog, $productDTO);
             }
         }
+
+        return $result;
     }
 }

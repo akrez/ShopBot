@@ -106,6 +106,8 @@ class ProductPropertyService
 
     public function importFromExcel(Blog $blog, array $rows)
     {
+        $result = [];
+        //
         $rows = $rows + [0 => []];
         unset($rows[0]);
         //
@@ -120,9 +122,11 @@ class ProductPropertyService
         foreach ($stringLinesArrays as $productCode => $keyAndValuesArray) {
             $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
             if ($product) {
-                $this->importfromArray($blog, $product, $keyAndValuesArray);
+                $result[] = $this->importfromArray($blog, $product, $keyAndValuesArray);
             }
         }
+
+        return $result;
     }
 
     public function importFromTextArea(Blog $blog, Product $product, ?string $content)
