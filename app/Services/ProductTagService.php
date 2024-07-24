@@ -7,10 +7,21 @@ use App\Facades\ArrayHelper;
 use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
-use App\Support\ArrayHelper as SupportArrayHelper;
 
 class ProductTagService
 {
+    const NAME_MAX_LENGTH = 32;
+
+    const NAME_SEPARATORS = [
+        PHP_EOL => 'Enter',
+        ':' => ':',
+        ',' => ',',
+        '،' => '،',
+        "\t" => 'Tab',
+    ];
+
+    const NAME_GLUE = PHP_EOL;
+
     public function getLatestProductsWithTags(Blog $blog)
     {
         $blog->load([
@@ -37,7 +48,7 @@ class ProductTagService
 
     public function exportToTextArea(Product $product)
     {
-        return $this->exportToArray($product)->implode(SupportArrayHelper::GLUE_LINES);
+        return $this->exportToArray($product)->implode(ProductTagService::NAME_GLUE);
     }
 
     public function exportToExcel(Blog $blog)
@@ -87,7 +98,9 @@ class ProductTagService
 
     public function importFromTextArea(Blog $blog, Product $product, ?string $content)
     {
-        return $this->import($blog, $product, explode(SupportArrayHelper::GLUE_LINES, $content));
+        $tags = ArrayHelper::iexplode(array_keys(ProductTagService::NAME_SEPARATORS), $content);
+
+        return $this->import($blog, $product, $tags);
     }
 
     protected function import(Blog $blog, Product $product, array $tags)
@@ -119,9 +132,9 @@ class ProductTagService
 
     public function filter(array $tags)
     {
-        $stringLine = implode(SupportArrayHelper::GLUE_VALUES, collect($tags)->flatten()->toArray());
+        $stringLine = implode(ProductTagService::NAME_GLUE, collect($tags)->flatten()->toArray());
 
-        $tags = ArrayHelper::iexplode(SupportArrayHelper::SEPARATOR_KEY_VALUES, $stringLine);
+        $tags = ArrayHelper::iexplode(array_keys(ProductTagService::NAME_SEPARATORS), $stringLine);
 
         return collect($tags)
             ->map(fn ($item) => trim($item))

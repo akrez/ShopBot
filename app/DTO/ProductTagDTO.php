@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-use App\Support\ArrayHelper;
+use App\Services\ProductTagService;
 
 class ProductTagDTO extends DTO
 {
@@ -18,7 +18,7 @@ class ProductTagDTO extends DTO
     public static function getRules(bool $isStore)
     {
         return [
-            'tag_name' => ['required', 'max:'.ArrayHelper::MAX_LENGTH],
+            'tag_name' => ['required', 'max:'.ProductTagService::NAME_MAX_LENGTH],
         ];
     }
 }

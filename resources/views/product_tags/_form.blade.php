@@ -9,9 +9,7 @@
             'label' => '',
             'hint' => __('Separate :names using :characters characters', [
                 'names' => __('Tags'),
-                'characters' => implode(
-                    ' ',
-                    \App\Support\ArrayHelper::SEPARATOR_KEY_VALUES + ["\t" => 'Tab', "\n" => 'Enter']),
+                'characters' => implode(' ', \App\Services\ProductTagService::NAME_SEPARATORS),
             ]),
         ])
         @include('components/formBuilder', [
