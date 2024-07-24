@@ -104,7 +104,7 @@ class ProductService
         return $source;
     }
 
-    public function import(Blog $blog, array $rows)
+    public function importFromExcel(Blog $blog, array $rows)
     {
         $skipedRow = 0;
         foreach ($rows as $row) {
