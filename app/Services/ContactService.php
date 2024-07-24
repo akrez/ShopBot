@@ -31,12 +31,15 @@ class ContactService
             return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
         }
 
-        $isSuccessful = $blog->contacts()->create($contactDTO->data());
-        if (! $isSuccessful) {
+        $contact = $blog->contacts()->create($contactDTO->data());
+
+        if (! $contact) {
             return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(200);
+        return ResponseBuilder::status(201)->data($contact)->message(__(':name is created successfully', [
+            'name' => __('Contact'),
+        ]));
     }
 
     public function update(Blog $blog, Contact $contact, ContactDTO $contactDTO)
@@ -52,15 +55,19 @@ class ContactService
             return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(200);
+        return ResponseBuilder::data($contact)->status(200)->message(__(':name is updated successfully', [
+            'name' => __('Contact'),
+        ]));
     }
 
     public function destroy(Blog $blog, Contact $contact)
     {
-        if ($contact->delete()) {
-            return ResponseBuilder::status(200);
+        if (! $contact->delete()) {
+            return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(500)->message('Internal Server Error');
+        return ResponseBuilder::status(200)->message(__(':name is deleted successfully', [
+            'name' => __('Contact'),
+        ]));
     }
 }

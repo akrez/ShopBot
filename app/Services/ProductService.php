@@ -24,17 +24,17 @@ class ProductService
             return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
         }
 
-        $isSuccessful = $blog->products()->create([
+        $product = $blog->products()->create([
             'code' => $productDto->code,
             'name' => $productDto->name,
             'product_status' => $productDto->product_status,
         ]);
 
-        if (! $isSuccessful) {
+        if (! $product) {
             return ResponseBuilder::status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(201)->message(__(':name is created successfully', [
+        return ResponseBuilder::status(201)->data($product)->message(__(':name is created successfully', [
             'name' => __('Product'),
         ]));
     }

@@ -48,7 +48,7 @@ class ProductTagService
 
     public function exportToTextArea(Product $product)
     {
-        return $this->exportToArray($product)->implode(ProductTagService::NAME_GLUE);
+        return implode(ProductTagService::NAME_GLUE, $this->exportToArray($product));
     }
 
     public function exportToExcel(Blog $blog)
@@ -73,7 +73,7 @@ class ProductTagService
 
     protected function exportToArray(Product $product)
     {
-        return $this->getLatestProductTags($product)->pluck('tag_name');
+        return $this->getLatestProductTags($product)->pluck('tag_name')->toArray();
     }
 
     public function importFromExcel(Blog $blog, array $rows)
