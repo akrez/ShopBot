@@ -35,6 +35,83 @@ class ProductTagService
         return $product->productTags;
     }
 
+    public function exportToTextArea(Product $product)
+    {
+        return $this->exportToArray($product)->implode(SupportArrayHelper::GLUE_LINES);
+    }
+
+    public function exportToExcel(Blog $blog)
+    {
+        $source = [];
+
+        $source[] = [
+            __('validation.attributes.code'),
+            __('validation.attributes.name'),
+        ];
+
+        $products = $this->getLatestProductsWithTags($blog);
+        foreach ($products as $product) {
+            $source[] = array_merge([
+                $product->code,
+                $product->name,
+            ], $this->exportToArray($product));
+        }
+
+        return $source;
+    }
+
+    private function exportToArray(Product $product)
+    {
+        return $this->getLatestProductTags($product)->pluck('tag_name');
+    }
+
+    public function importFromExcel(Blog $blog, array $rows)
+    {
+        $skipedRow = 0;
+        foreach ($rows as $row) {
+            if ($skipedRow < 1) {
+                $skipedRow++;
+
+                continue;
+            }
+            //
+            $row = ((array) $row) + array_fill(0, 2, null);
+            //
+            $product = resolve(ProductService::class)->firstProductByCode($blog, $row[0]);
+            //
+            if ($product) {
+                $this->import($blog, $product, array_slice($row, 2));
+            }
+        }
+    }
+
+    public function importFromTextArea(Blog $blog, Product $product, ?string $content)
+    {
+        return $this->import($blog, $product, explode(SupportArrayHelper::GLUE_LINES, $content));
+    }
+
+    private function import(Blog $blog, Product $product, array $tags)
+    {
+        $this->delete($product);
+        $safeTags = $this->filter($tags);
+        $data = $this->insert($blog, $product, $safeTags);
+
+        if (count($safeTags) == count($data)) {
+            if (count($safeTags) == 0) {
+                return ResponseBuilder::status(201)->data($data)->message(__('All :names removed', [
+                    'names' => __('Tags'),
+                ]));
+            }
+
+            return ResponseBuilder::status(201)->data($data)->message(__(':count :names are created successfully', [
+                'count' => count($safeTags),
+                'names' => __('Tag'),
+            ]));
+        }
+
+        return ResponseBuilder::status(500);
+    }
+
     public function delete(Product $product)
     {
         $product->productTags()->delete();
@@ -68,81 +145,5 @@ class ProductTagService
         }
 
         return $data;
-    }
-
-    public function importFromTextArea(Blog $blog, Product $product, ?string $content)
-    {
-        return $this->import($blog, $product, explode(SupportArrayHelper::GLUE_LINES, $content));
-    }
-
-    private function import(Blog $blog, Product $product, array $tags)
-    {
-        $this->delete($product);
-        $safeTags = $this->filter($tags);
-        $data = $this->insert($blog, $product, $safeTags);
-
-        if (count($safeTags) == count($data)) {
-            if (count($safeTags) == 0) {
-                return ResponseBuilder::status(201)->data($data)->message(__('All :names removed', [
-                    'names' => __('Tags'),
-                ]));
-            }
-
-            return ResponseBuilder::status(201)->data($data)->message(__(':count :names are created successfully', [
-                'count' => count($safeTags),
-                'names' => __('Tag'),
-            ]));
-        }
-
-        return ResponseBuilder::status(500);
-    }
-
-    public function exportToTextArea(Product $product)
-    {
-        return $this->getLatestProductTags($product)->pluck('tag_name')->implode(SupportArrayHelper::GLUE_LINES);
-    }
-
-    public function export(Blog $blog)
-    {
-        $source = [];
-
-        $source[] = [
-            __('validation.attributes.code'),
-            __('validation.attributes.name'),
-        ];
-
-        $products = $this->getLatestProductsWithTags($blog);
-        foreach ($products as $product) {
-            $row = [
-                $product->code,
-                $product->name,
-            ];
-            foreach ($product->productTags as $productTag) {
-                $row[] = $productTag->tag_name;
-            }
-            $source[] = $row;
-        }
-
-        return $source;
-    }
-
-    public function importFromExcel(Blog $blog, array $rows)
-    {
-        $skipedRow = 0;
-        foreach ($rows as $row) {
-            if ($skipedRow < 1) {
-                $skipedRow++;
-
-                continue;
-            }
-            //
-            $row = ((array) $row) + array_fill(0, 2, null);
-            //
-            $product = resolve(ProductService::class)->firstProductByCode($blog, $row[0]);
-            //
-            if ($product) {
-                $this->import($blog, $product, array_slice($row, 2));
-            }
-        }
     }
 }
