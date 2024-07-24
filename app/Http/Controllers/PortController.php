@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Excel\SheetsName;
 use App\Services\BlogService;
+use App\Services\ContactService;
 use App\Services\ProductPropertyService;
 use App\Services\ProductService;
 use App\Services\ProductTagService;
@@ -17,7 +18,8 @@ class PortController extends Controller
         protected BlogService $blogService,
         protected ProductService $productService,
         protected ProductTagService $productTagService,
-        protected ProductPropertyService $productPropertyService
+        protected ProductPropertyService $productPropertyService,
+        protected ContactService $contactService
     ) {}
 
     public function index(Request $request)
@@ -35,6 +37,7 @@ class PortController extends Controller
             SheetsName::PRODUCT->value => $this->productService->export($blog),
             SheetsName::PRODUCT_TAG->value => $this->productTagService->exportToExcel($blog),
             SheetsName::PRODUCT_PROPERTY->value => $this->productPropertyService->exportToExcel($blog),
+            SheetsName::CONTACT->value => $this->contactService->exportToExcel($blog),
         ]);
     }
 

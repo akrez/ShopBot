@@ -11,4 +11,5 @@ enum SheetsName: string
     case PRODUCT = 'Product';
     case PRODUCT_TAG = 'Tag';
     case PRODUCT_PROPERTY = 'Property';
+    case CONTACT = 'Contact';
 }

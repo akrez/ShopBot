@@ -58,6 +58,7 @@ class ProductTagService
         $source[] = [
             __('validation.attributes.code'),
             __('validation.attributes.name'),
+            __('validation.attributes.tag_name'),
         ];
 
         $products = $this->getLatestProductsWithTags($blog);

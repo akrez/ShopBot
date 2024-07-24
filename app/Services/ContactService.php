@@ -70,4 +70,30 @@ class ContactService
             'name' => __('Contact'),
         ]));
     }
+
+    public function exportToExcel(Blog $blog)
+    {
+        $source = [];
+
+        $source[] = [
+            __('validation.attributes.contact_type'),
+            __('validation.attributes.contact_key'),
+            __('validation.attributes.contact_value'),
+            __('validation.attributes.contact_link'),
+            __('validation.attributes.contact_order'),
+        ];
+
+        $contacts = $this->getLatestBlogContactsQuery($blog)->get();
+        foreach ($contacts as $contact) {
+            $source[] = [
+                $contact->contact_type->value,
+                $contact->contact_key,
+                $contact->contact_value,
+                $contact->contact_link,
+                $contact->contact_order,
+            ];
+        }
+
+        return $source;
+    }
 }
