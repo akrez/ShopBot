@@ -23,6 +23,15 @@ class ContactService
         return $contact;
     }
 
+    public function firstContactById(Blog $blog, $id): ?Contact
+    {
+        if (strlen($id)) {
+            return $blog->contacts()->where('id', $id)->first();
+        }
+
+        return null;
+    }
+
     public function store(Blog $blog, ContactDTO $contactDTO)
     {
         $validation = $contactDTO->validate();
@@ -76,6 +85,7 @@ class ContactService
         $source = [];
 
         $source[] = [
+            __('validation.attributes.id'),
             __('validation.attributes.contact_type'),
             __('validation.attributes.contact_key'),
             __('validation.attributes.contact_value'),
@@ -83,9 +93,9 @@ class ContactService
             __('validation.attributes.contact_order'),
         ];
 
-        $contacts = $this->getLatestBlogContactsQuery($blog)->get();
-        foreach ($contacts as $contact) {
+        foreach ($this->getLatestBlogContactsQuery($blog)->get() as $contact) {
             $source[] = [
+                $contact->id,
                 $contact->contact_type->value,
                 $contact->contact_key,
                 $contact->contact_value,
@@ -95,5 +105,37 @@ class ContactService
         }
 
         return $source;
+    }
+
+    public function importFromExcel(Blog $blog, array $rows)
+    {
+        //
+        $skipedRow = 0;
+        foreach ($rows as $row) {
+            if ($skipedRow < 1) {
+                $skipedRow++;
+
+                continue;
+            }
+            //
+            $row = ((array) $row) + array_fill(0, 6, null);
+            $id = $row[0];
+            //
+            $contactDTO = new ContactDTO(
+                $row[1],
+                $row[2],
+                $row[3],
+                $row[4],
+                $row[5]
+            );
+            //
+            $contact = $this->firstContactById($blog, $id);
+            //
+            if ($contact) {
+                $this->update($blog, $contact, $contactDTO);
+            } else {
+                $this->store($blog, $contactDTO);
+            }
+        }
     }
 }
