@@ -86,6 +86,16 @@ class BlogController extends Controller
         return new WebResponse($response, route('blogs.index'));
     }
 
+    public function show(int $id)
+    {
+        $user = Auth::user();
+        $blog = $this->blogService->findOrFailUserBlog($user, $id);
+
+        return view('blogs.show', [
+            'blog' => $blog,
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

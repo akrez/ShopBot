@@ -80,7 +80,7 @@
     @if (\App\Facades\ActiveBlog::has())
         <nav class="navbar navbar-light bg-light navbar-expand-lg z-1030">
             <div class="container">
-                <a class="navbar-brand" href="{{ route('home') }}">
+                <a class="navbar-brand" href="{{ route('blogs.show', ['id' => \App\Facades\ActiveBlog::attr('id')]) }}">
                     @if (\App\Facades\ActiveBlog::get()->logoUrl())
                         <img class="pe-3 max-height-28-px" src="{{ \App\Facades\ActiveBlog::get()->logoUrl() }}">
                     @endif
@@ -148,14 +148,16 @@
     <script src="{{ asset('libs/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
     <script>
         @if (session('swal-success'))
-            Swal.fire({{ Illuminate\Support\Js::from([
-                'text' => session('swal-success'),
-                'icon' => 'success',
-                'timer' => 5000,
-                'showCloseButton' => true,
-                'showConfirmButton' => false,
-                'timerProgressBar' => true,
-            ]) }});
+            Swal.fire(
+                {{ Illuminate\Support\Js::from([
+                    'text' => session('swal-success'),
+                    'icon' => 'success',
+                    'timer' => 5000,
+                    'showCloseButton' => true,
+                    'showConfirmButton' => false,
+                    'timerProgressBar' => true,
+                ]) }}
+            );
         @endif
     </script>
     @yield('POS_END')
