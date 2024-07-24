@@ -29,13 +29,13 @@
                 <tbody dir="ltr">
                     @forelse ($contacts as $contact)
                         <tr dir="ltr">
-                            <td scope="col">{{ $contact->contact_type and $contact->contact_type->trans() }}</th>
-                            <td scope="col">{{ $contact->contact_key }}</th>
-                            <td scope="col">{{ $contact->contact_value }}</th>
-                            <td scope="col">{{ $contact->contact_link }}</th>
-                            <td scope="col">{{ $contact->contact_order }}</th>
-                            <td scope="col">{{ $contact->created_at }}</th>
-                            <td scope="col">{{ $contact->updated_at }}</th>
+                            <td scope="col">{{ $contact->contact_type?->trans() }}</td>
+                            <td scope="col">{{ $contact->contact_key }}</td>
+                            <td scope="col">{{ $contact->contact_value }}</td>
+                            <td scope="col">{{ $contact->contact_link }}</td>
+                            <td scope="col">{{ $contact->contact_order }}</td>
+                            <td scope="col">{{ $contact->created_at }}</td>
+                            <td scope="col">{{ $contact->updated_at }}</td>
                             <td>
                                 <a class="btn btn-light border border-dark w-100"
                                     href="{{ route('contacts.edit', ['id' => $contact->id]) }}">
