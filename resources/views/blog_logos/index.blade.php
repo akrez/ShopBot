@@ -6,8 +6,7 @@
 @section('content')
     <div class="row mb-2">
         <div class="col-md-2 mt-1">
-            <a class="btn btn-light border border-dark w-100"
-                href="{{ route('blog_logos.create') }}">
+            <a class="btn btn-light border border-dark w-100" href="{{ route('blog_logos.create') }}">
                 @lang('Create :name', ['name' => __('blog_logo')])
             </a>
         </div>
@@ -27,10 +26,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($blogLogos as $blogLogo)
+                    @forelse ($blogLogos as $blogLogo)
                         <tr dir="ltr">
-                            <td><a href="{{ $blogLogo->getUrl() }}" target="_blank"><img
-                                        src="{{ $blogLogo->getUrl() }}" class="img-fluid max-height-38-px"></a></td>
+                            <td>
+                                <a href="{{ $blogLogo->getUrl() }}" target="_blank">
+                                    <img src="{{ $blogLogo->getUrl() }}" class="img-fluid max-height-38-px">
+                                </a>
+                            </td>
                             <td>{{ $blogLogo->name }}</td>
                             <td>{{ $blogLogo->selected_at ? '✔️' : '❌' }}</td>
                             <td>{{ $blogLogo->gallery_order }}</td>
@@ -42,8 +44,7 @@
                                 </a>
                             </td>
                             <td>
-                                <form
-                                    action="{{ route('blog_logos.destroy', ['name' => $blogLogo->name]) }}"
+                                <form action="{{ route('blog_logos.destroy', ['name' => $blogLogo->name]) }}"
                                     method="post">
                                     @csrf
                                     @method('DELETE')
@@ -53,7 +54,13 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr class="table-warning">
+                            <td colspan="99">
+                                @lang('Not Found')
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

@@ -27,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($productImages as $productImage)
+                    @forelse ($productImages as $productImage)
                         <tr dir="ltr">
                             <td><a href="{{ $productImage->getUrl() }}" target="_blank"><img
                                         src="{{ $productImage->getUrl() }}" class="img-fluid max-height-38-px"></a></td>
@@ -53,7 +53,13 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr class="table-warning">
+                            <td colspan="99">
+                                @lang('Not Found')
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
