@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\DTO\ContactDTO;
-use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Contact;
+use App\Support\ResponseBuilder;
 
 class ContactService
 {
@@ -37,16 +37,16 @@ class ContactService
         $validation = $contactDTO->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
         }
 
         $contact = $blog->contacts()->create($contactDTO->data());
 
         if (! $contact) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(201)->data($contact)->message(__(':name is created successfully', [
+        return resolve(ResponseBuilder::class)->status(201)->data($contact)->message(__(':name is created successfully', [
             'name' => __('Contact'),
         ]));
     }
@@ -56,15 +56,15 @@ class ContactService
         $validation = $contactDTO->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
         }
 
         $isSuccessful = $contact->update($contactDTO->data());
         if (! $isSuccessful) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::data($contact)->status(200)->message(__(':name is updated successfully', [
+        return resolve(ResponseBuilder::class)->data($contact)->status(200)->message(__(':name is updated successfully', [
             'name' => __('Contact'),
         ]));
     }
@@ -72,10 +72,10 @@ class ContactService
     public function destroy(Blog $blog, Contact $contact)
     {
         if (! $contact->delete()) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(200)->message(__(':name is deleted successfully', [
+        return resolve(ResponseBuilder::class)->status(200)->message(__(':name is deleted successfully', [
             'name' => __('Contact'),
         ]));
     }

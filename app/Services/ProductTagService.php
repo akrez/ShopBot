@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\DTO\ProductTagDTO;
 use App\Facades\ArrayHelper;
-use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
+use App\Support\ResponseBuilder;
 
 class ProductTagService
 {
@@ -116,18 +116,18 @@ class ProductTagService
 
         if (count($safeTags) == count($data)) {
             if (count($safeTags) == 0) {
-                return ResponseBuilder::status(201)->data($data)->message(__('All :names removed', [
+                return resolve(ResponseBuilder::class)->status(201)->data($data)->message(__('All :names removed', [
                     'names' => __('Tags'),
                 ]));
             }
 
-            return ResponseBuilder::status(201)->data($data)->message(__(':count :names are created successfully', [
+            return resolve(ResponseBuilder::class)->status(201)->data($data)->message(__(':count :names are created successfully', [
                 'count' => count($safeTags),
                 'names' => __('Tag'),
             ]));
         }
 
-        return ResponseBuilder::status(500);
+        return resolve(ResponseBuilder::class)->status(500);
     }
 
     public function delete(Product $product)

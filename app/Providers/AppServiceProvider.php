@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Support\ActiveBlog;
 use App\Support\ArrayHelper;
-use App\Support\ResponseBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,9 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->singleton('ResponseBuilder', function () {
-            return new ResponseBuilder();
-        });
         $this->app->singleton('ActiveBlog', function () {
             return new ActiveBlog(Auth::user());
         });

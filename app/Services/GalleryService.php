@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\DTO\GalleryDTO;
 use App\Enums\Gallery\GalleryCategory;
-use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Gallery;
+use App\Support\ResponseBuilder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -45,7 +45,7 @@ class GalleryService
     {
         $validation = $galleryDTO->validate();
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
         }
 
         $ext = $galleryDTO->file->extension();
@@ -63,7 +63,7 @@ class GalleryService
         $gallery->gallery_type = $galleryType;
         $gallery->gallery_id = $galleryId;
         if (! $gallery->save()) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
         $manager = new ImageManager(new Driver());
@@ -73,12 +73,12 @@ class GalleryService
 
         $isUploaded = Storage::put($path, $image->encode());
         if (! $isUploaded) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
         $this->resetSelected($blog, $gallery);
 
-        return ResponseBuilder::status(201)->data($gallery)->message(__(':name is created successfully', [
+        return resolve(ResponseBuilder::class)->status(201)->data($gallery)->message(__(':name is created successfully', [
             'name' => $gallery->gallery_category->trans(),
         ]));
     }
@@ -87,7 +87,7 @@ class GalleryService
     {
         $validation = $galleryDTO->validate(false);
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
         }
 
         $isSelected = ($galleryDTO->is_selected ? now()->format('Y-m-d H:i:s.u') : null);
@@ -95,12 +95,12 @@ class GalleryService
         $gallery->gallery_order = $galleryDTO->gallery_order;
         $gallery->selected_at = $isSelected;
         if (! $gallery->save()) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
         $this->resetSelected($blog, $gallery);
 
-        return ResponseBuilder::data($gallery)->status(200)->message(__(':name is updated successfully', [
+        return resolve(ResponseBuilder::class)->status(200)->data($gallery)->message(__(':name is updated successfully', [
             'name' => $gallery->gallery_category->trans(),
         ]));
     }
@@ -115,12 +115,12 @@ class GalleryService
         ) {
             $this->resetSelected($blog, $gallery);
 
-            return ResponseBuilder::status(200)->message(__(':name is deleted successfully', [
+            return resolve(ResponseBuilder::class)->status(200)->message(__(':name is deleted successfully', [
                 'name' => $gallery->gallery_category->trans(),
             ]));
         }
 
-        return ResponseBuilder::status(500)->message('Internal Server Error');
+        return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
     }
 
     private function resetSelected(Blog $blog, Gallery $gallery)

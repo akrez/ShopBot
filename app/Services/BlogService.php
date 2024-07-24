@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\DTO\BlogDTO;
 use App\Facades\ActiveBlog;
-use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\User;
+use App\Support\ResponseBuilder;
 
 class BlogService
 {
@@ -20,16 +20,16 @@ class BlogService
         $validation = $blogDto->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
         }
 
         $blog = $user->blogs()->create($validation->getData());
 
         if (! $blog) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(201)->data($blog)->message(__(':name is created successfully', [
+        return resolve(ResponseBuilder::class)->status(201)->data($blog)->message(__(':name is created successfully', [
             'name' => __('Blog'),
         ]));
     }
@@ -39,16 +39,16 @@ class BlogService
         $validation = $blogDto->validate(false);
 
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
         }
 
         $isSuccessful = $blog->update($validation->getData());
 
         if (! $isSuccessful) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::data($blog)->status(200)->message(__(':name is updated successfully', [
+        return resolve(ResponseBuilder::class)->data($blog)->status(200)->message(__(':name is updated successfully', [
             'name' => __('Blog'),
         ]));
     }
@@ -73,7 +73,7 @@ class BlogService
     {
         resolve(UserService::class)->setActiveBlog($user, $blog);
 
-        return ResponseBuilder::data($blog)->message(__(':name is selected successfully', [
+        return resolve(ResponseBuilder::class)->data($blog)->message(__(':name is selected successfully', [
             'name' => __('Blog'),
         ]))->status(200);
     }

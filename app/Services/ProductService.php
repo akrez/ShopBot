@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\DTO\ProductDTO;
-use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
+use App\Support\ResponseBuilder;
 
 class ProductService
 {
@@ -21,7 +21,7 @@ class ProductService
         ]);
 
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
         }
 
         $product = $blog->products()->create([
@@ -31,10 +31,10 @@ class ProductService
         ]);
 
         if (! $product) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::status(201)->data($product)->message(__(':name is created successfully', [
+        return resolve(ResponseBuilder::class)->status(201)->data($product)->message(__(':name is created successfully', [
             'name' => __('Product'),
         ]));
     }
@@ -47,7 +47,7 @@ class ProductService
         ]);
 
         if ($validation->errors()->isNotEmpty()) {
-            return ResponseBuilder::data($product)->status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(402)->data($product)->errors($validation->errors()->toArray());
         }
 
         $isSuccessful = $product->update([
@@ -57,10 +57,10 @@ class ProductService
         ]);
 
         if (! $isSuccessful) {
-            return ResponseBuilder::status(500)->message('Internal Server Error');
+            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
         }
 
-        return ResponseBuilder::data($product)->status(200)->message(__(':name is updated successfully', [
+        return resolve(ResponseBuilder::class)->status(200)->data($product)->message(__(':name is updated successfully', [
             'name' => __('Product'),
         ]));
     }
