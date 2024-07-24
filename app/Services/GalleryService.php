@@ -78,7 +78,9 @@ class GalleryService
 
         $this->resetSelected($blog, $gallery);
 
-        return ResponseBuilder::status(200);
+        return ResponseBuilder::status(201)->data($gallery)->message(__(':name is created successfully', [
+            'name' => $gallery->gallery_category->trans(),
+        ]));
     }
 
     public function update(Blog $blog, Gallery $gallery, GalleryDTO $galleryDTO)
@@ -98,7 +100,9 @@ class GalleryService
 
         $this->resetSelected($blog, $gallery);
 
-        return ResponseBuilder::status(200);
+        return ResponseBuilder::data($gallery)->status(200)->message(__(':name is updated successfully', [
+            'name' => $gallery->gallery_category->trans(),
+        ]));
     }
 
     public function destroy(Blog $blog, Gallery $gallery)
@@ -111,7 +115,9 @@ class GalleryService
         ) {
             $this->resetSelected($blog, $gallery);
 
-            return ResponseBuilder::status(200);
+            return ResponseBuilder::status(200)->message(__(':name is deleted successfully', [
+                'name' => $gallery->gallery_category->trans(),
+            ]));
         }
 
         return ResponseBuilder::status(500)->message('Internal Server Error');
