@@ -25,7 +25,7 @@ class ProductTagController extends Controller
 
         return view('product_tags.create', [
             'product' => $product,
-            'productTags' => $this->productTagService->getLatestProductTags($product),
+            'productTagsText' => $this->productTagService->exportToTextArea($product),
         ]);
     }
 

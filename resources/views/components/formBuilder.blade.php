@@ -30,7 +30,7 @@
     }
 
     if (!isset($textareaRows)) {
-        $textareaRows = 4;
+        $textareaRows = substr_count($inputValue, "\n") + 1;
     }
 
     if (!isset($visible)) {

@@ -6,6 +6,6 @@
 @section('content')
     @include('product_tags._form', [
         'product' => $product,
-        'productTags' => $productTags,
+        'productTagsText' => $productTagsText,
     ])
 @endsection

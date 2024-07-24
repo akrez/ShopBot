@@ -97,6 +97,11 @@ class ProductTagService
         return ResponseBuilder::status(500);
     }
 
+    public function exportToTextArea(Product $product)
+    {
+        return $this->getLatestProductTags($product)->pluck('tag_name')->implode(SupportArrayHelper::GLUE_LINES);
+    }
+
     public function export(Blog $blog)
     {
         $source = [];
