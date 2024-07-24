@@ -7,6 +7,12 @@
             'name' => 'property_value',
             'value' => $productPropertiesText,
             'label' => '',
+            'hint' => implode("\n", [
+                __('Separate :names using :characters characters', [
+                    'names' => __('validation.attributes.property_value'),
+                    'characters' => implode(' ', \App\Support\ArrayHelper::SEPARATOR_KEY_VALUES + ["\t" => 'Tab']),
+                ]),
+            ]),
         ])
         @include('components/formBuilder', [
             'type' => 'submit',

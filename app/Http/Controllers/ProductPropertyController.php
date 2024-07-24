@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\ResponseBuilder;
 use App\Services\BlogService;
 use App\Services\ProductPropertyService;
 use App\Services\ProductService;
@@ -40,6 +39,6 @@ class ProductPropertyController extends Controller
 
         $response = $this->productPropertyService->importFromTextArea($blog, $product, $request->property_value);
 
-        return new WebResponse(ResponseBuilder::status(200));
+        return new WebResponse($response);
     }
 }

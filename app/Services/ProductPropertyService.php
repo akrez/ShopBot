@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\ProductPropertyDTO;
 use App\Facades\ArrayHelper;
+use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
 use App\Support\ArrayHelper as SupportArrayHelper;
@@ -113,7 +114,8 @@ class ProductPropertyService
         foreach ($stringLines as $stringLine) {
             $keyAndValuesArray[] = ArrayHelper::iexplode(SupportArrayHelper::SEPARATOR_KEY_VALUES, $stringLine);
         }
-        $this->importfromArray($blog, $product, $keyAndValuesArray);
+
+        return $this->importfromArray($blog, $product, $keyAndValuesArray);
     }
 
     public function importfromArray(Blog $blog, Product $product, array $keyAndValuesArray)
@@ -130,14 +132,29 @@ class ProductPropertyService
             //
             $keyToValuesArray[$key] = array_merge($keyToValuesArray[$key], array_slice($keyAndValues, 1));
         }
-        $this->import($blog, $product, $keyToValuesArray);
+        return $this->import($blog, $product, $keyToValuesArray);
     }
 
     protected function import(Blog $blog, Product $product, array $keyToValuesArray)
     {
         $this->delete($product);
         $dtos = $this->filter($keyToValuesArray);
-        $this->insert($blog, $product, $dtos);
+        $data = $this->insert($blog, $product, $dtos);
+
+        if (count($dtos) == count($data)) {
+            if (count($dtos) == 0) {
+                return ResponseBuilder::status(201)->data($data)->message(__('All :names removed', [
+                    'names' => __('Property'),
+                ]));
+            }
+
+            return ResponseBuilder::status(201)->data($data)->message(__(':count :names are created successfully', [
+                'count' => count($dtos),
+                'names' => __('Property'),
+            ]));
+        }
+
+        return ResponseBuilder::status(500);
     }
 
     protected function delete(Product $product)

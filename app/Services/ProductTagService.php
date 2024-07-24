@@ -60,7 +60,7 @@ class ProductTagService
         return $source;
     }
 
-    private function exportToArray(Product $product)
+    protected function exportToArray(Product $product)
     {
         return $this->getLatestProductTags($product)->pluck('tag_name');
     }
@@ -90,7 +90,7 @@ class ProductTagService
         return $this->import($blog, $product, explode(SupportArrayHelper::GLUE_LINES, $content));
     }
 
-    private function import(Blog $blog, Product $product, array $tags)
+    protected function import(Blog $blog, Product $product, array $tags)
     {
         $this->delete($product);
         $safeTags = $this->filter($tags);
