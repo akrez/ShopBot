@@ -113,6 +113,6 @@ class BlogController extends Controller
 
         $response = $this->blogService->setUserActiveBlog($user, $blog);
 
-        return new WebResponse($response, route('blogs.index'));
+        return new WebResponse($response, route('blogs.show', ['id' => $blog->id]));
     }
 }

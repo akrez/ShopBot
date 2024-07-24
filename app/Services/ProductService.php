@@ -74,7 +74,7 @@ class ProductService
         return $product;
     }
 
-    public function firstProductByCode(Blog $blog, string $code): ?Product
+    public function firstProductByCode(Blog $blog, ?string $code): ?Product
     {
         if (strlen($code)) {
             return $blog->products()->where('code', $code)->first();

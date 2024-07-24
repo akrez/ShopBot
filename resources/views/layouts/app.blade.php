@@ -41,22 +41,15 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    @guest
-                        @if (Route::has('login'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                        @endif
-                        @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @endif
-                    @else
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('blogs.index') }}">{{ __('Blogs') }}</a>
                         </li>
+                    @endauth
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
@@ -72,7 +65,18 @@
                                 </form>
                             </div>
                         </li>
-                    @endguest
+                    @else
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                        @endif
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </li>
+                        @endif
+                    @endauth
                 </ul>
             </div>
         </div>
@@ -80,7 +84,8 @@
     @if (\App\Facades\ActiveBlog::has())
         <nav class="navbar navbar-light bg-light navbar-expand-lg z-1030">
             <div class="container">
-                <a class="navbar-brand" href="{{ route('blogs.show', ['id' => \App\Facades\ActiveBlog::attr('id')]) }}">
+                <a class="navbar-brand"
+                    href="{{ route('blogs.show', ['id' => \App\Facades\ActiveBlog::attr('id')]) }}">
                     @if (\App\Facades\ActiveBlog::get()->logoUrl())
                         <img class="pe-3 max-height-28-px" src="{{ \App\Facades\ActiveBlog::get()->logoUrl() }}">
                     @endif
@@ -93,11 +98,6 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent2">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ route('products.index') }}">
-                                {{ __('Products') }}
-                            </a>
-                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -120,6 +120,11 @@
                                         href="{{ route('blogs.edit', ['id' => \App\Facades\ActiveBlog::attr('id')]) }}">{{ __('Edit') }}</a>
                                 </li>
                             </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ route('products.index') }}">
+                                {{ __('Products') }}
+                            </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-md-0">

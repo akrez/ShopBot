@@ -45,14 +45,14 @@
                             <td>{{ $product->updated_at }}</td>
                             <td>
                                 <a class="btn btn-light border border-dark w-100"
-                                    href="{{ route('products.product_properties.create', ['product_id' => $product->id]) }}">
-                                    @lang('Properties')
+                                    href="{{ route('products.product_tags.create', ['product_id' => $product->id]) }}">
+                                    @lang('Tags')
                                 </a>
                             </td>
                             <td>
                                 <a class="btn btn-light border border-dark w-100"
-                                    href="{{ route('products.product_tags.create', ['product_id' => $product->id]) }}">
-                                    @lang('Tags')
+                                    href="{{ route('products.product_properties.create', ['product_id' => $product->id]) }}">
+                                    @lang('Properties')
                                 </a>
                             </td>
                             <td>
