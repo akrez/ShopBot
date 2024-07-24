@@ -7,10 +7,28 @@ use App\Facades\ArrayHelper;
 use App\Facades\ResponseBuilder;
 use App\Models\Blog;
 use App\Models\Product;
-use App\Support\ArrayHelper as SupportArrayHelper;
 
 class ProductPropertyService
 {
+    const PROPERTY_MAX_LENGTH = 32;
+
+    const KEY_VALUES_SEPARATORS = [
+        ':' => ':',
+        ',' => ',',
+        '،' => '،',
+        "\t" => 'Tab',
+    ];
+
+    const KEY_VALUES_GLUE = ':';
+
+    const VALUES_GLUE = ',';
+
+    const LINES_SEPARATORS = [
+        PHP_EOL => 'Enter',
+    ];
+
+    const LINES_GLUE = PHP_EOL;
+
     public function getLatestProductsWithProperties(Blog $blog)
     {
         $blog->load([
@@ -46,10 +64,10 @@ class ProductPropertyService
 
         $lines = [];
         foreach ($keyToValues as $key => $values) {
-            $lines[] = $key.SupportArrayHelper::GLUE_KEY_VALUES.' '.implode(SupportArrayHelper::GLUE_VALUES.' ', $values);
+            $lines[] = $key.ProductPropertyService::KEY_VALUES_GLUE.' '.implode(ProductPropertyService::VALUES_GLUE.' ', $values);
         }
 
-        return implode(SupportArrayHelper::GLUE_LINES, $lines);
+        return implode(ProductPropertyService::LINES_GLUE, $lines);
     }
 
     public function exportToExcel(Blog $blog)
@@ -110,9 +128,9 @@ class ProductPropertyService
     public function importFromTextArea(Blog $blog, Product $product, ?string $content)
     {
         $keyAndValuesArray = [];
-        $stringLines = explode(SupportArrayHelper::GLUE_LINES, $content);
+        $stringLines = ArrayHelper::iexplode(array_keys(ProductPropertyService::LINES_SEPARATORS), $content);
         foreach ($stringLines as $stringLine) {
-            $keyAndValuesArray[] = ArrayHelper::iexplode(SupportArrayHelper::SEPARATOR_KEY_VALUES, $stringLine);
+            $keyAndValuesArray[] = ArrayHelper::iexplode(array_keys(ProductPropertyService::KEY_VALUES_SEPARATORS), $stringLine);
         }
 
         return $this->importfromArray($blog, $product, $keyAndValuesArray);
@@ -132,6 +150,7 @@ class ProductPropertyService
             //
             $keyToValuesArray[$key] = array_merge($keyToValuesArray[$key], array_slice($keyAndValues, 1));
         }
+
         return $this->import($blog, $product, $keyToValuesArray);
     }
 

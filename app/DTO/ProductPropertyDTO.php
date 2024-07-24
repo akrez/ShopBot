@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-use App\Support\ArrayHelper;
+use App\Services\ProductPropertyService;
 
 class ProductPropertyDTO extends DTO
 {
@@ -19,8 +19,8 @@ class ProductPropertyDTO extends DTO
     public static function getRules(bool $isStore)
     {
         return [
-            'property_key' => ['required', 'max:'.ArrayHelper::MAX_LENGTH],
-            'property_value' => ['required', 'max:'.ArrayHelper::MAX_LENGTH],
+            'property_key' => ['required', 'max:'.ProductPropertyService::PROPERTY_MAX_LENGTH],
+            'property_value' => ['required', 'max:'.ProductPropertyService::PROPERTY_MAX_LENGTH],
         ];
     }
 }

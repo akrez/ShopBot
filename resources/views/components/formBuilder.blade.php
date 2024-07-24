@@ -45,8 +45,8 @@
         $class = 'form-control';
     }
 
-    if (!isset($hint)) {
-        $hint = '';
+    if (!isset($hints)) {
+        $hints = [];
     }
 
     $inputClass = [$class];
@@ -88,9 +88,12 @@
                         class="{{ implode(' ', $inputClass) }}" value="{{ $inputValue }}" />
                 @endif
             @endif
-            @if ($hint)
+            @foreach ($hints as $hint)
                 <small class="form-text">{{ $hint }}</small>
-            @endif
+                @if (!$loop->last)
+                    <br>
+                @endif
+            @endforeach
             @foreach ($errorsArray as $error)
                 <div class="invalid-feedback">{{ $error }}</div>
             @endforeach

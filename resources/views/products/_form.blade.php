@@ -9,7 +9,7 @@
         @include('components/formBuilder', [
             'name' => 'code',
             'value' => isset($product) ? $product->code : '',
-            'hint' => __('validation.code', ['Attribute' => __('validation.attributes.code')]),
+            'hints' => [__('validation.code', ['Attribute' => __('validation.attributes.code')])],
         ])
         @include('components/formBuilder', [
             'name' => 'name',

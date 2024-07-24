@@ -7,10 +7,12 @@
             'name' => 'tag_names',
             'value' => $productTagsText,
             'label' => '',
-            'hint' => __('Separate :names using :characters characters', [
-                'names' => __('Tags'),
-                'characters' => implode(' ', \App\Services\ProductTagService::NAME_SEPARATORS),
-            ]),
+            'hints' => [
+                __('Separate :names using :characters characters', [
+                    'names' => __('Tags'),
+                    'characters' => implode(' ', \App\Services\ProductTagService::NAME_SEPARATORS),
+                ]),
+            ],
         ])
         @include('components/formBuilder', [
             'type' => 'submit',

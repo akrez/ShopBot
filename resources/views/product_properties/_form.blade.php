@@ -7,12 +7,15 @@
             'name' => 'property_value',
             'value' => $productPropertiesText,
             'label' => '',
-            'hint' => implode("\n", [
+            'hints' => [
+                __('Write each :name on one line', [
+                    'name' => __('Property'),
+                ]),
                 __('Separate :names using :characters characters', [
                     'names' => __('validation.attributes.property_value'),
-                    'characters' => implode(' ', \App\Support\ArrayHelper::SEPARATOR_KEY_VALUES + ["\t" => 'Tab']),
+                    'characters' => implode(' ', \App\Services\ProductPropertyService::KEY_VALUES_SEPARATORS),
                 ]),
-            ]),
+            ],
         ])
         @include('components/formBuilder', [
             'type' => 'submit',

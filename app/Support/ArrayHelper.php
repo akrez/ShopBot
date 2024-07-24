@@ -4,18 +4,6 @@ namespace App\Support;
 
 class ArrayHelper
 {
-    const MAX_LENGTH = 32;
-
-    const SEPARATOR_LINES = [PHP_EOL];
-
-    const SEPARATOR_KEY_VALUES = [':', ',', '،', "\t"];
-
-    const GLUE_LINES = PHP_EOL;
-
-    const GLUE_KEY_VALUES = ':';
-
-    const GLUE_VALUES = ',';
-
     public function iexplode($delimiters, $string, $limit = PHP_INT_MAX)
     {
         if (! is_array($delimiters)) {
