@@ -58,7 +58,7 @@ class PortController extends Controller
                 SheetsName::CONTACT->value => [],
             ];
 
-            $this->productService->import($blog, $source[SheetsName::PRODUCT->value]);
+            $this->productService->importFromExcel($blog, $source[SheetsName::PRODUCT->value]);
             $this->productTagService->importFromExcel($blog, $source[SheetsName::PRODUCT_TAG->value]);
             $this->productPropertyService->importFromExcel($blog, $source[SheetsName::PRODUCT_PROPERTY->value]);
             $this->contactService->importFromExcel($blog, $source[SheetsName::CONTACT->value]);
