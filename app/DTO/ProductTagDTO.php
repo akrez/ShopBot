@@ -18,7 +18,7 @@ class ProductTagDTO extends DTO
     public static function getRules(bool $isStore)
     {
         return [
-            'tag_name' => ['required', 'max:'.ProductTagService::NAME_MAX_LENGTH],
+            'tag_name' => ['required', 'max:'.ProductTagService::TAG_NAME_MAX_LENGTH],
         ];
     }
 }

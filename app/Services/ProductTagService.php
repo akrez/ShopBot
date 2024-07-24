@@ -10,7 +10,7 @@ use App\Models\Product;
 
 class ProductTagService
 {
-    const NAME_MAX_LENGTH = 32;
+    const TAG_NAME_MAX_LENGTH = 32;
 
     const NAME_SEPARATORS = [
         PHP_EOL => 'Enter',
