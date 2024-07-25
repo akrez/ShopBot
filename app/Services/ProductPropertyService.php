@@ -122,7 +122,7 @@ class ProductPropertyService
         foreach ($stringLinesArrays as $productCode => $keyAndValuesArray) {
             $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
             if ($product) {
-                $result[] = $this->importfromArray($blog, $product, $keyAndValuesArray);
+                $result[$productCode] = $this->importfromArray($blog, $product, $keyAndValuesArray);
             }
         }
 
@@ -162,22 +162,22 @@ class ProductPropertyService
     {
         $this->delete($product);
         $dtos = $this->filter($keyToValuesArray);
-        $data = $this->insert($blog, $product, $dtos);
+        $productPropertyModels = $this->insert($blog, $product, $dtos);
 
-        if (count($dtos) == count($data)) {
-            if (count($dtos) == 0) {
-                return resolve(ResponseBuilder::class)->status(201)->data($data)->message(__('All :names removed', [
-                    'names' => __('Property'),
-                ]));
-            }
+        if (count($dtos) != count($productPropertyModels)) {
+            return resolve(ResponseBuilder::class)->status(500);
+        }
 
-            return resolve(ResponseBuilder::class)->status(201)->data($data)->message(__(':count :names are created successfully', [
-                'count' => count($dtos),
+        if (count($dtos) == 0) {
+            return resolve(ResponseBuilder::class)->status(200)->message(__('All :names removed', [
                 'names' => __('Property'),
             ]));
         }
 
-        return resolve(ResponseBuilder::class)->status(500);
+        return resolve(ResponseBuilder::class)->status(201)->data($productPropertyModels)->message(__(':count :names are created successfully', [
+            'count' => count($dtos),
+            'names' => __('Property'),
+        ]));
     }
 
     protected function delete(Product $product)

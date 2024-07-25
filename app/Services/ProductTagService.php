@@ -91,10 +91,12 @@ class ProductTagService
             //
             $row = ((array) $row) + array_fill(0, 2, null);
             //
-            $product = resolve(ProductService::class)->firstProductByCode($blog, $row[0]);
+            $productCode = trim($row[0]);
+            //
+            $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
             //
             if ($product) {
-                $result[] = $this->import($blog, $product, array_slice($row, 2));
+                $result[$productCode] = $this->import($blog, $product, array_slice($row, 2));
             }
         }
 
@@ -112,22 +114,22 @@ class ProductTagService
     {
         $this->delete($product);
         $safeTags = $this->filter($tags);
-        $data = $this->insert($blog, $product, $safeTags);
+        $productTagModels = $this->insert($blog, $product, $safeTags);
 
-        if (count($safeTags) == count($data)) {
-            if (count($safeTags) == 0) {
-                return resolve(ResponseBuilder::class)->status(201)->data($data)->message(__('All :names removed', [
-                    'names' => __('Tags'),
-                ]));
-            }
+        if (count($safeTags) != count($productTagModels)) {
+            return resolve(ResponseBuilder::class)->status(500);
+        }
 
-            return resolve(ResponseBuilder::class)->status(201)->data($data)->message(__(':count :names are created successfully', [
-                'count' => count($safeTags),
-                'names' => __('Tag'),
+        if (count($safeTags) == 0) {
+            return resolve(ResponseBuilder::class)->status(200)->message(__('All :names removed', [
+                'names' => __('Tags'),
             ]));
         }
 
-        return resolve(ResponseBuilder::class)->status(500);
+        return resolve(ResponseBuilder::class)->status(201)->data($productTagModels)->message(__(':count :names are created successfully', [
+            'count' => count($safeTags),
+            'names' => __('Tag'),
+        ]));
     }
 
     public function delete(Product $product)
@@ -152,7 +154,11 @@ class ProductTagService
             ->toArray();
     }
 
-    public function insert(Blog $blog, Product $product, array $tags)
+    /**
+     * @param  $tags  <int, string>
+     * @return <int, ProductTag>
+     */
+    public function insert(Blog $blog, Product $product, array $tags): array
     {
         $data = [];
         foreach ($tags as $tag) {
