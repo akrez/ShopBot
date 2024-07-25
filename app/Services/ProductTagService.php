@@ -117,7 +117,7 @@ class ProductTagService
         $productTagModels = $this->insert($blog, $product, $safeTags);
 
         if (count($safeTags) != count($productTagModels)) {
-            return resolve(ResponseBuilder::class)->status(500);
+            return resolve(ResponseBuilder::class)->status(206);
         }
 
         if (count($safeTags) == 0) {

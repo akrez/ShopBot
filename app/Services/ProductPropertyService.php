@@ -165,7 +165,7 @@ class ProductPropertyService
         $productPropertyModels = $this->insert($blog, $product, $dtos);
 
         if (count($dtos) != count($productPropertyModels)) {
-            return resolve(ResponseBuilder::class)->status(500);
+            return resolve(ResponseBuilder::class)->status(206);
         }
 
         if (count($dtos) == 0) {
