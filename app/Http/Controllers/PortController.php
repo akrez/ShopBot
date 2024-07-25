@@ -10,6 +10,7 @@ use App\Services\ProductService;
 use App\Services\ProductTagService;
 use App\Support\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class PortController extends Controller
 {
@@ -24,7 +25,9 @@ class PortController extends Controller
 
     public function index(Request $request)
     {
-        return view('port.index');
+        return view('port.index', [
+            'tabel' => session('tabel', []),
+        ]);
     }
 
     public function export(Request $request)
@@ -45,24 +48,25 @@ class PortController extends Controller
     {
         $blog = $this->blogService->findOrFailActiveBlog();
 
-        $port = $request->file('port');
+        $importResponses = [];
 
+        $port = $request->file('port');
         if ($port and $path = $port->getRealPath()) {
 
             $source = $this->excel->read($path);
 
-            $source += [
-                SheetsName::PRODUCT->value => [],
-                SheetsName::PRODUCT_TAG->value => [],
-                SheetsName::PRODUCT_PROPERTY->value => [],
-                SheetsName::CONTACT->value => [],
+            $importResponses = [
+                SheetsName::PRODUCT->value => $this->productService->importFromExcel($blog, Arr::get($source, SheetsName::PRODUCT->value)),
+                SheetsName::PRODUCT_TAG->value => $this->productTagService->importFromExcel($blog, Arr::get($source, SheetsName::PRODUCT_TAG->value)),
+                SheetsName::PRODUCT_PROPERTY->value => $this->productPropertyService->importFromExcel($blog, Arr::get($source, SheetsName::PRODUCT_PROPERTY->value)),
+                SheetsName::CONTACT->value => $this->contactService->importFromExcel($blog, Arr::get($source, SheetsName::CONTACT->value)),
             ];
 
-            $this->productService->importFromExcel($blog, $source[SheetsName::PRODUCT->value]);
-            $this->productTagService->importFromExcel($blog, $source[SheetsName::PRODUCT_TAG->value]);
-            $this->productPropertyService->importFromExcel($blog, $source[SheetsName::PRODUCT_PROPERTY->value]);
-            $this->contactService->importFromExcel($blog, $source[SheetsName::CONTACT->value]);
+            dd($importResponses);
+
+            session(['tabel' => ['value1', 'value2']]);
         }
+        exit;
 
         return back();
     }
