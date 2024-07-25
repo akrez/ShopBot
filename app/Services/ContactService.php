@@ -107,7 +107,10 @@ class ContactService
         return $source;
     }
 
-    public function importFromExcel(Blog $blog, array $rows)
+    /**
+     * @return  array<int, ResponseBuilder>
+     */
+    public function importFromExcel(Blog $blog, array $rows): array
     {
         $result = [];
         //
