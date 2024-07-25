@@ -81,22 +81,22 @@ class ProductTagService
     {
         $result = [];
         //
-        $skipedRow = 0;
+        $rows = $rows + [0 => []];
+        unset($rows[0]);
+        //
+        $productCodeToTags = [];
         foreach ($rows as $row) {
-            if ($skipedRow < 1) {
-                $skipedRow++;
-
-                continue;
-            }
-            //
-            $row = ((array) $row) + array_fill(0, 2, null);
+            $row += array_fill(0, 3, '');
             //
             $productCode = trim($row[0]);
-            //
+            $productCodeToTags[$productCode][] = array_slice($row, 2);
+        }
+        //
+        foreach ($productCodeToTags as $productCode => $tags) {
             $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
             //
             if ($product) {
-                $result[$productCode] = $this->import($blog, $product, array_slice($row, 2));
+                $result[$productCode] = $this->import($blog, $product, $tags);
             }
         }
 
