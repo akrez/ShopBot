@@ -162,9 +162,9 @@ class ProductPropertyService
     {
         $this->delete($product);
         $dtos = $this->filter($keyToValuesArray);
-        $productPropertyModels = $this->insert($blog, $product, $dtos);
+        $productProperties = $this->insert($blog, $product, $dtos);
 
-        if (count($dtos) != count($productPropertyModels)) {
+        if (count($dtos) != count($productProperties)) {
             return resolve(ResponseBuilder::class)->status(206);
         }
 
@@ -174,7 +174,10 @@ class ProductPropertyService
             ]));
         }
 
-        return resolve(ResponseBuilder::class)->status(201)->data($productPropertyModels)->message(__(':count :names are created successfully', [
+        return resolve(ResponseBuilder::class)->status(201)->data([
+            'product' => $product,
+            'product_properties' => $productProperties,
+        ])->message(__(':count :names are created successfully', [
             'count' => count($dtos),
             'names' => __('Property'),
         ]));

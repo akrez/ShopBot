@@ -96,7 +96,7 @@ class ProductTagService
             $product = resolve(ProductService::class)->firstProductByCode($blog, $productCode);
             //
             if ($product) {
-                $result[$productCode] = $this->import($blog, $product, $tags);
+                $result[] = $this->import($blog, $product, $tags);
             }
         }
 
@@ -114,9 +114,9 @@ class ProductTagService
     {
         $this->delete($product);
         $safeTags = $this->filter($tags);
-        $productTagModels = $this->insert($blog, $product, $safeTags);
+        $productTags = $this->insert($blog, $product, $safeTags);
 
-        if (count($safeTags) != count($productTagModels)) {
+        if (count($safeTags) != count($productTags)) {
             return resolve(ResponseBuilder::class)->status(206);
         }
 
@@ -126,7 +126,10 @@ class ProductTagService
             ]));
         }
 
-        return resolve(ResponseBuilder::class)->status(201)->data($productTagModels)->message(__(':count :names are created successfully', [
+        return resolve(ResponseBuilder::class)->status(201)->data([
+            'product' => $product,
+            'product_tags' => $productTags,
+        ])->message(__(':count :names are created successfully', [
             'count' => count($safeTags),
             'names' => __('Tag'),
         ]));
@@ -165,7 +168,7 @@ class ProductTagService
             $data[] = $blog->productTags()->create([
                 'tag_name' => $tag,
                 'product_id' => $product->id,
-            ])->toArray();
+            ]);
         }
 
         return $data;
