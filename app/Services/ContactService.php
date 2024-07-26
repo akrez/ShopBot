@@ -35,37 +35,41 @@ class ContactService implements PortContract
 
     public function store(Blog $blog, ContactDTO $contactDTO)
     {
+        $responseBuilder = resolve(ResponseBuilder::class)->input($contactDTO);
+
         $validation = $contactDTO->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
+            return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
         $contact = $blog->contacts()->create($contactDTO->data());
 
         if (! $contact) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return resolve(ResponseBuilder::class)->status(201)->data($contact)->message(__(':name is created successfully', [
+        return $responseBuilder->status(201)->data($contact)->message(__(':name is created successfully', [
             'name' => __('Contact'),
         ]));
     }
 
     public function update(Blog $blog, Contact $contact, ContactDTO $contactDTO)
     {
+        $responseBuilder = resolve(ResponseBuilder::class)->input($contactDTO);
+
         $validation = $contactDTO->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
+            return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
         $isSuccessful = $contact->update($contactDTO->data());
         if (! $isSuccessful) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return resolve(ResponseBuilder::class)->data($contact)->status(200)->message(__(':name is updated successfully', [
+        return $responseBuilder->data($contact)->status(200)->message(__(':name is updated successfully', [
             'name' => __('Contact'),
         ]));
     }

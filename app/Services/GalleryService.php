@@ -43,9 +43,11 @@ class GalleryService
 
     public function store(Blog $blog, string $galleryType, string $galleryId, GalleryCategory $galleryCategory, GalleryDTO $galleryDTO)
     {
+        $responseBuilder = resolve(ResponseBuilder::class)->input($galleryDTO);
+
         $validation = $galleryDTO->validate();
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
+            return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
         $ext = $galleryDTO->file->extension();
@@ -63,7 +65,7 @@ class GalleryService
         $gallery->gallery_type = $galleryType;
         $gallery->gallery_id = $galleryId;
         if (! $gallery->save()) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
         $manager = new ImageManager(new Driver());
@@ -73,21 +75,23 @@ class GalleryService
 
         $isUploaded = Storage::put($path, $image->encode());
         if (! $isUploaded) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
         $this->resetSelected($blog, $gallery);
 
-        return resolve(ResponseBuilder::class)->status(201)->data($gallery)->message(__(':name is created successfully', [
+        return $responseBuilder->status(201)->data($gallery)->message(__(':name is created successfully', [
             'name' => $gallery->gallery_category->trans(),
         ]));
     }
 
     public function update(Blog $blog, Gallery $gallery, GalleryDTO $galleryDTO)
     {
+        $responseBuilder = resolve(ResponseBuilder::class)->input($galleryDTO);
+
         $validation = $galleryDTO->validate(false);
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
+            return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
         $isSelected = ($galleryDTO->is_selected ? now()->format('Y-m-d H:i:s.u') : null);
@@ -95,12 +99,12 @@ class GalleryService
         $gallery->gallery_order = $galleryDTO->gallery_order;
         $gallery->selected_at = $isSelected;
         if (! $gallery->save()) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
         $this->resetSelected($blog, $gallery);
 
-        return resolve(ResponseBuilder::class)->status(200)->data($gallery)->message(__(':name is updated successfully', [
+        return $responseBuilder->status(200)->data($gallery)->message(__(':name is updated successfully', [
             'name' => $gallery->gallery_category->trans(),
         ]));
     }

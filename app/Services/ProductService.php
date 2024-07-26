@@ -24,7 +24,7 @@ class ProductService implements PortContract
         ]);
 
         if ($validation->errors()->isNotEmpty()) {
-            return $responseBuilder->status(422)->errors($validation->errors());
+            return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
         $product = $blog->products()->create([

@@ -15,40 +15,44 @@ class BlogService
         return $user->blogs()->latest('created_at')->get();
     }
 
-    public function store(User $user, BlogDTO $blogDto)
+    public function store(User $user, BlogDTO $blogDTO)
     {
-        $validation = $blogDto->validate();
+        $responseBuilder = resolve(ResponseBuilder::class)->input($blogDTO);
+
+        $validation = $blogDTO->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
+            return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
         $blog = $user->blogs()->create($validation->getData());
 
         if (! $blog) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return resolve(ResponseBuilder::class)->status(201)->data($blog)->message(__(':name is created successfully', [
+        return $responseBuilder->status(201)->data($blog)->message(__(':name is created successfully', [
             'name' => __('Blog'),
         ]));
     }
 
-    public function update(Blog $blog, BlogDTO $blogDto)
+    public function update(Blog $blog, BlogDTO $blogDTO)
     {
-        $validation = $blogDto->validate(false);
+        $responseBuilder = resolve(ResponseBuilder::class)->input($blogDTO);
+
+        $validation = $blogDTO->validate(false);
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
+            return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
         $isSuccessful = $blog->update($validation->getData());
 
         if (! $isSuccessful) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return resolve(ResponseBuilder::class)->data($blog)->status(200)->message(__(':name is updated successfully', [
+        return $responseBuilder->data($blog)->status(200)->message(__(':name is updated successfully', [
             'name' => __('Blog'),
         ]));
     }
