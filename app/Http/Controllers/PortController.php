@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Excel\SheetsName;
+use App\Enums\Excel\SheetName;
 use App\Services\BlogService;
-use App\Services\ContactService;
-use App\Services\ProductPropertyService;
-use App\Services\ProductService;
-use App\Services\ProductTagService;
+use App\Services\PortService;
 use App\Support\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -15,59 +12,52 @@ use Illuminate\Support\Arr;
 class PortController extends Controller
 {
     public function __construct(
-        protected Excel $excel,
+        protected PortService $portService,
         protected BlogService $blogService,
-        protected ProductService $productService,
-        protected ProductTagService $productTagService,
-        protected ProductPropertyService $productPropertyService,
-        protected ContactService $contactService
+        protected Excel $excel
     ) {}
 
-    public function index(Request $request)
+    public function getRelativeView(SheetName $sheetName)
     {
-        return view('port.index', [
-            'tabel' => session('tabel', []),
-        ]);
+        $view = Arr::get([
+            SheetName::PRODUCT->value => 'ports._product',
+            SheetName::PRODUCT_TAG->value => 'ports._product_tag',
+            SheetName::PRODUCT_PROPERTY->value => 'ports._product_property',
+            SheetName::CONTACT->value => 'ports._contact',
+        ], $sheetName->value);
+
+        abort_unless($view, 500);
+
+        return $view;
     }
 
-    public function export(Request $request)
+    public function index(Request $request, SheetName $sheetName)
     {
         $blog = $this->blogService->findOrFailActiveBlog();
 
-        $fileName = date('Y-m-d-H-i-s').'.xlsx';
+        $responseBuilders = [];
+        if (
+            $port = $request->file('port') and
+            $path = $port->getRealPath()
+        ) {
+            $source = $this->excel->read($path);
+            $responseBuilders = $this->portService->importFromExcel($sheetName, $blog, Arr::get($source, $sheetName->value, []));
+        }
+
+        return view('ports.index', [
+            'sheetName' => $sheetName,
+            'responseBuilders' => $responseBuilders,
+            'responseBuilderView' => $this->getRelativeView($sheetName),
+        ]);
+    }
+
+    public function export(Request $request, SheetName $sheetName)
+    {
+        $blog = $this->blogService->findOrFailActiveBlog();
+        $fileName = date('Y-m-d-H-i-s').'_'.$sheetName->value.'.xlsx';
 
         return $this->excel->export($fileName, [
-            SheetsName::PRODUCT->value => $this->productService->export($blog),
-            SheetsName::PRODUCT_TAG->value => $this->productTagService->exportToExcel($blog),
-            SheetsName::PRODUCT_PROPERTY->value => $this->productPropertyService->exportToExcel($blog),
-            SheetsName::CONTACT->value => $this->contactService->exportToExcel($blog),
+            $sheetName->value => $this->portService->exportToExcel($sheetName, $blog),
         ]);
-    }
-
-    public function import(Request $request)
-    {
-        $blog = $this->blogService->findOrFailActiveBlog();
-
-        $importResponses = [];
-
-        $port = $request->file('port');
-        if ($port and $path = $port->getRealPath()) {
-
-            $source = $this->excel->read($path);
-
-            $importResponses = [
-                SheetsName::PRODUCT->value => $this->productService->importFromExcel($blog, Arr::get($source, SheetsName::PRODUCT->value)),
-                SheetsName::PRODUCT_TAG->value => $this->productTagService->importFromExcel($blog, Arr::get($source, SheetsName::PRODUCT_TAG->value)),
-                SheetsName::PRODUCT_PROPERTY->value => $this->productPropertyService->importFromExcel($blog, Arr::get($source, SheetsName::PRODUCT_PROPERTY->value)),
-                SheetsName::CONTACT->value => $this->contactService->importFromExcel($blog, Arr::get($source, SheetsName::CONTACT->value)),
-            ];
-
-            dd($importResponses);
-
-            session(['tabel' => ['value1', 'value2']]);
-        }
-        exit;
-
-        return back();
     }
 }

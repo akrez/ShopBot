@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
+use App\Contracts\PortContract;
 use App\DTO\ProductTagDTO;
 use App\Facades\ArrayHelper;
 use App\Models\Blog;
 use App\Models\Product;
 use App\Support\ResponseBuilder;
 
-class ProductTagService
+class ProductTagService implements PortContract
 {
     const TAG_NAME_MAX_LENGTH = 32;
 

@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
+use App\Contracts\PortContract;
 use App\DTO\ProductDTO;
 use App\Models\Blog;
 use App\Models\Product;
 use App\Support\ResponseBuilder;
 
-class ProductService
+class ProductService implements PortContract
 {
     public function getLatestBlogProductsQuery(Blog $blog)
     {
@@ -16,12 +17,14 @@ class ProductService
 
     public function store(Blog $blog, ProductDTO $productDto)
     {
+        $responseBuilder = resolve(ResponseBuilder::class)->input($productDto);
+
         $validation = $productDto->validate(true, [
             'blog' => $blog,
         ]);
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
+            return $responseBuilder->status(422)->errors($validation->errors());
         }
 
         $product = $blog->products()->create([
@@ -31,23 +34,25 @@ class ProductService
         ]);
 
         if (! $product) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return resolve(ResponseBuilder::class)->status(201)->data($product)->message(__(':name is created successfully', [
+        return $responseBuilder->status(201)->data($product)->message(__(':name is created successfully', [
             'name' => __('Product'),
         ]));
     }
 
     public function update(Blog $blog, Product $product, ProductDTO $productDto)
     {
+        $responseBuilder = resolve(ResponseBuilder::class)->input($productDto);
+
         $validation = $productDto->validate(false, [
             'blog' => $blog,
             'id' => $product->id,
         ]);
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(402)->data($product)->errors($validation->errors()->toArray());
+            return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
         $isSuccessful = $product->update([
@@ -57,10 +62,10 @@ class ProductService
         ]);
 
         if (! $isSuccessful) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return resolve(ResponseBuilder::class)->status(200)->data($product)->message(__(':name is updated successfully', [
+        return $responseBuilder->status(200)->data($product)->message(__(':name is updated successfully', [
             'name' => __('Product'),
         ]));
     }
@@ -83,7 +88,7 @@ class ProductService
         return null;
     }
 
-    public function export(Blog $blog)
+    public function exportToExcel(Blog $blog)
     {
         $source = [];
 

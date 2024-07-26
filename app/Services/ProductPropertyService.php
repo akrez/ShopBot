@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
+use App\Contracts\PortContract;
 use App\DTO\ProductPropertyDTO;
 use App\Facades\ArrayHelper;
 use App\Models\Blog;
 use App\Models\Product;
 use App\Support\ResponseBuilder;
 
-class ProductPropertyService
+class ProductPropertyService implements PortContract
 {
     const PROPERTY_MAX_LENGTH = 32;
 

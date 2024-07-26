@@ -45,7 +45,7 @@ class GalleryService
     {
         $validation = $galleryDTO->validate();
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
         }
 
         $ext = $galleryDTO->file->extension();
@@ -87,7 +87,7 @@ class GalleryService
     {
         $validation = $galleryDTO->validate(false);
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
         }
 
         $isSelected = ($galleryDTO->is_selected ? now()->format('Y-m-d H:i:s.u') : null);

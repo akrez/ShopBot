@@ -9,9 +9,11 @@ class ResponseBuilder implements Responsable
 {
     private int $status;
 
-    private ?string $message;
+    private string $message;
 
     private mixed $data;
+
+    private mixed $input;
 
     private mixed $errors;
 
@@ -24,8 +26,9 @@ class ResponseBuilder implements Responsable
     {
         $this->status = 200;
         $this->message = '';
-        $this->data = [];
-        $this->errors = [];
+        $this->data = null;
+        $this->input = null;
+        $this->errors = null;
 
         return $this;
     }
@@ -42,14 +45,14 @@ class ResponseBuilder implements Responsable
         return $this->status;
     }
 
-    public function message(?string $message): self
+    public function message(string $message): self
     {
         $this->message = (Lang::has($message) ? __($message) : $message);
 
         return $this;
     }
 
-    public function getMessage(): ?string
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -64,6 +67,18 @@ class ResponseBuilder implements Responsable
     public function getData(): mixed
     {
         return $this->data;
+    }
+
+    public function input(mixed $input): self
+    {
+        $this->input = $input;
+
+        return $this;
+    }
+
+    public function getInput(): mixed
+    {
+        return $this->input;
     }
 
     public function errors(mixed $errors): self

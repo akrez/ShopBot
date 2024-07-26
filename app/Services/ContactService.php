@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
+use App\Contracts\PortContract;
 use App\DTO\ContactDTO;
 use App\Models\Blog;
 use App\Models\Contact;
 use App\Support\ResponseBuilder;
 
-class ContactService
+class ContactService implements PortContract
 {
     public function getLatestBlogContactsQuery(Blog $blog)
     {
@@ -37,7 +38,7 @@ class ContactService
         $validation = $contactDTO->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
         }
 
         $contact = $blog->contacts()->create($contactDTO->data());
@@ -56,7 +57,7 @@ class ContactService
         $validation = $contactDTO->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
         }
 
         $isSuccessful = $contact->update($contactDTO->data());

@@ -20,7 +20,7 @@ class BlogService
         $validation = $blogDto->validate();
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
         }
 
         $blog = $user->blogs()->create($validation->getData());
@@ -39,7 +39,7 @@ class BlogService
         $validation = $blogDto->validate(false);
 
         if ($validation->errors()->isNotEmpty()) {
-            return resolve(ResponseBuilder::class)->status(402)->errors($validation->errors()->toArray());
+            return resolve(ResponseBuilder::class)->status(422)->errors($validation->errors()->toArray());
         }
 
         $isSuccessful = $blog->update($validation->getData());

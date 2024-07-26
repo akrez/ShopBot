@@ -129,12 +129,37 @@
                                 {{ __('Products') }}
                             </a>
                         </li>
-                    </ul>
-                    <ul class="navbar-nav mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ route('port.index') }}">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ __('Port') }}
                             </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('ports.index', ['sheetName' => \App\Enums\Excel\SheetName::PRODUCT->value]) }}">
+                                        {{ \App\Enums\Excel\SheetName::PRODUCT->trans() }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('ports.index', ['sheetName' => \App\Enums\Excel\SheetName::PRODUCT_TAG->value]) }}">
+                                        {{ \App\Enums\Excel\SheetName::PRODUCT_TAG->trans() }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('ports.index', ['sheetName' => \App\Enums\Excel\SheetName::PRODUCT_PROPERTY->value]) }}">
+                                        {{ \App\Enums\Excel\SheetName::PRODUCT_PROPERTY->trans() }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('ports.index', ['sheetName' => \App\Enums\Excel\SheetName::CONTACT->value]) }}">
+                                        {{ \App\Enums\Excel\SheetName::CONTACT->trans() }}
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
