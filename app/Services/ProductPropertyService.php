@@ -170,7 +170,7 @@ class ProductPropertyService
 
         if (count($dtos) == 0) {
             return resolve(ResponseBuilder::class)->status(200)->message(__('All :names removed', [
-                'names' => __('Property'),
+                'names' => __('Properties'),
             ]));
         }
 
