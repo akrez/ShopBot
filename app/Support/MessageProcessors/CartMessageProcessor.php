@@ -8,7 +8,7 @@ class CartMessageProcessor extends MessageProcessor
 {
     public function shouldProcess()
     {
-        if ($this->message->message_text === ReplyMarkupEnum::CART->value) {
+        if ($this->message->message_text === ReplyMarkupEnum::CART->trans()) {
             return true;
         }
 

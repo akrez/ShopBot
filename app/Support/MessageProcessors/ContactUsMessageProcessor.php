@@ -14,7 +14,7 @@ class ContactUsMessageProcessor extends MessageProcessor
 
     public function shouldProcess()
     {
-        if ($this->message->message_text === ReplyMarkupEnum::CONTACT_US->value) {
+        if ($this->message->message_text === ReplyMarkupEnum::CONTACT_US->trans()) {
             return true;
         }
 

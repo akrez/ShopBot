@@ -14,7 +14,7 @@ class CategoriesMessageProcessor extends MessageProcessor
 
     public function shouldProcess()
     {
-        if ($this->message->message_text === ReplyMarkupEnum::CATEGORIES->value) {
+        if ($this->message->message_text === ReplyMarkupEnum::CATEGORIES->trans()) {
             return true;
         }
 

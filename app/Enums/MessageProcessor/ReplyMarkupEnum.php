@@ -8,8 +8,18 @@ enum ReplyMarkupEnum: string
 {
     use Enum;
 
-    case REQUEST_CONTACT = '🔐 | ورود به وسیله اشتراک گزاری شماره تلفن همراه';
-    case CATEGORIES = '🗂 | دسته‌بندی‌ها';
-    case CART = '🛒 | مشاهده سبد خرید';
-    case CONTACT_US = '☎️ | ارتباط با ما';
+    public static function translates()
+    {
+        return [
+            'request_contact' => '🔐 | ورود به وسیله اشتراک گزاری شماره تلفن همراه',
+            'categories' => '🗂 | دسته‌بندی‌ها',
+            'cart' => '🛒 | مشاهده سبد خرید',
+            'contact_us' => '☎️ | ارتباط با ما',
+        ];
+    }
+
+    case REQUEST_CONTACT = 'request_contact';
+    case CATEGORIES = 'categories';
+    case CART = 'cart';
+    case CONTACT_US = 'contact_us';
 }

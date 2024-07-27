@@ -80,21 +80,21 @@ trait MessageProcessorTrait
                 'keyboard' => [
                     [
                         [
-                            'text' => ReplyMarkupEnum::CONTACT_US,
+                            'text' => ReplyMarkupEnum::CONTACT_US->trans(),
                         ],
                         [
-                            'text' => ReplyMarkupEnum::CATEGORIES,
+                            'text' => ReplyMarkupEnum::CATEGORIES->trans(),
                         ],
                     ],
                     /*
                     [
                         [
-                            'text' => ReplyMarkupEnum::CART,
+                            'text' => ReplyMarkupEnum::CART->trans(),
                         ],
                     ],
                     [
                         [
-                            'text' => ReplyMarkupEnum::REQUEST_CONTACT,
+                            'text' => ReplyMarkupEnum::REQUEST_CONTACT->trans(),
                             'request_contact' => true,
                         ],
                     ],
