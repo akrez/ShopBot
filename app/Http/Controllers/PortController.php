@@ -54,7 +54,7 @@ class PortController extends Controller
     public function export(Request $request, SheetName $sheetName)
     {
         $blog = $this->blogService->findOrFailActiveBlog();
-        $fileName = date('Y-m-d-H-i-s').'_'.$sheetName->value.'.xlsx';
+        $fileName = $sheetName->value.'_'.date('Y-m-d-H-i-s').'.xlsx';
 
         return $this->excel->export($fileName, [
             $sheetName->value => $this->portService->exportToExcel($sheetName, $blog),
