@@ -163,22 +163,23 @@ class ProductPropertyService implements PortContract
     {
         $this->delete($product);
         $dtos = $this->filter($keyToValuesArray);
-        $productProperties = $this->insert($blog, $product, $dtos);
 
-        if (count($dtos) != count($productProperties)) {
-            return resolve(ResponseBuilder::class)->status(206);
+        $responseBuilder = resolve(ResponseBuilder::class)->data((object) [
+            'product' => $product,
+            'product_properties' => $this->insert($blog, $product, $dtos),
+        ]);
+
+        if (count($dtos) != count($responseBuilder->getData()->product_properties)) {
+            return $responseBuilder->status(206)->message(__('http-statuses.422'));
         }
 
         if (count($dtos) == 0) {
-            return resolve(ResponseBuilder::class)->status(200)->message(__('All :names removed', [
+            return $responseBuilder->status(200)->message(__('All :names removed', [
                 'names' => __('Properties'),
             ]));
         }
 
-        return resolve(ResponseBuilder::class)->status(201)->data([
-            'product' => $product,
-            'product_properties' => $productProperties,
-        ])->message(__(':count :names are created successfully', [
+        return $responseBuilder->status(201)->message(__(':count :names are created successfully', [
             'count' => count($dtos),
             'names' => __('Property'),
         ]));

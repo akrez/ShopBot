@@ -115,22 +115,23 @@ class ProductTagService implements PortContract
     {
         $this->delete($product);
         $safeTags = $this->filter($tags);
-        $productTags = $this->insert($blog, $product, $safeTags);
 
-        if (count($safeTags) != count($productTags)) {
-            return resolve(ResponseBuilder::class)->status(206);
+        $responseBuilder = resolve(ResponseBuilder::class)->data((object) [
+            'product' => $product,
+            'product_tags' => $this->insert($blog, $product, $safeTags),
+        ]);
+
+        if (count($safeTags) != count($responseBuilder->getData()->product_tags)) {
+            return $responseBuilder->status(206)->message(__('http-statuses.422'));
         }
 
         if (count($safeTags) == 0) {
-            return resolve(ResponseBuilder::class)->status(200)->message(__('All :names removed', [
+            return $responseBuilder->status(200)->message(__('All :names removed', [
                 'names' => __('Tags'),
             ]));
         }
 
-        return resolve(ResponseBuilder::class)->status(201)->data([
-            'product' => $product,
-            'product_tags' => $productTags,
-        ])->message(__(':count :names are created successfully', [
+        return $responseBuilder->status(201)->message(__(':count :names are created successfully', [
             'count' => count($safeTags),
             'names' => __('Tag'),
         ]));
