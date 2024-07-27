@@ -101,7 +101,7 @@ class ContactService implements PortContract
         foreach ($this->getLatestBlogContactsQuery($blog)->get() as $contact) {
             $source[] = [
                 $contact->id,
-                $contact->contact_type->value,
+                $contact->contact_type?->value,
                 $contact->contact_key,
                 $contact->contact_value,
                 $contact->contact_link,
