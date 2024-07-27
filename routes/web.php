@@ -21,7 +21,7 @@ Route::get('/', [SiteController::class, 'index']);
 Route::middleware('auth')->group(function () {
     Route::get(AppServiceProvider::HOME, [BlogController::class, 'index'])->name('home');
     Route::patch('blogs/{id}/active', [BlogController::class, 'active'])->name('blogs.active');
-    Route::resource('blogs', BlogController::class)->parameter('blogs', 'id');
+    Route::resource('blogs', BlogController::class)->parameter('blogs', 'id')->except(['destroy']);
     Route::middleware(ActiveBlogMiddleware::class)->group(function () {
 
         Route::get('ports/{sheetName}', [PortController::class, 'index'])->name('ports.index');

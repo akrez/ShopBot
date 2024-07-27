@@ -96,16 +96,6 @@ class BlogController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Blog $blog)
-    {
-        //
-    }
-
     public function active(int $id)
     {
         $user = Auth::user();
