@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use App\Enums\Blog\BlogStatus;
+use App\Enums\Gallery\GalleryCategory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -87,7 +88,7 @@ class Blog extends Model
 
     public function logo(): MorphOne
     {
-        return $this->morphOne(Gallery::class, 'gallery');
+        return $this->morphOne(Gallery::class, 'gallery')->where('gallery_category', GalleryCategory::BLOG_LOGO->value);
     }
 
     public function logoUrl(): ?string

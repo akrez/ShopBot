@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\BlogDTO;
+use App\Enums\Blog\BlogStatus;
 use App\Facades\ActiveBlog;
 use App\Models\Blog;
 use App\Models\User;
@@ -80,5 +81,10 @@ class BlogService
         return resolve(ResponseBuilder::class)->data($blog)->message(__(':name is selected successfully', [
             'name' => __('Blog'),
         ]))->status(200);
+    }
+
+    public function findOrFailApiActiveBlog($id)
+    {
+        return Blog::where('id', $id)->where('blog_status', BlogStatus::ACTIVE->value)->firstOrFail();
     }
 }
