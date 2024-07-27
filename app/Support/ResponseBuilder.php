@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use Illuminate\Contracts\Support\MessageBag;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\Lang;
 
@@ -15,7 +16,7 @@ class ResponseBuilder implements Responsable
 
     private mixed $input;
 
-    private mixed $errors;
+    private ?MessageBag $errors;
 
     public function __construct()
     {
@@ -81,14 +82,14 @@ class ResponseBuilder implements Responsable
         return $this->input;
     }
 
-    public function errors(mixed $errors): self
+    public function errors(?MessageBag $errors): self
     {
         $this->errors = $errors;
 
         return $this;
     }
 
-    public function getErrors(): mixed
+    public function getErrors(): ?MessageBag
     {
         return $this->errors;
     }
