@@ -37,7 +37,7 @@ class ContactService implements PortContract
     {
         $responseBuilder = resolve(ResponseBuilder::class)->input($contactDTO);
 
-        $validation = $contactDTO->validate();
+        $validation = $contactDTO->validate(true, ['blog' => $blog]);
 
         if ($validation->errors()->isNotEmpty()) {
             return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
@@ -58,7 +58,7 @@ class ContactService implements PortContract
     {
         $responseBuilder = resolve(ResponseBuilder::class)->input($contactDTO);
 
-        $validation = $contactDTO->validate();
+        $validation = $contactDTO->validate(false, ['blog' => $blog, 'id' => $contact->id]);
 
         if ($validation->errors()->isNotEmpty()) {
             return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
