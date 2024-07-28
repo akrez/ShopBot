@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BlogResource;
 use App\Services\BlogService;
 use App\Support\ResponseBuilder;
 use Illuminate\Http\Request;
@@ -34,6 +35,6 @@ class ApiController extends Controller
             },
         ]);
 
-        return (new ResponseBuilder)->status(200)->data($blog);
+        return (new ResponseBuilder)->status(200)->data(new BlogResource($blog));
     }
 }
