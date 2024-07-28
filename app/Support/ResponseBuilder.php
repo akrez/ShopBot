@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Lang;
 
 class ResponseBuilder implements Responsable
 {
+    const DEFAULT_STATUS = 200;
+
+    const DEFAULT_MESSAGE = '';
+
     private int $status;
 
     private string $message;
@@ -25,8 +29,8 @@ class ResponseBuilder implements Responsable
 
     public function reset(): self
     {
-        $this->status = 200;
-        $this->message = '';
+        $this->status = static::DEFAULT_STATUS;
+        $this->message = static::DEFAULT_MESSAGE;
         $this->data = null;
         $this->input = null;
         $this->errors = null;
@@ -106,5 +110,14 @@ class ResponseBuilder implements Responsable
             'data' => $this->getData(),
             'errors' => $this->getErrors(),
         ], $this->getStatus());
+    }
+
+    public static function new(
+        $status = self::DEFAULT_STATUS,
+        $message = self::DEFAULT_MESSAGE
+    ): static {
+        return (new static)
+            ->status($status)
+            ->message($message);
     }
 }

@@ -83,8 +83,8 @@ class BlogService
         ]))->status(200);
     }
 
-    public function findOrFailApiActiveBlog($id)
+    public function firstApiActiveBlog($id)
     {
-        return Blog::where('id', $id)->where('blog_status', BlogStatus::ACTIVE->value)->firstOrFail();
+        return Blog::where('id', $id)->where('blog_status', BlogStatus::ACTIVE->value)->first();
     }
 }
