@@ -17,7 +17,7 @@
                     </div>
                 </div>
             @endif
-            <div class="row pb-2">
+            <div class="row mb-2">
                 <div class="col-sm-12">
                     <div class="btn-group-vertical w-100" role="group">
                         @foreach (collect(Arr::get($data, 'products', []))->pluck('product_tags')->flatten()->unique()->toArray() as $tagKey => $tag)
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-9">
+        <div class="col-sm-9 mb-2">
             <div class="pb-2">
                 <h1 class="d-inline-block">{{ \Arr::get($data, 'name') }}</h1>
                 <h2 class="d-inline-block ms-2 text-secondary">{{ \Arr::get($data, 'short_description') }}</h2>
@@ -44,11 +44,11 @@
                         @foreach (Arr::get($data, 'products', []) as $product)
                             <div class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3">
                                 @if (isset($product['images'][0]))
-                                    <img class="w-100 rounded" src="{{ $product['images'][0]['url'] }}"
+                                    <img class="w-100 pb-2 rounded" src="{{ $product['images'][0]['url'] }}"
                                         alt="{{ $product['name'] }}">
                                 @endif
-                                <div class="card-body p-2">
-                                    <h5 class="card-title font-weight-bold py-2">{{ $product['name'] }}</h5>
+                                <div class="card-body">
+                                    <h5 class="card-title font-weight-bold pb-2">{{ $product['name'] }}</h5>
                                     <p class="card-text">
                                         @foreach ($product['product_properties'] as $property)
                                             <strong>{{ $property['property_key'] }}:</strong>
