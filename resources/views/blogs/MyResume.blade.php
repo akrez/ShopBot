@@ -173,7 +173,7 @@
                                     $icon = 'bi bi-envelope';
                                 } elseif ('instagram' == $contact['contact_type']) {
                                     $icon = 'bi bi-instagram';
-                                } elseif ('phone' == $contact['contact_type']) {
+                                } else {
                                     $icon = 'bi bi-telephone';
                                 }
                             @endphp
