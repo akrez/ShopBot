@@ -91,7 +91,7 @@ class BlogController extends Controller
         $response = resolve(ApiService::class)->blogResponse($id);
         abort_unless($response->isSuccessful(), $response->getStatus());
 
-        return view('blogs.show', [
+        return view('blogs.MyResume', [
             'data' => json_decode(json_encode($response->getData()->toArray($request)), true),
         ]);
     }

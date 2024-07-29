@@ -4,14 +4,10 @@
 @section('subheader', $product->name)
 
 @section('content')
-    <div class="row mb-2">
-        <div class="col-md-2 mt-1">
-            <a class="btn btn-light border border-dark w-100"
-                href="{{ route('products.product_images.create', ['product_id' => $product->id]) }}">
-                @lang('Create :name', ['name' => __('product_image')])
-            </a>
-        </div>
-    </div>
+    @include('product_images._form', [
+        'product' => $product,
+        'action' => route('products.product_images.store', ['product_id' => $product->id]),
+    ])
     <div class="row">
         <div class="col-md-12 table-responsive">
             <table class="table table-striped table-hover table-bordered align-middle rounded-3 text-center">

@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('contacts', ContactController::class)->parameter('contacts', 'id');
 
-        Route::resource('products/{product_id}/product_images', ProductImageController::class, ['as' => 'products'])->parameter('product_images', 'name');
+        Route::resource('products/{product_id}/product_images', ProductImageController::class, ['as' => 'products'])->parameter('product_images', 'name')->except(['create', 'show']);
         Route::resource('blog_logos', BlogLogoController::class)->parameter('blog_logos', 'name');
     });
 });
