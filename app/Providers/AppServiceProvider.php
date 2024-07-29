@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
             return new ActiveBlog(Auth::user());
         });
         $this->app->singleton('ArrayHelper', function () {
-            return new ArrayHelper();
+            return new ArrayHelper;
         });
         $this->app->alias('Arr', Arr::class);
     }

@@ -68,7 +68,7 @@ class GalleryService
             return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        $manager = new ImageManager(new Driver());
+        $manager = new ImageManager(new Driver);
         $image = $manager->read($galleryDTO->file->getRealPath());
 
         $path = static::getGalleryPath($gallery);

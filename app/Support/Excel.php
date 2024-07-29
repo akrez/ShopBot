@@ -17,7 +17,7 @@ class Excel
         ];
 
         $callback = function () use ($sheetNameSource) {
-            $spreadsheet = new Spreadsheet();
+            $spreadsheet = new Spreadsheet;
             //
             $ctiveSheetIndex = $spreadsheet->getActiveSheetIndex();
             $spreadsheet->removeSheetByIndex($ctiveSheetIndex);
@@ -43,7 +43,7 @@ class Excel
     {
         $result = [];
         //
-        $reader = new XlsxReader();
+        $reader = new XlsxReader;
         $reader->setReadDataOnly(true);
         $spreadsheet = $reader->load($path);
         //
