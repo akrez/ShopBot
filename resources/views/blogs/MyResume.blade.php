@@ -1,6 +1,7 @@
 @php
     $title = \Arr::get($data, 'name');
     $shortDescription = \Arr::get($data, 'short_description', '');
+    $description = \Arr::get($data, 'description', '');
     $titleShortDescription = $title . ($shortDescription ? ' | ' . $shortDescription : '');
     $heroUrl = url('images/hero.jpg');
     $tags = collect(Arr::get($data, 'products', []))->pluck('product_tags')->flatten()->unique()->toArray();
@@ -8,6 +9,7 @@
     $contacts = collect(Arr::get($data, 'contacts', []));
     $contactSize = max(3, intval(12 / count($contacts)));
     $icon = 5;
+    $logoUrl = \Arr::get($data, 'logo.url', null);
 @endphp
 <!DOCTYPE html>
 
@@ -90,7 +92,7 @@
             <img src="{{ $heroUrl }}" alt="">
 
             <div class="container" data-aos="zoom-out">
-                <div class="row justify-content-center">
+                <div class="row">
                     <div class="col-lg-9">
                         <span class="h1 typed" data-typed-items="{{ implode(', ', $tags) }}"></span>
                         <h1 class="text-dark d-inline-block me-3">{{ $title }}</h1>
@@ -115,15 +117,16 @@
 
                     <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
                         <li data-filter="*" class="filter-active">همه محصولات {{ $title }}</li>
+                        <br>
                         @foreach ($tags as $tag)
-                            <li data-filter=".filter-{{ crc32($tag) }}">{{ $tag }}</li>
+                            <li data-filter=".filter-{{ crc32($tag) }}" class="fs-5">{{ $tag }}</li>
                         @endforeach
                     </ul><!-- End Portfolio Filters -->
 
                     <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-
                         @foreach ($products as $product)
-                            <div class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3 isotope-item @foreach ($product['product_tags'] as $productTag) {{ ' filter-' . crc32($productTag) }} @endforeach ">
+                            <div
+                                class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3 isotope-item @foreach ($product['product_tags'] as $productTag) {{ ' filter-' . crc32($productTag) }} @endforeach ">
                                 @if (isset($product['images'][0]))
                                     <img class="w-100 pb-2 rounded" src="{{ $product['images'][0]['url'] }}"
                                         alt="{{ $product['name'] }}">
@@ -151,7 +154,7 @@
             <section id="contact" class="contact section">
 
                 <!-- Section Title -->
-                <div class="container section-title" data-aos="fade-up">
+                <div class="container section-title aos-init aos-animate pb-1" data-aos="fade-up">
                     <h2>ارتباط با ما</h2>
                 </div><!-- End Section Title -->
 
@@ -201,29 +204,11 @@
 
     <footer id="footer" class="footer position-relative light-background">
         <div class="container">
-            <h3 class="sitename">Brandon Johnson</h3>
-            <p>Et aut eum quis fuga eos sunt ipsa nihil. Labore corporis magni eligendi fuga maxime saepe commodi
-                placeat.</p>
-            <div class="social-links d-flex justify-content-center">
-                <a href=""><i class="bi bi-twitter-x"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-skype"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-            <div class="container">
-                <div class="copyright">
-                    <span>Copyright</span> <strong class="px-1 sitename">Alex Smith</strong> <span>All Rights
-                        Reserved</span>
-                </div>
-                <div class="credits">
-                    <!-- All the links in the footer should remain intact. -->
-                    <!-- You can delete the links only if you've purchased the pro version. -->
-                    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                    <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div>
-            </div>
+            <h3 class="sitename">{{ $title }}</h3>
+            <p class="my-3">{{ $description }}</p>
+            @if ($logoUrl)
+                <img class="img-fluid" src="{{ $logoUrl }}" alt="{{ $title }}">
+            @endif
         </div>
     </footer>
 
