@@ -126,7 +126,7 @@
                     <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
                         @foreach ($products as $product)
                             <div
-                                class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3 isotope-item @foreach ($product['product_tags'] as $productTag) {{ ' filter-' . crc32($productTag) }} @endforeach ">
+                                class="border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3 isotope-item @foreach ($product['product_tags'] as $productTag) {{ ' filter-' . crc32($productTag) }} @endforeach ">
                                 @if (isset($product['images'][0]))
                                     <img class="w-100 pb-2 rounded" src="{{ $product['images'][0]['url'] }}"
                                         alt="{{ $product['name'] }}">
