@@ -39,7 +39,7 @@ class ContactDTO extends DTO
         }
 
         return [
-            'contact_type' => ['nullable', Rule::in(ContactType::values())],
+            'contact_type' => ['required', Rule::in(ContactType::values())],
             'contact_key' => ['bail', 'required', 'max:255', $uniqueRule],
             'contact_value' => ['required', 'max:1023'],
             'contact_link' => ['nullable'],
