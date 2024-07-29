@@ -123,22 +123,46 @@
                         @endforeach
                     </ul><!-- End Portfolio Filters -->
 
-                    <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+                    <div class="row gy-4 isotope-container mt-2" data-aos="fade-up" data-aos-delay="200">
                         @foreach ($products as $product)
                             <div
-                                class="border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3 isotope-item @foreach ($product['product_tags'] as $productTag) {{ ' filter-' . crc32($productTag) }} @endforeach ">
-                                @if (isset($product['images'][0]))
-                                    <img class="w-100 pb-2 rounded" src="{{ $product['images'][0]['url'] }}"
+                                class="border pt-3 mt-0 col-sm-6 col-md-4 col-lg-3 isotope-item @foreach ($product['product_tags'] as $productTag) {{ ' filter-' . crc32($productTag) }} @endforeach ">
+                                @if (count($product['images']) == 1)
+                                    <img class="w-100 pb-3 rounded" src="{{ $product['images'][0]['url'] }}"
                                         alt="{{ $product['name'] }}">
+                                @elseif (count($product['images']) > 1)
+                                    <div id="product-carousel-{{ $product['code'] }}" class="carousel pb-3 carousel-dark slide"
+                                        data-bs-ride="true">
+                                        <div class="carousel-inner">
+                                            @foreach ($product['images'] as $productImage)
+                                                <div class="carousel-item active">
+                                                    <img class="w-100 pb-2 rounded" src="{{ $productImage['url'] }}"
+                                                        alt="{{ $product['name'] }}">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#product-carousel-{{ $product['code'] }}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#product-carousel-{{ $product['code'] }}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
                                 @endif
                                 <div class="card-body mb-auto">
-                                    <h5 class="card-title font-weight-bold pb-2">{{ $product['name'] }}</h5>
-                                    <p class="card-text">
-                                        @foreach ($product['product_properties'] as $property)
-                                            <strong>{{ $property['property_key'] }}:</strong>
-                                            {{ implode(', ', $property['property_values']) }}<br>
-                                        @endforeach
-                                    </p>
+                                    <h5 class="card-title font-weight-bold pb-3">{{ $product['name'] }}</h5>
+                                    @if ($product['product_properties'])
+                                        <p class="card-text pb-3">
+                                            @foreach ($product['product_properties'] as $property)
+                                                <strong>{{ $property['property_key'] }}:</strong>
+                                                {{ implode(', ', $property['property_values']) }}<br>
+                                            @endforeach
+                                        </p>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
