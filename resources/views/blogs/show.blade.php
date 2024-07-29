@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ url('libs/bootstrap/dist/css/bootstrap.rtl.min.css') }}" />
     <link rel="stylesheet" href="{{ url('libs/vazirmatn/Vazirmatn-font-face.css') }}" />
     <link rel="stylesheet" href="{{ url('libs/@fortawesome/fontawesome-free/css/all.min.css') }}" />
-    <link rel="stylesheet" href="{{ url('blog.css') }}">
+    <link rel="stylesheet" href="{{ url('css/blog.css') }}">
 
     @yield('POS_HEAD')
 </head>

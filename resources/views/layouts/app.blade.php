@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ url('libs/sweetalert2/dist/sweetalert2.min.css') }}" />
     <link rel="stylesheet" href="{{ url('libs/vazirmatn/Vazirmatn-font-face.css') }}" />
     <link rel="stylesheet" href="{{ url('libs/@fortawesome/fontawesome-free/css/all.min.css') }}" />
-    <link rel="stylesheet" href="{{ url('app.css') }}">
+    <link rel="stylesheet" href="{{ url('css/app.css') }}">
 
     @yield('POS_HEAD')
 </head>

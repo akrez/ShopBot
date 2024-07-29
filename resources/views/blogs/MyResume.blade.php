@@ -41,7 +41,7 @@
     </style>
 
     <!-- Main CSS File -->
-    <link rel="stylesheet" href="{{ url('MyResume.css') }}">
+    <link rel="stylesheet" href="{{ url('css/MyResume.css') }}">
 
     @yield('POS_HEAD')
 </head>
@@ -256,7 +256,7 @@
     <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 
     <!-- Main JS File -->
-    <script src="{{ asset('MyResume.js') }}"></script>
+    <script src="{{ asset('js/MyResume.js') }}"></script>
 
     @yield('POS_END')
 </body>
