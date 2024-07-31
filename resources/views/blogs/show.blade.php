@@ -48,18 +48,14 @@
                         </div>
                     </div>
                 @endif
-                <div class="row mb-2">
+                <div class="row my-3">
                     <div class="col-sm-12">
                         <div class="btn-group-vertical w-100" role="group">
-                            <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-checbox-"
-                                autocomplete="off">
-                            <label class="btn btn-outline-dark" for="vbtn-checbox-">
-                                <h4 class="m-1">همه محصولات {{ $title }}</h4>
-                            </label>
-                            @foreach ($tags as $tagKey => $tag)
-                                <input type="radio" class="btn-check" name="vbtn-radio"
-                                    id="vbtn-checbox-{{ $tagKey }}" autocomplete="off">
-                                <label class="btn btn-outline-dark" for="vbtn-checbox-{{ $tagKey }}">
+                            @foreach (['همه محصولات ' . $title, ...$tags] as $tagKey => $tag)
+                                <input type="radio" class="btn-check" name="filter-radio"
+                                    id="filter-radio-{{ $tagKey }}" autocomplete="off"
+                                    data-filter-tag="{{ $tagKey === 0 ? '' : md5($tag) }}">
+                                <label class="btn btn-outline-dark" for="filter-radio-{{ $tagKey }}">
                                     <h4 class="m-1">{{ $tag }}</h4>
                                 </label>
                             @endforeach
@@ -75,13 +71,14 @@
                 </div>
                 <div class="container-fluid">
                     <div class="row equal">
-                        @foreach ($products as $product)
-                            <div class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3">
+                        @foreach ($products as $productKey => $product)
+                            <div class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3"
+                                data-filter-tags="{{ json_encode(array_map('md5', $product['product_tags'])) }}">
                                 @if (count($product['images']) == 1)
                                     <img class="w-100 pb-3 rounded" src="{{ $product['images'][0]['url'] }}"
                                         alt="{{ $product['name'] }}">
                                 @elseif (count($product['images']) > 1)
-                                    <div id="product-carousel-{{ $product['code'] }}"
+                                    <div id="product-carousel-{{ $productKey }}"
                                         class="carousel pb-3 carousel-dark slide">
                                         <div class="carousel-inner">
                                             @foreach ($product['images'] as $productImage)
@@ -93,13 +90,13 @@
                                             @endforeach
                                         </div>
                                         <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#product-carousel-{{ $product['code'] }}"
+                                            data-bs-target="#product-carousel-{{ $productKey }}"
                                             data-bs-slide="prev">
                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Previous</span>
                                         </button>
                                         <button class="carousel-control-next" type="button"
-                                            data-bs-target="#product-carousel-{{ $product['code'] }}"
+                                            data-bs-target="#product-carousel-{{ $productKey }}"
                                             data-bs-slide="next">
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Next</span>
@@ -157,6 +154,18 @@
         </div>
     </footer>
     <script src="{{ asset('libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
+    <script>
+        document.querySelectorAll("[data-filter-tag]").forEach(function(radioFilterElement) {
+            radioFilterElement.onclick = function() {
+                tag = this.getAttribute('data-filter-tag');
+                document.querySelectorAll("[data-filter-tags]").forEach(productElement => {
+                    const hasTag = JSON.parse((productElement.getAttribute('data-filter-tags')))
+                        .includes(tag);
+                    productElement.style.display = (tag && !hasTag ? 'none' : 'block');
+                });
+            }
+        });
+    </script>
     @yield('POS_END')
 </body>
 
