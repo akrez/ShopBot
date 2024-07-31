@@ -6,11 +6,11 @@
     $tags = collect(Arr::get($data, 'products', []))->pluck('product_tags')->flatten()->unique()->toArray();
     $products = collect(Arr::get($data, 'products', []));
     $contacts = collect(Arr::get($data, 'contacts', []));
-    $contactSize = max(4, intval(12 / count($contacts)));
+    $contactSize = $contacts->count() ? max(4, intval(12 / count($contacts))) : 4;
     $logoUrl = \Arr::get($data, 'logo.url', null);
 @endphp
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="h-100" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -33,9 +33,9 @@
     @yield('POS_HEAD')
 </head>
 
-<body dir="rtl">
+<body class="d-flex flex-column h-100" dir="rtl">
     @yield('POS_BEGIN')
-    <div class="container mt-4">
+    <div class="container flex-shrink-0 mt-4">
         <div class="row">
             <div class="col-sm-3">
                 @if ($logoUrl)
@@ -119,40 +119,43 @@
             </div>
         </div>
     </div>
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-            <div class="row">
-                @foreach ($contacts as $contact)
-                    @php
-                        if ('address' == $contact['contact_type']) {
-                            $icon = 'bi bi-geo-alt';
-                        } elseif ('telegram' == $contact['contact_type']) {
-                            $icon = 'bi bi-telegram';
-                        } elseif ('whatsapp' == $contact['contact_type']) {
-                            $icon = 'bi bi-whatsapp';
-                        } elseif ('email' == $contact['contact_type']) {
-                            $icon = 'bi bi-envelope';
-                        } elseif ('instagram' == $contact['contact_type']) {
-                            $icon = 'bi bi-instagram';
-                        } else {
-                            $icon = 'bi bi-telephone';
-                        }
-                    @endphp
-                    <div class="col-lg-{{ $contactSize }} pt-3">
-                        <div class="info-item text-center">
-                            <div class="contact d-inline-block text-center">
-                                <div class="d-flex justify-content-center"><i class="{{ $icon }} fs-3em"></i>
+    @if ($contacts->count())
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container">
+                <div class="row">
+                    @foreach ($contacts as $contact)
+                        @php
+                            if ('address' == $contact['contact_type']) {
+                                $icon = 'bi bi-geo-alt';
+                            } elseif ('telegram' == $contact['contact_type']) {
+                                $icon = 'bi bi-telegram';
+                            } elseif ('whatsapp' == $contact['contact_type']) {
+                                $icon = 'bi bi-whatsapp';
+                            } elseif ('email' == $contact['contact_type']) {
+                                $icon = 'bi bi-envelope';
+                            } elseif ('instagram' == $contact['contact_type']) {
+                                $icon = 'bi bi-instagram';
+                            } else {
+                                $icon = 'bi bi-telephone';
+                            }
+                        @endphp
+                        <div class="col-lg-{{ $contactSize }} pt-3">
+                            <div class="info-item text-center">
+                                <div class="contact d-inline-block text-center">
+                                    <div class="d-flex justify-content-center"><i
+                                            class="{{ $icon }} fs-3em"></i>
+                                    </div>
+                                    <h3>{{ $contact['contact_key'] }}</h3>
+                                    <p><a href="{{ $contact['contact_link'] }}"
+                                            dir="ltr">{{ $contact['contact_value'] }}</a></p>
                                 </div>
-                                <h3>{{ $contact['contact_key'] }}</h3>
-                                <p><a href="{{ $contact['contact_link'] }}"
-                                        dir="ltr">{{ $contact['contact_value'] }}</a></p>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    @endif
     <script src="{{ asset('libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
     <script>
         document.querySelectorAll("[data-filter-tag]").forEach(function(radioFilterElement) {
