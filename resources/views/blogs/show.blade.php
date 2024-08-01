@@ -3,7 +3,7 @@
     $shortDescription = \Arr::get($data, 'short_description', '');
     $description = \Arr::get($data, 'description', '');
     $titleShortDescription = $title . ($shortDescription ? ' | ' . $shortDescription : '');
-    $tags = collect(Arr::get($data, 'products', []))->pluck('product_tags')->flatten()->unique()->toArray();
+    $tags = collect(Arr::get($data, 'products', []))->pluck('product_tags')->flatten()->unique()->sort()->toArray();
     $products = collect(Arr::get($data, 'products', []));
     $contacts = collect(Arr::get($data, 'contacts', []));
     $contactSize = $contacts->count() ? max(4, intval(12 / count($contacts))) : 4;
@@ -30,6 +30,14 @@
     <link rel="stylesheet" href="{{ url('libs/vazirmatn/Vazirmatn-font-face.css') }}" />
     <link rel="stylesheet" href="{{ url('libs/bootstrap-icons/font/bootstrap-icons.min.css') }}">
     <link rel="stylesheet" href="{{ url('css/blog.css') }}">
+
+    <style>
+        .bg 
+        {
+
+            
+        }
+    </style>
 
     @yield('POS_HEAD')
 </head>
@@ -60,13 +68,14 @@
 
         <div class="row pb-3">
             <div class="col-12 text-center">
-                <button class="btn btn-primary rounded-pill mb-2" data-filter-tag="">
+                <button class="btn rounded-pill px-4 mb-2 btn-success" data-filter-tag="">
                     {{ 'همه محصولات ' . $title }}
                 </button>
             </div>
             <div class="col-12 text-center">
                 @foreach ($tags as $tagKey => $tag)
-                    <button class="btn btn-info rounded-pill mb-1" data-filter-tag="{{ md5($tag) }}">
+                    <button class="btn rounded-pill px-4 mb-1 btn-outline-success"
+                        data-filter-tag="{{ md5($tag) }}">
                         {{ $tag }}
                     </button>
                 @endforeach
@@ -153,7 +162,7 @@
                                     </div>
                                     <h3>{{ $contact['contact_key'] }}</h3>
                                     @if ($contact['contact_link'])
-                                        <a class="h4 text-primary text-decoration-none"
+                                        <a class="h4 text-success text-decoration-none"
                                             href="{{ $contact['contact_link'] }}"
                                             dir="ltr">{{ $contact['contact_value'] }}</a>
                                     @else
@@ -173,6 +182,16 @@
         document.querySelectorAll("[data-filter-tag]").forEach(function(radioFilterElement) {
             radioFilterElement.onclick = function() {
                 tag = this.getAttribute('data-filter-tag');
+                selectedTagBtn = this;
+                document.querySelectorAll("[data-filter-tag]").forEach(tagBtn => {
+                    if (tagBtn == selectedTagBtn) {
+                        tagBtn.classList.remove('btn-outline-success');
+                        tagBtn.classList.add('btn-success');
+                    } else {
+                        tagBtn.classList.add('btn-outline-success');
+                        tagBtn.classList.remove('btn-success');
+                    }
+                });
                 document.querySelectorAll("[data-filter-tags]").forEach(productElement => {
                     const hasTag = JSON.parse((productElement.getAttribute('data-filter-tags')))
                         .includes(tag);
