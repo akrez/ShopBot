@@ -31,14 +31,6 @@
     <link rel="stylesheet" href="{{ url('libs/bootstrap-icons/font/bootstrap-icons.min.css') }}">
     <link rel="stylesheet" href="{{ url('css/blog.css') }}">
 
-    <style>
-        .bg 
-        {
-
-            
-        }
-    </style>
-
     @yield('POS_HEAD')
 </head>
 
