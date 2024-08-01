@@ -40,8 +40,8 @@ class PortController extends Controller
             $port = $request->file('port') and
             $path = $port->getRealPath()
         ) {
-            $source = $this->excel->read($path);
-            $responseBuilders = $this->portService->importFromExcel($sheetName, $blog, Arr::get($source, $sheetName->value, []));
+            $source = $this->excel->read($path) + [0 => []];
+            $responseBuilders = $this->portService->importFromExcel($sheetName, $blog, reset($source));
         }
 
         return view('ports.index', [

@@ -139,15 +139,21 @@
                                 $icon = 'bi bi-telephone';
                             }
                         @endphp
-                        <div class="col-lg-{{ $contactSize }} pt-3">
+                        <div class="col-lg-{{ $contactSize }} py-3">
                             <div class="info-item text-center">
                                 <div class="contact d-inline-block text-center">
-                                    <div class="d-flex justify-content-center"><i
-                                            class="{{ $icon }} fs-3em"></i>
+                                    <div class="d-flex justify-content-center">
+                                        <i class="{{ $icon }} fs-3em"></i>
                                     </div>
                                     <h3>{{ $contact['contact_key'] }}</h3>
-                                    <p><a href="{{ $contact['contact_link'] }}"
-                                            dir="ltr">{{ $contact['contact_value'] }}</a></p>
+                                    @if ($contact['contact_link'])
+                                        <a class="h4 text-primary text-decoration-none"
+                                            href="{{ $contact['contact_link'] }}"
+                                            dir="ltr">{{ $contact['contact_value'] }}</a>
+                                    @else
+                                        <div class="h4 text-secondary text-decoration-none" dir="ltr">
+                                            {{ $contact['contact_value'] }}</div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
