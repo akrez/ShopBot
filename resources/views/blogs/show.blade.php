@@ -33,7 +33,7 @@
 
     <style>
         .bg {
-            background-image: url("{{ url('images/b.png') }}");
+            background-image: url("{{ url('images/bg.png') }}");
         }
     </style>
 
