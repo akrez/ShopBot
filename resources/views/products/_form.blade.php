@@ -23,6 +23,12 @@
             'selectOptions' => App\Enums\Product\ProductStatus::toArray(),
         ])
         @include('components/formBuilder', [
+            'name' => 'product_order',
+            'label' => __('validation.attributes.product_order'),
+            'errorsArray' => $errors->get('product_order'),
+            'value' => isset($product) ? $product->product_order : '',
+        ])
+        @include('components/formBuilder', [
             'type' => 'submit',
             'name' => 'submit',
             'value' => isset($product) ? __('Edit') : __('Create'),

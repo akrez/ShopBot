@@ -21,6 +21,7 @@ return new class extends Migration
                 ProductStatus::ACTIVE->value,
                 ProductStatus::DEACTIVE->value,
             ])->nullable();
+            $table->decimal('product_order')->nullable();
             $table->timestamps();
         });
     }

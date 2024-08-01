@@ -274,6 +274,8 @@ return [
         'value' => 'ارزش',
         'year' => 'سال',
         //
+        'product_order' => 'ترتیب',
+        //
         'short_description' => 'توضیحات مختصر',
         'code' => 'کد',
         'tag_name' => 'نام برچسب',

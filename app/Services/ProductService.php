@@ -12,7 +12,7 @@ class ProductService implements PortContract
 {
     public function getLatestBlogProductsQuery(Blog $blog)
     {
-        return $blog->products()->latest('created_at');
+        return $blog->products()->orderDefault('created_at');
     }
 
     public function store(Blog $blog, ProductDTO $productDto)
@@ -27,11 +27,7 @@ class ProductService implements PortContract
             return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
-        $product = $blog->products()->create([
-            'code' => $productDto->code,
-            'name' => $productDto->name,
-            'product_status' => $productDto->product_status,
-        ]);
+        $product = $blog->products()->create($productDto->data());
 
         if (! $product) {
             return $responseBuilder->status(500)->message('Internal Server Error');
@@ -55,11 +51,7 @@ class ProductService implements PortContract
             return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
-        $isSuccessful = $product->update([
-            'code' => $productDto->code,
-            'name' => $productDto->name,
-            'product_status' => $productDto->product_status,
-        ]);
+        $isSuccessful = $product->update($productDto->data());
 
         if (! $isSuccessful) {
             return $responseBuilder->status(500)->message('Internal Server Error');
@@ -96,6 +88,7 @@ class ProductService implements PortContract
             __('validation.attributes.code'),
             __('validation.attributes.name'),
             __('validation.attributes.status'),
+            __('validation.attributes.product_order'),
         ];
 
         foreach ($this->getLatestBlogProductsQuery($blog)->get() as $product) {
@@ -103,6 +96,7 @@ class ProductService implements PortContract
                 $product->code,
                 $product->name,
                 $product->product_status->value,
+                $product->product_order,
             ];
         }
 
@@ -122,7 +116,7 @@ class ProductService implements PortContract
             }
             //
             $row = ((array) $row) + array_fill(0, 3, null);
-            $productDTO = new ProductDTO($row[0], $row[1], $row[2]);
+            $productDTO = new ProductDTO($row[0], $row[1], $row[2], $row[3]);
             //
             $product = $this->firstProductByCode($blog, $productDTO->code);
             //

@@ -26,7 +26,7 @@ class ApiService
                     ->with('images', function ($query) {
                         $query->orderDefault();
                     })
-                    ->latest('created_at');
+                    ->orderDefault();
             },
             'contacts' => function ($query) {
                 $query->orderDefault();

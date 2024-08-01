@@ -8,6 +8,7 @@ namespace App\Models;
 
 use App\Enums\Product\ProductStatus;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,6 +39,7 @@ class Product extends Model
         'code',
         'name',
         'product_status',
+        'product_order',
     ];
 
     protected function casts(): array
@@ -65,5 +67,13 @@ class Product extends Model
     public function images()
     {
         return $this->morphMany(Gallery::class, 'gallery');
+    }
+
+    public function scopeOrderDefault(Builder $query)
+    {
+        $query = $query
+            ->orderBy('product_order', 'DESC')
+            ->orderBy('name', 'ASC')
+            ->orderBy('created_at', 'ASC');
     }
 }

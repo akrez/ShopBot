@@ -17,6 +17,7 @@ class ProductDTO extends DTO
         public $code,
         public $name,
         public $product_status,
+        public $product_order
     ) {}
 
     public function rules(bool $isStore = true)
@@ -35,6 +36,7 @@ class ProductDTO extends DTO
             'name' => ['required', 'max:64'],
             'code' => ['required', 'max:32', new BotCommandRule, $uniqueRule],
             'product_status' => [Rule::in(ProductStatus::values())],
+            'product_order' => ['nullable', 'numeric'],
         ];
     }
 }

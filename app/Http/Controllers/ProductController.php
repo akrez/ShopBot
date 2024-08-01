@@ -49,7 +49,8 @@ class ProductController extends Controller
         $response = $this->productService->store($blog, new ProductDTO(
             $request->code,
             $request->name,
-            $request->product_status
+            $request->product_status,
+            $request->product_order
         ));
 
         return new WebResponse($response, route('products.index'));
@@ -78,7 +79,8 @@ class ProductController extends Controller
         $response = $this->productService->update($blog, $product, new ProductDTO(
             $request->code,
             $request->name,
-            $request->product_status
+            $request->product_status,
+            $request->product_order
         ));
 
         return new WebResponse($response, route('products.index'));
