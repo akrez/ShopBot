@@ -31,35 +31,43 @@
     <link rel="stylesheet" href="{{ url('libs/bootstrap-icons/font/bootstrap-icons.min.css') }}">
     <link rel="stylesheet" href="{{ url('css/blog.css') }}">
 
+    <style>
+        .bg {
+            background-image: url("{{ url('images/b.png') }}");
+        }
+    </style>
+
     @yield('POS_HEAD')
 </head>
 
 <body dir="rtl">
     @yield('POS_BEGIN')
-    <div class="container">
-        <div class="row align-items-center p-0 pt-4">
-            <div class="col-sm-4">
+    <div class="container-fluid">
+        <div class="row align-items-center min-vh-100 bg">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-3">
                 @if ($logoUrl)
                     <img class="w-100 rounded m-auto" alt="{{ $title }}" src="{{ $logoUrl }}">
                 @endif
             </div>
-            <div class="col-sm-8">
+            <div class="col-md-6">
                 <div class="row">
-                    <div class="col-sm-12 d-flex ">
-                        <h1 class="me-2">{{ $title }}</h1>
-                        <h2 class="h1 text-secondary">{{ $shortDescription }}</h2>
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <h1 class="me-2 text-shadow-white">{{ $title }}</h1>
+                        <h2 class="h1 text-secondary text-shadow-white ">{{ $shortDescription }}</h2>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12">
-                        <h4 class="text-justify">{{ $description }}</h4>
+                    <div class="col-md-12 text-center">
+                        <h4 class="text-justify text-shadow-white">{{ $description }}</h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="container">
-        <div class="row pb-3">
+        <div class="row py-3">
             <div class="col-12 text-center">
                 <button class="btn rounded-pill px-4 mb-2 btn-success" data-filter-tag="">
                     {{ 'همه محصولات ' . $title }}
@@ -80,7 +88,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         @foreach ($products as $productKey => $product)
-                            <div class="thumbnail border pt-3 pb-3 col-sm-4 col-md-3 col-lg-2"
+                            <div class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-2"
                                 data-filter-tags="{{ json_encode(array_map('md5', $product['product_tags'])) }}">
                                 @if (count($product['images']) == 1)
                                     <img class="w-100 pb-3 rounded" src="{{ $product['images'][0]['url'] }}"
