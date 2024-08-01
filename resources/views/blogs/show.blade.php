@@ -8,6 +8,7 @@
     $contacts = collect(Arr::get($data, 'contacts', []));
     $contactSize = $contacts->count() ? max(4, intval(12 / count($contacts))) : 4;
     $logoUrl = \Arr::get($data, 'logo.url', null);
+    $heroUrl = url('images/hero.jpg');
 @endphp
 <!doctype html>
 <html class="h-100" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -33,46 +34,51 @@
     @yield('POS_HEAD')
 </head>
 
-<body class="d-flex flex-column h-100" dir="rtl">
+<body dir="rtl">
     @yield('POS_BEGIN')
-    <div class="container flex-shrink-0 mt-4">
-        <div class="row">
-            <div class="col-sm-3">
+    <div class="container">
+        <div class="row align-items-center p-0 pt-4">
+            <div class="col-sm-4">
                 @if ($logoUrl)
-                    <div class="row pb-2">
-                        <div class="col-sm-12">
-                            <a href="" style="text-align: center;">
-                                <img class="w-100 rounded" alt="{{ $title }}" src="{{ $logoUrl }}"
-                                    style="margin: auto;">
-                            </a>
-                        </div>
-                    </div>
+                    <img class="w-100 rounded m-auto" alt="{{ $title }}" src="{{ $logoUrl }}">
                 @endif
-                <div class="row my-3">
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-sm-12 d-flex ">
+                        <h1 class="me-2">{{ $title }}</h1>
+                        <h2 class="h1 text-secondary">{{ $shortDescription }}</h2>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-sm-12">
-                        <div class="btn-group-vertical w-100" role="group">
-                            @foreach (['همه محصولات ' . $title, ...$tags] as $tagKey => $tag)
-                                <input type="radio" class="btn-check" name="filter-radio"
-                                    id="filter-radio-{{ $tagKey }}" autocomplete="off"
-                                    data-filter-tag="{{ $tagKey === 0 ? '' : md5($tag) }}">
-                                <label class="btn btn-outline-dark" for="filter-radio-{{ $tagKey }}">
-                                    <h4 class="m-1">{{ $tag }}</h4>
-                                </label>
-                            @endforeach
-                        </div>
+                        <h4 class="text-justify">{{ $description }}</h4>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-9 mb-4">
-                <div class="mb-4">
-                    <h1 class="d-inline-block">{{ $title }}</h1>
-                    <h2 class="d-inline-block ms-2 text-secondary">{{ $shortDescription }}</h2>
-                    <h4 class="text-justify">{{ $description }}</h4>
-                </div>
+        </div>
+
+        <div class="row pb-3">
+            <div class="col-12 text-center">
+                <button class="btn btn-primary rounded-pill mb-2" data-filter-tag="">
+                    {{ 'همه محصولات ' . $title }}
+                </button>
+            </div>
+            <div class="col-12 text-center">
+                @foreach ($tags as $tagKey => $tag)
+                    <button class="btn btn-info rounded-pill mb-1" data-filter-tag="{{ md5($tag) }}">
+                        {{ $tag }}
+                    </button>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 mb-4">
                 <div class="container-fluid">
-                    <div class="row equal">
+                    <div class="row">
                         @foreach ($products as $productKey => $product)
-                            <div class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-3"
+                            <div class="thumbnail border pt-3 pb-3 col-sm-4 col-md-3 col-lg-2"
                                 data-filter-tags="{{ json_encode(array_map('md5', $product['product_tags'])) }}">
                                 @if (count($product['images']) == 1)
                                     <img class="w-100 pb-3 rounded" src="{{ $product['images'][0]['url'] }}"
