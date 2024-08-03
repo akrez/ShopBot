@@ -2,18 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bot;
-use App\Http\Requests\StoreBotRequest;
-use App\Http\Requests\UpdateBotRequest;
+use App\DTO\BotDTO;
+use App\Services\BlogService;
+use App\Services\BotService;
+use App\Support\WebResponse;
+use Illuminate\Http\Request;
 
 class BotController extends Controller
 {
+    public function __construct(
+        protected BlogService $blogService,
+        protected BotService $botService
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $blog = $this->blogService->findOrFailActiveBlog();
+
+        return view('bots.index', [
+            'bots' => $this->botService->getLatestBlogBotsQuery($blog)->get(),
+        ]);
     }
 
     /**
@@ -21,46 +32,60 @@ class BotController extends Controller
      */
     public function create()
     {
-        //
+        return view('bots.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBotRequest $request)
+    public function store(Request $request)
     {
-        //
-    }
+        $blog = $this->blogService->findOrFailActiveBlog();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Bot $bot)
-    {
-        //
+        $response = $this->botService->store($blog, new BotDTO(
+            $request->token
+        ));
+
+        return new WebResponse($response, route('bots.index'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Bot $bot)
+    public function edit(int $id)
     {
-        //
+        $bot = $this->botService->findOrFailActiveBlogBot($id);
+
+        return view('bots.edit', [
+            'bot' => $bot,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBotRequest $request, Bot $bot)
+    public function update(Request $request, int $id)
     {
-        //
+        $blog = $this->blogService->findOrFailActiveBlog();
+        $bot = $this->botService->findOrFailActiveBlogBot($id);
+
+        $response = $this->botService->update($blog, $bot, new BotDTO(
+            $request->token
+        ));
+
+        return new WebResponse($response, route('bots.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Bot $bot)
+    public function destroy(Request $request, int $id)
     {
-        //
+        $blog = $this->blogService->findOrFailActiveBlog();
+        $bot = $this->botService->findOrFailActiveBlogBot($id);
+
+        $response = $this->botService->destroy($blog, $bot);
+
+        return new WebResponse($response, route('bots.index'));
     }
 }
