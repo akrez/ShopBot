@@ -115,7 +115,7 @@ class ProductService implements PortContract
                 continue;
             }
             //
-            $row = ((array) $row) + array_fill(0, 3, null);
+            $row = ((array) $row) + array_fill(0, 4, null);
             $productDTO = new ProductDTO($row[0], $row[1], $row[2], $row[3]);
             //
             $product = $this->firstProductByCode($blog, $productDTO->code);
