@@ -9,7 +9,7 @@ class ApiService
 {
     public function blogResponse(int $blogId)
     {
-        $blog = resolve(BlogService::class)->firstApiActiveBlog($blogId);
+        $blog = resolve(BlogService::class)->firstApiBlog($blogId);
         if (empty($blog)) {
             return ResponseBuilder::new(404, 'Not Found');
         }
