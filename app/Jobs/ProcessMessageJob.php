@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Bot;
 use App\Models\Message;
-use App\Services\BotService;
 use App\Services\MessageService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
