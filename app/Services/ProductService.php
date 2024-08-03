@@ -12,7 +12,7 @@ class ProductService implements PortContract
 {
     public function getLatestBlogProductsQuery(Blog $blog)
     {
-        return $blog->products()->orderDefault('created_at');
+        return $blog->products()->orderDefault();
     }
 
     public function store(Blog $blog, ProductDTO $productDto)
