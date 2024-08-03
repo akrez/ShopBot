@@ -2,17 +2,24 @@
 
 namespace App\Services;
 
-use App\Contracts\PortContract;
 use App\DTO\BotDTO;
 use App\Models\Blog;
 use App\Models\Bot;
 use App\Support\ResponseBuilder;
+use Illuminate\Database\Eloquent\Builder;
 
-class BotService implements PortContract
+class BotService
 {
+    public function getLatestApiBlogBots()
+    {
+        return Bot::whereHas('blog', function (Builder $query) {
+            $query->filterIsActive();
+        })->orderDefault()->get();
+    }
+
     public function getLatestBlogBotsQuery(Blog $blog)
     {
-        return $blog->bots()->orderDefault('created_at');
+        return $blog->bots()->orderDefault();
     }
 
     public function store(Blog $blog, BotDTO $botDto)
@@ -71,63 +78,13 @@ class BotService implements PortContract
         return $bot;
     }
 
-    public function firstBotByCode(Blog $blog, ?string $code): ?Bot
+    public function firstBotByToken(Blog $blog, ?string $token): ?Bot
     {
-        if (strlen($code)) {
-            return $blog->bots()->where('code', $code)->first();
+        if (strlen($token)) {
+            return $blog->bots()->where('code', $token)->first();
         }
 
         return null;
-    }
-
-    public function exportToExcel(Blog $blog)
-    {
-        $source = [];
-
-        $source[] = [
-            __('validation.attributes.code'),
-            __('validation.attributes.name'),
-            __('validation.attributes.status'),
-            __('validation.attributes.bot_order'),
-        ];
-
-        foreach ($this->getLatestBlogBotsQuery($blog)->get() as $bot) {
-            $source[] = [
-                $bot->code,
-                $bot->name,
-                $bot->bot_status->value,
-                $bot->bot_order,
-            ];
-        }
-
-        return $source;
-    }
-
-    public function importFromExcel(Blog $blog, array $rows)
-    {
-        $result = [];
-        //
-        $skipedRow = 0;
-        foreach ($rows as $row) {
-            if ($skipedRow < 1) {
-                $skipedRow++;
-
-                continue;
-            }
-            //
-            $row = ((array) $row) + array_fill(0, 3, null);
-            $botDTO = new BotDTO($row[0], $row[1], $row[2], $row[3]);
-            //
-            $bot = $this->firstBotByCode($blog, $botDTO->code);
-            //
-            if ($bot) {
-                $result[] = $this->update($blog, $bot, $botDTO);
-            } else {
-                $result[] = $this->store($blog, $botDTO);
-            }
-        }
-
-        return $result;
     }
 
     public function destroy(Blog $blog, Bot $bot)
