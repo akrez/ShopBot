@@ -1,10 +1,11 @@
 <?php
 
+use App\Services\BotService;
 use App\Services\TelegramService;
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::call(function () {
-    foreach (TelegramService::getBots() as $bot) {
+    foreach ((new BotService)->getLatestBotsQuery() as $bot) {
         foreach (TelegramService::fetchMessages($bot) as $message) {
             $messageProcessor = TelegramService::processMessage(
                 $bot,
