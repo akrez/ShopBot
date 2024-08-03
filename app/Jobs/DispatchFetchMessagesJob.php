@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Services\TelegramService;
+use App\Services\BotService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -55,7 +55,7 @@ class DispatchFetchMessagesJob implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        foreach (TelegramService::getBots() as $bot) {
+        foreach (resolve(BotService::class)->getLatestApiBlogBots() as $bot) {
             FetchMessagesJob::dispatch($bot);
         }
     }
