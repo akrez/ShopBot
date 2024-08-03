@@ -61,6 +61,11 @@ class Blog extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function bots()
+    {
+        return $this->hasMany(Bot::class);
+    }
+
     public function productProperties()
     {
         return $this->hasMany(ProductProperty::class);
