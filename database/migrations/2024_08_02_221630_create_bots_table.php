@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('bots', function (Blueprint $table) {
             $table->id();
+            $table->string('token', 64);
+            $table->foreignId('blog_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
