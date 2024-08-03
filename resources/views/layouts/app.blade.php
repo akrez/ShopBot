@@ -106,13 +106,6 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item"
-                                        href="{{ route('contacts.index') }}">{{ __('Contacts') }}</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item"
                                         href="{{ route('blog_logos.index') }}">{{ __('blog_logos') }}</a>
                                 </li>
                                 <li>
@@ -127,6 +120,16 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{{ route('products.index') }}">
                                 {{ __('Products') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ route('bots.index') }}">
+                                {{ __('Bots') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ route('contacts.index') }}">
+                                {{ __('Contacts') }}
                             </a>
                         </li>
                         <li class="nav-item dropdown">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogLogoController;
+use App\Http\Controllers\BotController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProductController;
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
         Route::get('ports/{sheetName}/export', [PortController::class, 'export'])->name('ports.export');
         Route::post('ports/{sheetName}', [PortController::class, 'index'])->name('ports.import');
 
+        Route::resource('bots', BotController::class)->parameter('bots', 'id');
         Route::resource('products', ProductController::class)->parameter('products', 'id')->except('destroy');
 
         Route::get('products/{product_id}/product_tags', [ProductTagController::class, 'create'])->name('products.product_tags.create');
