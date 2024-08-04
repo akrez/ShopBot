@@ -117,7 +117,9 @@ class MessageService
             return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
-        $message = $bot->messages()->create($messageDTO->data());
+        $message = $bot->messages()->firstOrCreate([
+            'id' => $messageDTO->id,
+        ], $messageDTO->data());
 
         if (! $message) {
             return $responseBuilder->status(500)->message('Internal Server Error');
@@ -126,5 +128,17 @@ class MessageService
         return $responseBuilder->status(201)->data($message)->message(__(':name is created successfully', [
             'name' => __('Message'),
         ]));
+    }
+
+    public function callSchedule()
+    {
+        $botService = resolve(BotService::class);
+        //
+        foreach ($botService->getLatestApiBlogBots() as $bot) {
+            foreach ($this->syncMessages($bot) as $message) {
+                $result = $this->setMessageProcessor($bot, $message);
+                $this->sendMessage($result->getData());
+            }
+        }
     }
 }
