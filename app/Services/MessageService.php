@@ -62,8 +62,9 @@ class MessageService
         //
         $maxId = $bot->messages()->max('id');
         $response = (new TelegramApi($bot))->getUpdates($maxId + 1);
+        $results = Arr::get($response, 'result', []);
         //
-        foreach (Arr::get($response, 'result', []) as $result) {
+        foreach ($results as $result) {
             $content = ($result['message'] ?? $result['edited_message']);
             //
             $response = $this->store($bot, new MessageDTO(
@@ -96,7 +97,7 @@ class MessageService
             return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return $responseBuilder->status(200)->message(__(':name is updated successfully', [
+        return $responseBuilder->status(200)->data($messageProcessor)->message(__(':name is updated successfully', [
             'name' => __('Message'),
         ]));
     }
@@ -116,14 +117,34 @@ class MessageService
             return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
         }
 
-        $message = $bot->messages()->create($messageDTO->data());
+        $message = $bot->messages()->firstOrCreate([
+            'id' => $messageDTO->id,
+        ], $messageDTO->data());
 
         if (! $message) {
             return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return $responseBuilder->status(201)->data($message)->message(__(':name is created successfully', [
+        if ($message->wasRecentlyCreated) {
+            return $responseBuilder->status(201)->data($message)->message(__(':name is created successfully', [
+                'name' => __('Message'),
+            ]));
+        }
+
+        return $responseBuilder->status(200)->data($message)->message(__(':name is updated successfully', [
             'name' => __('Message'),
         ]));
+    }
+
+    public function callSchedule()
+    {
+        $botService = resolve(BotService::class);
+        //
+        foreach ($botService->getLatestApiBlogBots() as $bot) {
+            foreach ($this->syncMessages($bot) as $message) {
+                $result = $this->setMessageProcessor($bot, $message);
+                $this->sendMessage($result->getData());
+            }
+        }
     }
 }

@@ -81,7 +81,7 @@ class BotService
     public function firstBotByToken(Blog $blog, ?string $token): ?Bot
     {
         if (strlen($token)) {
-            return $blog->bots()->where('code', $token)->first();
+            return $blog->bots()->where('token', $token)->first();
         }
 
         return null;

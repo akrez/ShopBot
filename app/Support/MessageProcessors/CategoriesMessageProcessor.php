@@ -3,7 +3,7 @@
 namespace App\Support\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
-use App\Services\ShopApi;
+use App\Services\ApiService;
 use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
@@ -26,11 +26,12 @@ class CategoriesMessageProcessor extends MessageProcessor
         $text = [];
         $commands = [];
 
-        $jsonResponse = resolve(ShopApi::class)->json();
+        $jsonResponse = resolve(ApiService::class)->blogArray($this->bot->blog);
 
-        $categories = Arr::get($jsonResponse, 'blog_categories.0.values', []);
+        $categories = collect(Arr::get($jsonResponse, 'products', []))->pluck('product_tags')->flatten()->unique()->sort()->toArray();
 
-        foreach ($categories as $categoryIndex => $category) {
+        foreach ($categories as $category) {
+            $categoryIndex = md5($category);
             $text[] = '/'.static::PREFIX.($categoryIndex).' '.$category;
             $commands[static::PREFIX.($categoryIndex)] = $category;
         }

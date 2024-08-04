@@ -4,52 +4,36 @@ namespace App\Traits;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Support\TelegramApi;
-use Illuminate\Support\Arr;
 
 trait MessageProcessorTrait
 {
     const PREFIX = 'category_';
 
-    public function filterProcess($jsonResponse, $filterProductIds = null)
+    public function filterProducts($products)
     {
-        $allProducts = Arr::get($jsonResponse, 'products', []);
-        $allProductsImages = Arr::get($jsonResponse, 'products_images', []);
-        $allProductsProperties = Arr::get($jsonResponse, 'products_properties', []);
+        foreach ($products as $product) {
+            $caption = ['***'.$product['name'].'***'];
 
-        $needleProducts = collect($allProducts)->filter(function ($item) use ($filterProductIds) {
-            return $filterProductIds === null ? true : in_array($item['id'], $filterProductIds);
-        })->values()->all();
-
-        foreach ($needleProducts as $needleProduct) {
-            $caption = ['***'.$needleProduct['title'].'***'];
-
-            $needleProductProperties = collect($allProductsProperties)->filter(function ($item) use ($needleProduct) {
-                return intval($item['model_id']) === intval($needleProduct['id']);
-            })->values();
-            if ($needleProductProperties) {
+            if ($product['product_properties']) {
                 $caption[] = '';
-                foreach ($needleProductProperties as $needleProductProperty) {
-                    if ($needleProductProperty['values']) {
-                        $caption[] = '***'.$needleProductProperty['key'].'***'.' '.implode(', ', $needleProductProperty['values']);
+                foreach ($product['product_properties'] as $productProperty) {
+                    if ($productProperty['property_values']) {
+                        $caption[] = '***'.$productProperty['property_key'].'***'.' '.implode(', ', $productProperty['property_values']);
                     }
                 }
             }
 
-            $needleProductImages = collect($allProductsImages)->filter(function ($item) use ($needleProduct) {
-                return intval($item['model_id']) === intval($needleProduct['id']);
-            })->values()->first();
-
-            if ($needleProductImages and $needleProductImages['names']) {
+            if ($product['images']) {
                 $medias = [];
-                foreach ($needleProductImages['names'] as $needleProductImageName) {
-                    $medias[$needleProductImageName] = [
+                foreach ($product['images'] as $productImageKey => $productImage) {
+                    $medias[$productImageKey] = [
                         'type' => 'photo',
-                        'media' => 'https://gallery.akrezing.ir/'.$needleProductImageName,
+                        'media' => $productImage['url'],
                     ];
                     if ($caption) {
-                        $medias[$needleProductImageName]['caption'] = implode("\n", $caption);
-                        $medias[$needleProductImageName]['parse_mode'] = 'MarkdownV2';
-                        $caption = null;
+                        $medias[$productImageKey]['caption'] = implode("\n", $caption);
+                        $medias[$productImageKey]['parse_mode'] = 'MarkdownV2';
+                        $caption = [];
                     }
                 }
 
