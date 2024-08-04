@@ -6,12 +6,15 @@ use App\DTO\BotDTO;
 use App\Models\Blog;
 use App\Models\Bot;
 use App\Support\ResponseBuilder;
+use Illuminate\Database\Eloquent\Builder;
 
 class BotService
 {
-    public function getLatestBotsQuery()
+    public function getLatestApiBlogBots()
     {
-        return Bot::orderDefault();
+        return Bot::whereHas('blog', function (Builder $query) {
+            $query->filterIsActive();
+        })->orderDefault()->get();
     }
 
     public function getLatestBlogBotsQuery(Blog $blog)

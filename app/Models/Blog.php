@@ -9,6 +9,7 @@ namespace App\Models;
 use App\Enums\Blog\BlogStatus;
 use App\Enums\Gallery\GalleryCategory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -99,5 +100,10 @@ class Blog extends Model
     public function logoUrl(): ?string
     {
         return $this->logo()?->filterIsSelected()->first()?->getUrl();
+    }
+
+    public function scopeFilterIsActive(Builder $query)
+    {
+        $query = $query->where('blog_status', BlogStatus::ACTIVE->value);
     }
 }

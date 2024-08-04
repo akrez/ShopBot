@@ -290,5 +290,7 @@ return [
         'contact_value' => 'مقدار',
         'contact_order' => 'ترتیب',
         'contact_type' => 'نوع',
+        //
+        'token' => 'توکن',
     ],
 ];

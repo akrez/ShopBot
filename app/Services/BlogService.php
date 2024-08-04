@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\DTO\BlogDTO;
-use App\Enums\Blog\BlogStatus;
 use App\Facades\ActiveBlog;
 use App\Models\Blog;
 use App\Models\User;
@@ -11,6 +10,16 @@ use App\Support\ResponseBuilder;
 
 class BlogService
 {
+    public function firstApiBlog($id)
+    {
+        return Blog::filterIsActive()->where('id', $id)->first();
+    }
+
+    public function getApiBlogsQuery()
+    {
+        return Blog::filterIsActive();
+    }
+
     public function getLatestUserBlogs(User $user)
     {
         return $user->blogs()->latest('created_at')->get();
@@ -81,10 +90,5 @@ class BlogService
         return resolve(ResponseBuilder::class)->data($blog)->message(__(':name is selected successfully', [
             'name' => __('Blog'),
         ]))->status(200);
-    }
-
-    public function firstApiActiveBlog($id)
-    {
-        return Blog::where('id', $id)->where('blog_status', BlogStatus::ACTIVE->value)->first();
     }
 }

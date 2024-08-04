@@ -1,20 +1,17 @@
 <?php
 
 use App\Services\BotService;
-use App\Services\TelegramService;
+use App\Services\MessageService;
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::call(function () {
-    foreach ((new BotService)->getLatestBotsQuery() as $bot) {
-        foreach (TelegramService::fetchMessages($bot) as $message) {
-            $messageProcessor = TelegramService::processMessage(
-                $bot,
-                $message,
-                TelegramService::getMessageProcessorClasses(),
-                TelegramService::getDefaultMessageProcessorClass()
-            );
-            //
-            TelegramService::sendMessage($messageProcessor);
+    $botService = resolve(BotService::class);
+    $messageService = resolve(MessageService::class);
+    //
+    foreach ($botService->getLatestApiBlogBots() as $bot) {
+        foreach ($messageService->syncMessages($bot) as $message) {
+            $result = $messageService->setMessageProcessor($bot, $message);
+            $messageService->sendMessage($result->getData());
         }
     }
 })->name('ScheduleCall')->withoutOverlapping(1)->everySecond();
