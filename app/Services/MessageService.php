@@ -62,8 +62,9 @@ class MessageService
         //
         $maxId = $bot->messages()->max('id');
         $response = (new TelegramApi($bot))->getUpdates($maxId + 1);
+        $results = Arr::get($response, 'result', []);
         //
-        foreach (Arr::get($response, 'result', []) as $result) {
+        foreach ($results as $result) {
             $content = ($result['message'] ?? $result['edited_message']);
             //
             $response = $this->store($bot, new MessageDTO(
