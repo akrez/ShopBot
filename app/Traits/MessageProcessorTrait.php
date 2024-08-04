@@ -48,7 +48,7 @@ trait MessageProcessorTrait
 
                 (new TelegramApi($this->bot))->sendMessage(
                     $this->message->chat_id,
-                    implode("\n\n", $caption),
+                    implode("\n", $caption),
                     $this->getDefaultReplyMarkup() + [
                         'parse_mode' => 'MarkdownV2',
                     ]

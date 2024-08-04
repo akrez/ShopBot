@@ -35,7 +35,7 @@ class SearchMessageProcessor extends MessageProcessor
             return Str::contains($item['name'], $productTitleFilter, true);
         });
 
-        if ($filteredProducts) {
+        if ($filteredProducts->count()) {
             $this->filterProducts($filteredProducts);
         } else {
             (new TelegramApi($this->bot))->sendMessage(
