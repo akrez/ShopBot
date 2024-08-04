@@ -97,7 +97,7 @@ class MessageService
             return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return $responseBuilder->status(200)->message(__(':name is updated successfully', [
+        return $responseBuilder->status(200)->data($messageProcessor)->message(__(':name is updated successfully', [
             'name' => __('Message'),
         ]));
     }
@@ -125,7 +125,13 @@ class MessageService
             return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        return $responseBuilder->status(201)->data($message)->message(__(':name is created successfully', [
+        if ($message->wasRecentlyCreated) {
+            return $responseBuilder->status(201)->data($message)->message(__(':name is created successfully', [
+                'name' => __('Message'),
+            ]));
+        }
+
+        return $responseBuilder->status(200)->data($message)->message(__(':name is updated successfully', [
             'name' => __('Message'),
         ]));
     }
