@@ -2,7 +2,7 @@
 
 namespace App\Support\MessageProcessors;
 
-use App\Services\ShopApi;
+use App\Services\ApiService;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -25,7 +25,7 @@ class CategoryMessageProcessor extends MessageProcessor
             return;
         }
 
-        $jsonResponse = resolve(ShopApi::class)->json();
+        $jsonResponse = resolve(ApiService::class)->blogArray($this->bot->blog);
 
         $category = Arr::get($jsonResponse, 'blog_categories.0.values.'.$categoryId);
         if (! $category) {
@@ -36,6 +36,6 @@ class CategoryMessageProcessor extends MessageProcessor
 
         $filterProductIds = collect($apiProductsCategories)->where('values', [$category])->pluck('model_id')->toArray();
 
-        $this->filterProcess($jsonResponse, $filterProductIds);
+        $this->filterProducts($jsonResponse, $filterProductIds);
     }
 }

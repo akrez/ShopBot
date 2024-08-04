@@ -3,7 +3,7 @@
 namespace App\Support\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
-use App\Services\ShopApi;
+use App\Services\ApiService;
 use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
@@ -25,7 +25,7 @@ class ContactUsMessageProcessor extends MessageProcessor
     {
         $text = [];
 
-        $jsonResponse = resolve(ShopApi::class)->json();
+        $jsonResponse = resolve(ApiService::class)->blogArray($this->bot->blog);
 
         $contacts = Arr::get($jsonResponse, 'contacts', []);
 

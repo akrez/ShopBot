@@ -2,7 +2,7 @@
 
 namespace App\Support\MessageProcessors;
 
-use App\Services\ShopApi;
+use App\Services\ApiService;
 use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
@@ -27,16 +27,16 @@ class SearchMessageProcessor extends MessageProcessor
             return;
         }
 
-        $jsonResponse = resolve(ShopApi::class)->json();
+        $jsonResponse = resolve(ApiService::class)->blogArray($this->bot->blog);
 
         $apiProducts = Arr::get($jsonResponse, 'products', []);
 
-        $filterProductIds = collect($apiProducts)->filter(function ($item) use ($productTitleFilter) {
-            return Str::contains($item['title'], $productTitleFilter, true);
-        })->pluck('id')->toArray();
+        $filteredProducts = collect($apiProducts)->filter(function ($item) use ($productTitleFilter) {
+            return Str::contains($item['name'], $productTitleFilter, true);
+        });
 
-        if ($filterProductIds) {
-            $this->filterProcess($jsonResponse, $filterProductIds);
+        if ($filteredProducts) {
+            $this->filterProducts($filteredProducts);
         } else {
             (new TelegramApi($this->bot))->sendMessage(
                 $this->message->chat_id,
