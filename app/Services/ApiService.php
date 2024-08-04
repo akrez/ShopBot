@@ -3,17 +3,28 @@
 namespace App\Services;
 
 use App\Http\Resources\BlogResource;
+use App\Models\Blog;
 use App\Support\ResponseBuilder;
 
 class ApiService
 {
     public function blogResponse(int $blogId)
     {
-        $blog = resolve(BlogService::class)->firstApiActiveBlog($blogId);
+        $blog = resolve(BlogService::class)->firstApiBlog($blogId);
         if (empty($blog)) {
             return ResponseBuilder::new(404, 'Not Found');
         }
 
+        return ResponseBuilder::new()->data($this->blogResource($blog));
+    }
+
+    public function blogArray(Blog $blog)
+    {
+        return (array) json_decode($this->blogResource($blog)->toJson(), true);
+    }
+
+    public function blogResource(Blog $blog)
+    {
         $blog->load([
             'products' => function ($query) {
                 $query
@@ -36,6 +47,6 @@ class ApiService
             },
         ]);
 
-        return ResponseBuilder::new()->data(new BlogResource($blog));
+        return new BlogResource($blog);
     }
 }
