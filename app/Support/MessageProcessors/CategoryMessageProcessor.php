@@ -4,14 +4,11 @@ namespace App\Support\MessageProcessors;
 
 use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
-use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class CategoryMessageProcessor extends MessageProcessor
 {
-    use MessageProcessorTrait;
-
     public function shouldProcess()
     {
         return Str::startsWith($this->message->message_text, static::CATEGORY_PREFIX);

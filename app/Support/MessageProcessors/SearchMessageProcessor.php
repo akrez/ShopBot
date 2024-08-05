@@ -5,14 +5,11 @@ namespace App\Support\MessageProcessors;
 use App\Services\ApiService;
 use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
-use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class SearchMessageProcessor extends MessageProcessor
 {
-    use MessageProcessorTrait;
-
     public function process()
     {
         $productTitleFilter = Str::trim($this->message->message_text);

@@ -4,13 +4,10 @@ namespace App\Support\MessageProcessors;
 
 use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
-use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
 
 class ContactUsMessageProcessor extends MessageProcessor
 {
-    use MessageProcessorTrait;
-
     public function shouldProcess()
     {
         if ($this->message->message_text === static::CONTACT_US) {
