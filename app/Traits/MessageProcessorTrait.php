@@ -7,7 +7,7 @@ use App\Support\TelegramApi;
 
 trait MessageProcessorTrait
 {
-    const PREFIX = 'category_';
+    const CATEGORY_PREFIX = '📂 | ';
 
     public function filterProducts($products)
     {

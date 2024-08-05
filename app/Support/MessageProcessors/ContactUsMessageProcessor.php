@@ -4,6 +4,7 @@ namespace App\Support\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ApiService;
+use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;

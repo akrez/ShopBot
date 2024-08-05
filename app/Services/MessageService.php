@@ -6,12 +6,10 @@ use App\Contracts\MessageProcessorContract;
 use App\DTO\MessageDTO;
 use App\Models\Bot;
 use App\Models\Message;
-use App\Support\MessageProcessors\BotMessageProcessor;
-use App\Support\MessageProcessors\CartMessageProcessor;
 use App\Support\MessageProcessors\CategoriesMessageProcessor;
 use App\Support\MessageProcessors\CategoryMessageProcessor;
 use App\Support\MessageProcessors\ContactUsMessageProcessor;
-use App\Support\MessageProcessors\RequestContactMessageProcessor;
+use App\Support\MessageProcessors\FilterMessageProcessor;
 use App\Support\MessageProcessors\SearchMessageProcessor;
 use App\Support\ResponseBuilder;
 use App\Support\TelegramApi;
@@ -25,11 +23,9 @@ class MessageService
     public function getMessageProcessorClasses(): array
     {
         return [
-            BotMessageProcessor::class,
-            RequestContactMessageProcessor::class,
-            CategoryMessageProcessor::class,
+            FilterMessageProcessor::class,
             CategoriesMessageProcessor::class,
-            CartMessageProcessor::class,
+            CategoryMessageProcessor::class,
             ContactUsMessageProcessor::class,
         ];
     }

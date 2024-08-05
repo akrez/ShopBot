@@ -4,6 +4,7 @@ namespace App\Support\MessageProcessors;
 
 use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ApiService;
+use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
 use Illuminate\Support\Arr;
@@ -14,37 +15,36 @@ class CategoriesMessageProcessor extends MessageProcessor
 
     public function shouldProcess()
     {
-        if ($this->message->message_text === ReplyMarkupEnum::CATEGORIES->trans()) {
-            return true;
-        }
-
-        return false;
+        return $this->message->message_text === ReplyMarkupEnum::CATEGORIES->trans();
     }
 
     public function process()
     {
-        $text = [];
-        $commands = [];
-
         $jsonResponse = resolve(ApiService::class)->blogArray($this->bot->blog);
 
         $categories = collect(Arr::get($jsonResponse, 'products', []))->pluck('product_tags')->flatten()->unique()->sort()->toArray();
 
-        foreach ($categories as $category) {
-            $categoryIndex = md5($category);
-            $text[] = '/'.static::PREFIX.($categoryIndex).' '.$category;
-            $commands[static::PREFIX.($categoryIndex)] = $category;
-        }
-
         (new TelegramApi($this->bot))->sendMessage(
             $this->message->chat_id,
-            implode("\n\n", $text),
-            $this->getDefaultReplyMarkup()
+            'لطفا از کیبورد انتخاب کنید',
+            $this->getReplyMarkup($categories)
         );
+    }
 
-        (new TelegramApi($this->bot))->setMyCommands(
-            $commands,
-            $this->getDefaultReplyMarkup()
-        );
+    public function getReplyMarkup($categories)
+    {
+        $keyboard = collect($categories)->map(function ($tag) {
+            return [
+                'text' => static::CATEGORY_PREFIX.$tag,
+            ];
+        })->toArray();
+
+        return [
+            'reply_markup' => json_encode([
+                'keyboard' => array_chunk($keyboard, 3),
+                'resize_keyboard' => true,
+                'one_time_keyboard' => true,
+            ]),
+        ];
     }
 }
