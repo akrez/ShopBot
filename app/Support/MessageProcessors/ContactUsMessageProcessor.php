@@ -2,7 +2,6 @@
 
 namespace App\Support\MessageProcessors;
 
-use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ApiService;
 use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
@@ -15,7 +14,7 @@ class ContactUsMessageProcessor extends MessageProcessor
 
     public function shouldProcess()
     {
-        if ($this->message->message_text === ReplyMarkupEnum::CONTACT_US->trans()) {
+        if ($this->message->message_text === static::CONTACT_US) {
             return true;
         }
 

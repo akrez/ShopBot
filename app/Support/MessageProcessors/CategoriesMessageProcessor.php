@@ -2,7 +2,6 @@
 
 namespace App\Support\MessageProcessors;
 
-use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Services\ApiService;
 use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
@@ -15,7 +14,7 @@ class CategoriesMessageProcessor extends MessageProcessor
 
     public function shouldProcess()
     {
-        return $this->message->message_text === ReplyMarkupEnum::CATEGORIES->trans();
+        return $this->message->message_text === static::CATEGORIES;
     }
 
     public function process()

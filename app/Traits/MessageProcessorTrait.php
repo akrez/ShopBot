@@ -2,12 +2,15 @@
 
 namespace App\Traits;
 
-use App\Enums\MessageProcessor\ReplyMarkupEnum;
 use App\Support\TelegramApi;
 
 trait MessageProcessorTrait
 {
     const CATEGORY_PREFIX = '📂 | ';
+
+    const CATEGORIES = '🗂 | دسته‌بندی‌ها';
+
+    const CONTACT_US = '☎️ | ارتباط با ما';
 
     public function filterProducts($products)
     {
@@ -64,25 +67,12 @@ trait MessageProcessorTrait
                 'keyboard' => [
                     [
                         [
-                            'text' => ReplyMarkupEnum::CONTACT_US->trans(),
+                            'text' => static::CONTACT_US,
                         ],
                         [
-                            'text' => ReplyMarkupEnum::CATEGORIES->trans(),
+                            'text' => static::CATEGORIES,
                         ],
                     ],
-                    /*
-                    [
-                        [
-                            'text' => ReplyMarkupEnum::CART->trans(),
-                        ],
-                    ],
-                    [
-                        [
-                            'text' => ReplyMarkupEnum::REQUEST_CONTACT->trans(),
-                            'request_contact' => true,
-                        ],
-                    ],
-                    */
                 ],
                 'resize_keyboard' => true,
                 'one_time_keyboard' => true,
