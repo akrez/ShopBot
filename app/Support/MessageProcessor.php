@@ -89,18 +89,18 @@ class MessageProcessor implements MessageProcessorContract
                 'text' => static::CATEGORY_PREFIX.$tag,
             ];
         })->toArray();
-        $keyboard = array_chunk($keyboard, 3);
-        array_unshift($keyboard, [
-            [
-                'text' => static::CONTACT_US,
-            ],
-        ]);
 
         return [
             'reply_markup' => json_encode([
                 'resize_keyboard' => true,
                 'one_time_keyboard' => true,
-                'keyboard' => $keyboard,
+                'keyboard' => array_merge([
+                    [
+                        [
+                            'text' => static::CONTACT_US,
+                        ],
+                    ],
+                ], array_chunk($keyboard, 2)),
             ]),
         ];
     }
