@@ -6,7 +6,6 @@ use App\Contracts\MessageProcessorContract;
 use App\DTO\MessageDTO;
 use App\Models\Bot;
 use App\Models\Message;
-use App\Support\MessageProcessors\CategoriesMessageProcessor;
 use App\Support\MessageProcessors\CategoryMessageProcessor;
 use App\Support\MessageProcessors\ContactUsMessageProcessor;
 use App\Support\MessageProcessors\FilterMessageProcessor;
@@ -24,7 +23,6 @@ class MessageService
     {
         return [
             FilterMessageProcessor::class,
-            CategoriesMessageProcessor::class,
             CategoryMessageProcessor::class,
             ContactUsMessageProcessor::class,
         ];
@@ -35,10 +33,10 @@ class MessageService
         return SearchMessageProcessor::class;
     }
 
-    public function detectMessageProcessor(Bot $bot, Message $message): MessageProcessorContract
+    public function detectMessageProcessor(Bot $bot, Message $message, array $response): MessageProcessorContract
     {
         foreach ($this->getMessageProcessorClasses() as $messageProcessorClass) {
-            $messageProcessor = new $messageProcessorClass($bot, $message);
+            $messageProcessor = new $messageProcessorClass($bot, $message, $response);
             if ($messageProcessor->shouldProcess()) {
                 return $messageProcessor;
             }
@@ -46,7 +44,7 @@ class MessageService
 
         $defaultMessageProcessorClass = $this->getDefaultMessageProcessorClass();
 
-        return new $defaultMessageProcessorClass($bot, $message);
+        return new $defaultMessageProcessorClass($bot, $message, $response);
     }
 
     /**
@@ -79,9 +77,9 @@ class MessageService
         return $messages;
     }
 
-    public function setMessageProcessor(Bot $bot, Message $message)
+    public function setMessageProcessor(Bot $bot, Message $message, array $response)
     {
-        $messageProcessor = $this->detectMessageProcessor($bot, $message);
+        $messageProcessor = $this->detectMessageProcessor($bot, $message, $response);
 
         $responseBuilder = resolve(ResponseBuilder::class)->data($messageProcessor);
 
@@ -137,8 +135,9 @@ class MessageService
         $botService = resolve(BotService::class);
         //
         foreach ($botService->getLatestApiBlogBots() as $bot) {
+            $response = resolve(ApiService::class)->blogArray($bot->blog);
             foreach ($this->syncMessages($bot) as $message) {
-                $result = $this->setMessageProcessor($bot, $message);
+                $result = $this->setMessageProcessor($bot, $message, $response);
                 $this->sendMessage($result->getData());
             }
         }

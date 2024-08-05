@@ -2,7 +2,6 @@
 
 namespace App\Support\MessageProcessors;
 
-use App\Services\ApiService;
 use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
@@ -25,9 +24,7 @@ class ContactUsMessageProcessor extends MessageProcessor
     {
         $text = [];
 
-        $jsonResponse = resolve(ApiService::class)->blogArray($this->bot->blog);
-
-        $contacts = Arr::get($jsonResponse, 'contacts', []);
+        $contacts = Arr::get($this->response, 'contacts', []);
 
         foreach ($contacts as $contactUs) {
             $text[] = '***'.$contactUs['contact_key'].'*** '.$contactUs['contact_value'];

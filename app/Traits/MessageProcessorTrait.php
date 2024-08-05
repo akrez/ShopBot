@@ -3,12 +3,11 @@
 namespace App\Traits;
 
 use App\Support\TelegramApi;
+use Illuminate\Support\Arr;
 
 trait MessageProcessorTrait
 {
-    const CATEGORY_PREFIX = '📂 | ';
-
-    const CATEGORIES = '🗂 | دسته‌بندی‌ها';
+    const CATEGORY_PREFIX = '🗂 | ';
 
     const CONTACT_US = '☎️ | ارتباط با ما';
 
@@ -62,20 +61,31 @@ trait MessageProcessorTrait
 
     public function getDefaultReplyMarkup()
     {
+        $products = Arr::get($this->response, 'products', []);
+
+        $categories = collect($products)->pluck('product_tags')
+            ->flatten()
+            ->unique()
+            ->sort()
+            ->toArray();
+
+        $keyboard = collect($categories)->map(function ($tag) {
+            return [
+                'text' => static::CATEGORY_PREFIX.$tag,
+            ];
+        })->toArray();
+        $keyboard = array_chunk($keyboard, 3);
+        array_unshift($keyboard, [
+            [
+                'text' => static::CONTACT_US,
+            ],
+        ]);
+
         return [
             'reply_markup' => json_encode([
-                'keyboard' => [
-                    [
-                        [
-                            'text' => static::CONTACT_US,
-                        ],
-                        [
-                            'text' => static::CATEGORIES,
-                        ],
-                    ],
-                ],
                 'resize_keyboard' => true,
                 'one_time_keyboard' => true,
+                'keyboard' => $keyboard,
             ]),
         ];
     }

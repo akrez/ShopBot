@@ -2,7 +2,6 @@
 
 namespace App\Support\MessageProcessors;
 
-use App\Services\ApiService;
 use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
 use App\Traits\MessageProcessorTrait;
@@ -22,8 +21,7 @@ class CategoryMessageProcessor extends MessageProcessor
     {
         $category = Str::of($this->message->message_text)->chopStart(static::CATEGORY_PREFIX)->value();
 
-        $jsonResponse = resolve(ApiService::class)->blogArray($this->bot->blog);
-        $products = Arr::get($jsonResponse, 'products', []);
+        $products = Arr::get($this->response, 'products', []);
         $categories = collect($products)->pluck('product_tags')->flatten()->unique()->sort()->toArray();
 
         $categoryIsValid = ($category and in_array($category, $categories));
