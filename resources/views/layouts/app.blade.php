@@ -105,8 +105,8 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item"
-                                        href="{{ route('blog_logos.index') }}">{{ __('blog_logos') }}</a>
+                                    <a class="dropdown-item" target="_blank"
+                                        href="{{ route('blogs.show', ['id' => \App\Facades\ActiveBlog::attr('id')]) }}">{{ __('View') }}</a>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -114,6 +114,13 @@
                                 <li>
                                     <a class="dropdown-item"
                                         href="{{ route('blogs.edit', ['id' => \App\Facades\ActiveBlog::attr('id')]) }}">{{ __('Edit') }}</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('blog_logos.index') }}">{{ __('blog_logos') }}</a>
                                 </li>
                             </ul>
                         </li>
@@ -123,13 +130,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ route('bots.index') }}">
-                                {{ __('Bots') }}
+                            <a class="nav-link active" aria-current="page" href="{{ route('contacts.index') }}">
+                                {{ __('Contacts') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ route('contacts.index') }}">
-                                {{ __('Contacts') }}
+                            <a class="nav-link active" aria-current="page" href="{{ route('bots.index') }}">
+                                {{ __('Bots') }}
                             </a>
                         </li>
                         <li class="nav-item dropdown">
