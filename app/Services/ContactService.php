@@ -77,10 +77,10 @@ class ContactService implements PortContract
     public function destroy(Blog $blog, Contact $contact)
     {
         if (! $contact->delete()) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return ResponseBuilder::new(500)->message('Internal Server Error');
         }
 
-        return resolve(ResponseBuilder::class)->status(200)->message(__(':name is deleted successfully', [
+        return ResponseBuilder::new(200)->message(__(':name is deleted successfully', [
             'name' => __('Contact'),
         ]));
     }

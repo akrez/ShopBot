@@ -119,12 +119,12 @@ class GalleryService
         ) {
             $this->resetSelected($blog, $gallery);
 
-            return resolve(ResponseBuilder::class)->status(200)->message(__(':name is deleted successfully', [
+            return ResponseBuilder::new(200)->message(__(':name is deleted successfully', [
                 'name' => $gallery->gallery_category->trans(),
             ]));
         }
 
-        return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+        return ResponseBuilder::new(500)->message('Internal Server Error');
     }
 
     private function resetSelected(Blog $blog, Gallery $gallery)

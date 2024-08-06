@@ -91,10 +91,10 @@ class BotService
     public function destroy(Blog $blog, Bot $bot)
     {
         if (! $bot->delete()) {
-            return resolve(ResponseBuilder::class)->status(500)->message('Internal Server Error');
+            return ResponseBuilder::new(500)->message('Internal Server Error');
         }
 
-        return resolve(ResponseBuilder::class)->status(200)->message(__(':name is deleted successfully', [
+        return ResponseBuilder::new(200)->message(__(':name is deleted successfully', [
             'name' => __('Bot'),
         ]));
     }
@@ -110,11 +110,11 @@ class BotService
         } elseif ($attribute === 'description') {
             $response = $telegramApi->setMyDescription($blog->description);
         } else {
-            return resolve(ResponseBuilder::class)->status(400)->message('Bad Request');
+            return ResponseBuilder::new(400)->message('Bad Request');
         }
 
         if (isset($response['ok']) and $response['ok']) {
-            return resolve(ResponseBuilder::class)->status(200)->message(__(':name is updated successfully', [
+            return ResponseBuilder::new(200)->message(__(':name is updated successfully', [
                 'name' => __('Bot'),
             ]));
         }
@@ -122,6 +122,6 @@ class BotService
         $status = (isset($response['error_code']) ? $response['error_code'] : 500);
         $message = __('http-statuses.'.$status);
 
-        return resolve(ResponseBuilder::class)->status($status)->message($message);
+        return ResponseBuilder::new($status)->message($message);
     }
 }

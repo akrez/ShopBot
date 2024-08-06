@@ -87,7 +87,7 @@ class BlogService
     {
         resolve(UserService::class)->setActiveBlog($user, $blog);
 
-        return resolve(ResponseBuilder::class)->data($blog)->message(__(':name is selected successfully', [
+        return ResponseBuilder::new(200)->data($blog)->message(__(':name is selected successfully', [
             'name' => __('Blog'),
         ]))->status(200);
     }

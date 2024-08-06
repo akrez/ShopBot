@@ -15,7 +15,7 @@ class WebResponse implements Responsable
     {
         if (! $this->responseBuilder->isSuccessful()) {
             return back()
-                ->with('message', $this->responseBuilder->getMessage())
+                ->with('swal-error', $this->responseBuilder->getMessage())
                 ->withInput($request->input())
                 ->withErrors($this->responseBuilder->getErrors());
         }

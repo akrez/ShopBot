@@ -10,11 +10,9 @@ class ResponseBuilder implements Responsable
 {
     const DEFAULT_STATUS = 200;
 
-    const DEFAULT_MESSAGE = '';
-
     private int $status;
 
-    private string $message;
+    private ?string $message;
 
     private mixed $data;
 
@@ -30,7 +28,7 @@ class ResponseBuilder implements Responsable
     public function reset(): self
     {
         $this->status = static::DEFAULT_STATUS;
-        $this->message = static::DEFAULT_MESSAGE;
+        $this->message = null;
         $this->data = null;
         $this->input = null;
         $this->errors = null;
@@ -41,6 +39,10 @@ class ResponseBuilder implements Responsable
     public function status(int $status): self
     {
         $this->status = $status;
+
+        if ($this->getMessage() === null) {
+            $this->message(__('http-statuses.'.$status));
+        }
 
         return $this;
     }
@@ -57,7 +59,7 @@ class ResponseBuilder implements Responsable
         return $this;
     }
 
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
         return $this->message;
     }
@@ -112,12 +114,8 @@ class ResponseBuilder implements Responsable
         ], $this->getStatus());
     }
 
-    public static function new(
-        $status = self::DEFAULT_STATUS,
-        $message = self::DEFAULT_MESSAGE
-    ): static {
-        return (new static)
-            ->status($status)
-            ->message($message);
+    public static function new($status = self::DEFAULT_STATUS): static
+    {
+        return (new static)->status($status);
     }
 }

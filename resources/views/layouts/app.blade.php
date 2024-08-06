@@ -188,10 +188,24 @@
                 {{ Illuminate\Support\Js::from([
                     'text' => session('swal-success'),
                     'icon' => 'success',
-                    'timer' => 5000,
+                    'timer' => 3000,
                     'showCloseButton' => true,
                     'showConfirmButton' => false,
                     'timerProgressBar' => true,
+                ]) }}
+            );
+        @endif
+        @if (session('swal-error'))
+            Swal.fire(
+                {{ Illuminate\Support\Js::from([
+                    'text' => session('swal-error'),
+                    'icon' => 'error',
+                    'timer' => 3000,
+                    'showCloseButton' => true,
+                    'showConfirmButton' => false,
+                    'timerProgressBar' => true,
+                    'toast' => true,
+                    'position' => 'bottom',
                 ]) }}
             );
         @endif

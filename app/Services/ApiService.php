@@ -12,7 +12,7 @@ class ApiService
     {
         $blog = resolve(BlogService::class)->firstApiBlog($blogId);
         if (empty($blog)) {
-            return ResponseBuilder::new(404, 'Not Found');
+            return ResponseBuilder::new(404);
         }
 
         return ResponseBuilder::new()->data($this->blogResource($blog));
