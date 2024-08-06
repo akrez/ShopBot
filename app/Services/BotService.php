@@ -6,6 +6,7 @@ use App\DTO\BotDTO;
 use App\Models\Blog;
 use App\Models\Bot;
 use App\Support\ResponseBuilder;
+use App\Support\TelegramApi;
 use Illuminate\Database\Eloquent\Builder;
 
 class BotService
@@ -96,5 +97,31 @@ class BotService
         return resolve(ResponseBuilder::class)->status(200)->message(__(':name is deleted successfully', [
             'name' => __('Bot'),
         ]));
+    }
+
+    public function uploadAttribute(Blog $blog, Bot $bot, string $attribute)
+    {
+        $telegramApi = (new TelegramApi($bot));
+
+        if ($attribute === 'name') {
+            $response = $telegramApi->setMyName($blog->name);
+        } elseif ($attribute === 'short_description') {
+            $response = $telegramApi->setMyShortDescription($blog->short_description);
+        } elseif ($attribute === 'description') {
+            $response = $telegramApi->setMyDescription($blog->description);
+        } else {
+            return resolve(ResponseBuilder::class)->status(400)->message('Bad Request');
+        }
+
+        if (isset($response['ok']) and $response['ok']) {
+            return resolve(ResponseBuilder::class)->status(200)->message(__(':name is updated successfully', [
+                'name' => __('Bot'),
+            ]));
+        }
+
+        $status = (isset($response['error_code']) ? $response['error_code'] : 500);
+        $message = __('http-statuses.'.$status);
+
+        return resolve(ResponseBuilder::class)->status($status)->message($message);
     }
 }

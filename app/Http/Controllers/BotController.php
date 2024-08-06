@@ -88,4 +88,16 @@ class BotController extends Controller
 
         return new WebResponse($response, route('bots.index'));
     }
+
+    public function uploadAttribute(Request $request, int $id)
+    {
+        $attribute = strval($request->input('attribute'));
+
+        $blog = $this->blogService->findOrFailActiveBlog();
+        $bot = $this->botService->findOrFailActiveBlogBot($id);
+
+        $response = $this->botService->uploadAttribute($blog, $bot, $attribute);
+
+        return new WebResponse($response, route('bots.index'));
+    }
 }

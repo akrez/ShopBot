@@ -86,4 +86,40 @@ class TelegramApi
             $requiredParameters
         ));
     }
+
+    public function setMyName($name, $optionalParameters = [])
+    {
+        $requiredParameters = [
+            'name' => strval($name),
+        ];
+
+        return $this->sendPostForm('setMyName', array_replace_recursive(
+            $optionalParameters,
+            $requiredParameters
+        ));
+    }
+
+    public function setMyDescription($description, $optionalParameters = [])
+    {
+        $requiredParameters = [
+            'description' => $description,
+        ];
+
+        return $this->sendPostForm('setMyDescription', array_replace_recursive(
+            $optionalParameters,
+            $requiredParameters
+        ));
+    }
+
+    public function setMyShortDescription($shortDescription, $optionalParameters = [])
+    {
+        $requiredParameters = [
+            'short_description' => $shortDescription,
+        ];
+
+        return $this->sendPostForm('setMyShortDescription', array_replace_recursive(
+            $optionalParameters,
+            $requiredParameters
+        ));
+    }
 }

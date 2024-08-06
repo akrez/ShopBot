@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
         Route::get('ports/{sheetName}/export', [PortController::class, 'export'])->name('ports.export');
         Route::post('ports/{sheetName}', [PortController::class, 'index'])->name('ports.import');
 
+        Route::post('bots/{id}/upload_attribute', [BotController::class, 'uploadAttribute'])->name('bots.upload_attribute');
+
         Route::resource('bots', BotController::class)->parameter('bots', 'id');
         Route::resource('products', ProductController::class)->parameter('products', 'id')->except('destroy');
 
