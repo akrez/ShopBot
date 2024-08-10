@@ -15,6 +15,10 @@ use App\Providers\AppServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::domain('{host}')
+    ->whereIn('host', resolve('Hosts')->getArrayKeys())
+    ->get('/', [BlogController::class, 'serve']);
+
 Auth::routes();
 
 Route::get('/', [SiteController::class, 'index']);

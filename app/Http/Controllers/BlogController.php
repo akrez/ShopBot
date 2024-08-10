@@ -103,4 +103,16 @@ class BlogController extends Controller
 
         return new WebResponse($response, route('blogs.index'));
     }
+
+    public function serve(Request $request, $host)
+    {
+        $hosts = resolve('Hosts');
+
+        abort_unless($id = $hosts->hostToBlogId($host), 404);
+        abort_unless($blog = $this->blogService->findOrFailApiBlog($id), 404);
+
+        return view('blogs.show', [
+            'data' => $this->blogService->getArrayResponse($blog),
+        ]);
+    }
 }

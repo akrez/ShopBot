@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Support\ActiveBlog;
 use App\Support\ArrayHelper;
+use App\Support\Hosts;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton('ArrayHelper', function () {
             return new ArrayHelper;
+        });
+        $this->app->singleton('Hosts', function () {
+            return new Hosts(storage_path('hosts.json'));
         });
         $this->app->alias('Arr', Arr::class);
     }
