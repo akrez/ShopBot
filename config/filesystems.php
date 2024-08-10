@@ -32,7 +32,7 @@ return [
 
         'local_public' => [
             'driver' => 'local',
-            'root' => public_path(),
+            'root' => public_path().env('DISK_ROOT_SUFFIX'),
             'url' => env('APP_URL'),
             'throw' => false,
         ],
