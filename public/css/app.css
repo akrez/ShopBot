@@ -1,0 +1,15 @@
+body {
+    font-family: "vazirmatn";
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.max-height-38-px {
+    max-height: 38px;
+}
+
+.max-height-28-px {
+    max-height: 28px;
+}

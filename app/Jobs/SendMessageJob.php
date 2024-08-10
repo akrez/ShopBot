@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Contracts\MessageProcessorContract;
-use App\Services\TelegramService;
+use App\Services\MessageService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -56,6 +56,6 @@ class SendMessageJob implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        TelegramService::sendMessage($this->messageProcessor);
+        resolve(MessageService::class)->sendMessage($this->messageProcessor);
     }
 }

@@ -7,7 +7,11 @@ use App\Models\Message;
 
 interface MessageProcessorContract
 {
-    public function __construct(Bot $bot, Message $message);
+    public function __construct(
+        Bot $bot,
+        Message $message,
+        array $response,
+    );
 
     public function shouldProcess();
 

@@ -1,0 +1,18 @@
+body {
+    font-family: "vazirmatn";
+}
+
+.fs-3em {
+    font-size: 3em;
+}
+
+.bg {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-x: left;
+    background-position-y: top;
+}
+
+.text-shadow-white {
+    text-shadow: 0 0 0.15em white, 0 0 0.15em white, 0 0 0.15em white;
+}

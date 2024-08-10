@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Bot;
-use App\Services\TelegramService;
+use App\Services\MessageService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -56,6 +56,6 @@ class FetchMessagesJob implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        (new TelegramService)->fetchMessagesJob($this->bot);
+        resolve(MessageService::class)->syncMessages($this->bot);
     }
 }
