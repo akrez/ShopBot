@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\DTO\BlogDTO;
-use App\Services\ApiService;
 use App\Services\BlogService;
 use App\Support\WebResponse;
 use Illuminate\Http\Request;
@@ -88,11 +87,10 @@ class BlogController extends Controller
 
     public function show(Request $request, int $id)
     {
-        $response = resolve(ApiService::class)->blogResponse($id);
-        abort_unless($response->isSuccessful(), $response->getStatus());
+        $blog = $this->blogService->findOrFailApiBlog($id);
 
         return view('blogs.show', [
-            'data' => json_decode(json_encode($response->getData()->toArray($request)), true),
+            'data' => $this->blogService->getArrayResponse($blog),
         ]);
     }
 

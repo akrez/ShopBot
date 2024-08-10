@@ -2,7 +2,7 @@
 
 namespace App\Support\MessageProcessors;
 
-use App\Services\ApiService;
+use App\Services\BlogService;
 use App\Support\MessageProcessor;
 use App\Support\TelegramApi;
 use Illuminate\Support\Arr;
@@ -25,7 +25,7 @@ class SearchMessageProcessor extends MessageProcessor
             return;
         }
 
-        $jsonResponse = resolve(ApiService::class)->blogArray($this->bot->blog);
+        $jsonResponse = resolve(BlogService::class)->getArrayResponse($this->bot->blog);
 
         $apiProducts = Arr::get($jsonResponse, 'products', []);
 

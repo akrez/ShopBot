@@ -135,7 +135,7 @@ class MessageService
         $botService = resolve(BotService::class);
         //
         foreach ($botService->getLatestApiBlogBots() as $bot) {
-            $response = resolve(ApiService::class)->blogArray($bot->blog);
+            $response = resolve(BlogService::class)->getArrayResponse($bot->blog);
             foreach ($this->syncMessages($bot) as $message) {
                 $result = $this->setMessageProcessor($bot, $message, $response);
                 $this->sendMessage($result->getData());

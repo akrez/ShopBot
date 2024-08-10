@@ -4,20 +4,19 @@ namespace App\Services;
 
 use App\DTO\BlogDTO;
 use App\Facades\ActiveBlog;
+use App\Http\Resources\BlogResource;
 use App\Models\Blog;
 use App\Models\User;
 use App\Support\ResponseBuilder;
 
 class BlogService
 {
-    public function firstApiBlog($id)
+    public function findOrFailApiBlog(int $id)
     {
-        return Blog::filterIsActive()->where('id', $id)->first();
-    }
+        $blog = Blog::filterIsActive()->where('id', $id)->first();
+        abort_unless($blog, 404);
 
-    public function getApiBlogsQuery()
-    {
-        return Blog::filterIsActive();
+        return $blog;
     }
 
     public function getLatestUserBlogs(User $user)
@@ -90,5 +89,34 @@ class BlogService
         return ResponseBuilder::new(200)->data($blog)->message(__(':name is selected successfully', [
             'name' => __('Blog'),
         ]))->status(200);
+    }
+
+    public function getArrayResponse(Blog $blog)
+    {
+        $request = app('request');
+
+        $blog->load([
+            'products' => function ($query) {
+                $query
+                    ->with('productProperties', function ($query) {
+                        $query->orderBy('created_at', 'ASC');
+                    })
+                    ->with('productTags', function ($query) {
+                        $query->orderBy('created_at', 'ASC');
+                    })
+                    ->with('images', function ($query) {
+                        $query->orderDefault();
+                    })
+                    ->orderDefault();
+            },
+            'contacts' => function ($query) {
+                $query->orderDefault();
+            },
+            'logo' => function ($query) {
+                $query->orderDefault();
+            },
+        ]);
+
+        return json_decode(json_encode((new BlogResource($blog))->toArray($request)), true);
     }
 }
