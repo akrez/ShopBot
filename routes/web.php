@@ -21,9 +21,6 @@ Route::domain('{host}')
 
 Auth::routes();
 
-Route::get('/', [SiteController::class, 'index']);
-Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');
-
 Route::middleware('auth')->group(function () {
     Route::get(AppServiceProvider::HOME, [BlogController::class, 'index'])->name('home');
     Route::patch('blogs/{id}/active', [BlogController::class, 'active'])->name('blogs.active');
@@ -51,3 +48,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('blog_logos', BlogLogoController::class)->parameter('blog_logos', 'name');
     });
 });
+
+Route::get('/', [SiteController::class, 'index']);
+Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');
