@@ -98,6 +98,7 @@ class BlogService
         $blog->load([
             'products' => function ($query) {
                 $query
+                    ->filterIsActive()
                     ->with('productProperties', function ($query) {
                         $query->orderBy('created_at', 'ASC');
                     })

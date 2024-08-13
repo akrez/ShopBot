@@ -76,4 +76,9 @@ class Product extends Model
             ->orderBy('name', 'ASC')
             ->orderBy('created_at', 'ASC');
     }
+
+    public function scopeFilterIsActive(Builder $query)
+    {
+        $query = $query->where('product_status', ProductStatus::ACTIVE->value);
+    }
 }
