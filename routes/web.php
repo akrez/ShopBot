@@ -4,6 +4,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogLogoController;
 use App\Http\Controllers\BotController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
@@ -50,4 +51,5 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/', [SiteController::class, 'index']);
+Route::get('/gallery/{category}/{whmq}/{name}', [GalleryController::class, 'paint']);
 Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');

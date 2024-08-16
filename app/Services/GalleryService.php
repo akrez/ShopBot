@@ -50,33 +50,6 @@ class GalleryService
         return $gallery;
     }
 
-    public function getUrlByModel(Gallery $gallery)
-    {
-        return $this->getUrl(
-            $gallery->gallery_category->value,
-            $gallery->name
-        );
-    }
-
-    public function getUrl($category, $name, $whmq = null)
-    {
-        $segments = [
-            'gallery',
-            $category,
-        ];
-        if ($whmq) {
-            $segments[] = $whmq;
-        }
-        $segments[] = $name;
-
-        return $this->getStorageUrl(implode('/', $segments));
-    }
-
-    public function getStorageUrl($url)
-    {
-        return Storage::url($url);
-    }
-
     public function store(Blog $blog, string $galleryType, string $galleryId, GalleryCategory $galleryCategory, GalleryDTO $galleryDTO)
     {
         $responseBuilder = resolve(ResponseBuilder::class)->input($galleryDTO);
@@ -275,6 +248,34 @@ class GalleryService
 
     public function getPath($category, $name, $whmq = null)
     {
+        return $this->getStoragePath($this->getUri($category, $name, $whmq));
+    }
+
+    public function getStoragePath($path)
+    {
+        return $path;
+    }
+
+    public function getUrlByModel(Gallery $gallery)
+    {
+        return $this->getUrl(
+            $gallery->gallery_category->value,
+            $gallery->name
+        );
+    }
+
+    public function getUrl($category, $name, $whmq = null)
+    {
+        return $this->getStorageUrl($this->getUri($category, $name, $whmq));
+    }
+
+    public function getStorageUrl($url)
+    {
+        return Storage::url($url);
+    }
+
+    public function getUri($category, $name, $whmq = null)
+    {
         $segments = [
             'gallery',
             $category,
@@ -284,11 +285,6 @@ class GalleryService
         }
         $segments[] = $name;
 
-        return $this->getStoragePath(implode('/', $segments));
-    }
-
-    public function getStoragePath($path)
-    {
-        return $path;
+        return implode('/', $segments);
     }
 }
