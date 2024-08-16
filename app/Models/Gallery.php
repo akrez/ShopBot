@@ -33,9 +33,9 @@ class Gallery extends Model
      */
     protected $fillable = [];
 
-    public function getUrl(): string
+    public function getUrl($whmq = null): string
     {
-        return resolve(GalleryService::class)->getUrlByModel($this);
+        return resolve(GalleryService::class)->getUrlByModel($this, $whmq);
     }
 
     public function getBaseUrl(): string

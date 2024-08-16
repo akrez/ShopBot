@@ -256,11 +256,12 @@ class GalleryService
         return $path;
     }
 
-    public function getUrlByModel(Gallery $gallery)
+    public function getUrlByModel(Gallery $gallery, $whmq = null)
     {
         return $this->getUrl(
             $gallery->gallery_category->value,
-            $gallery->name
+            $gallery->name,
+            $whmq
         );
     }
 
