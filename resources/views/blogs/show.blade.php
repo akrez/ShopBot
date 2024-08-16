@@ -7,7 +7,8 @@
     $products = collect(Arr::get($data, 'products', []));
     $contacts = collect(Arr::get($data, 'contacts', []));
     $contactSize = $contacts->count() ? max(4, intval(12 / count($contacts))) : 4;
-    $logoUrl = \Arr::get($data, 'logo.url', null);
+    $logo = \Arr::get($data, 'logo', null);
+    $logoUrl = $logo ? $logo['base_url'] . '/576__contain/' . $logo['name'] : null;
     $heroUrl = url('images/hero.jpg');
 @endphp
 <!doctype html>
@@ -20,7 +21,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="shortcut icon" href="{{ $logoUrl }}">
+    @if ($logoUrl)
+        <link rel="shortcut icon" href="{{ $logoUrl }}">
+    @endif
 
     <title>{{ $titleShortDescription }}</title>
     <meta name="description" content="{{ $description }}">
