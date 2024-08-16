@@ -92,7 +92,7 @@
                                 data-filter-tags="{{ json_encode(array_map('md5', $product['product_tags'])) }}">
                                 @if (count($product['images']) == 1)
                                     <img class="w-100 mb-3 rounded"
-                                        src="{{ $product['images'][0]['base_url'] . '/576__contain/' . $product['images'][0]['name'] }}"
+                                        src="{{ $product['images'][0]['base_url'] . '/576__contain_67/' . $product['images'][0]['name'] }}"
                                         alt="{{ $product['name'] }}">
                                 @elseif (count($product['images']) > 1)
                                     <div id="product-carousel-{{ $productKey }}"
@@ -102,7 +102,7 @@
                                                 <div
                                                     class="carousel-item @if ($loop->first) active @endif">
                                                     <img class="w-100 rounded"
-                                                        src="{{ $productImage['base_url'] . '/576__contain/' . $productImage['name'] }}"
+                                                        src="{{ $productImage['base_url'] . '/576__contain_67/' . $productImage['name'] }}"
                                                         alt="{{ $product['name'] }}">
                                                 </div>
                                             @endforeach
