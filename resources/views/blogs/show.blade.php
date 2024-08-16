@@ -7,7 +7,7 @@
     $products = collect(Arr::get($data, 'products', []));
     $contacts = collect(Arr::get($data, 'contacts', []));
     $contactSize = $contacts->count() ? max(4, intval(12 / count($contacts))) : 4;
-    $whmq = '__contain_67';
+    $whmq = '__contain';
     $logo = \Arr::get($data, 'logo', null);
     $logoUrl = $logo ? $logo['base_url'] . '/' . $whmq . '/' . $logo['name'] : null;
     $heroUrl = url('images/hero.jpg');
