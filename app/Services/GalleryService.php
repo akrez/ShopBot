@@ -146,7 +146,7 @@ class GalleryService
         try {
             $path = $this->getPath($category, $name, $whmq);
             //
-            $isUploaded = Storage::put($path, $image->encode(new AutoEncoder(quality: $quality)));
+            $isUploaded = Storage::put($path, $image->encode(new AutoEncoder(quality: intval($quality))));
             if ($isUploaded) {
                 $pathinfo = pathinfo($path);
 
