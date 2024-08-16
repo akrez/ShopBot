@@ -269,12 +269,17 @@ class GalleryService
         return $this->getStorageUrl($this->getUri($category, $name, $whmq));
     }
 
+    public function getBaseUrl($category)
+    {
+        return $this->getStorageUrl($this->getUri($category));
+    }
+
     public function getStorageUrl($url)
     {
         return Storage::url($url);
     }
 
-    public function getUri($category, $name, $whmq = null)
+    public function getUri($category, $name = null, $whmq = null)
     {
         $segments = [
             'gallery',
@@ -283,7 +288,9 @@ class GalleryService
         if ($whmq) {
             $segments[] = $whmq;
         }
-        $segments[] = $name;
+        if ($name) {
+            $segments[] = $name;
+        }
 
         return implode('/', $segments);
     }

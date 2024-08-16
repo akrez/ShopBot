@@ -13,12 +13,15 @@ use App\Http\Controllers\ProductTagController;
 use App\Http\Controllers\SiteController;
 use App\Http\Middleware\ActiveBlogMiddleware;
 use App\Providers\AppServiceProvider;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::domain('{host}')
-    ->whereIn('host', resolve('Hosts')->getArrayKeys())
-    ->get('/', [BlogController::class, 'serve']);
+if (App::isProduction()) {
+    Route::domain('{host}')
+        ->whereIn('host', resolve('Hosts')->getArrayKeys())
+        ->get('/', [BlogController::class, 'serve']);
+}
 
 Auth::routes();
 

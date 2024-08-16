@@ -38,6 +38,11 @@ class Gallery extends Model
         return resolve(GalleryService::class)->getUrlByModel($this);
     }
 
+    public function getBaseUrl(): string
+    {
+        return resolve(GalleryService::class)->getBaseUrl($this->gallery_category->value);
+    }
+
     public function blog(): BelongsTo
     {
         return $this->belongsTo(Blog::class);

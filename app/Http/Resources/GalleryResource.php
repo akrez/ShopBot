@@ -17,6 +17,7 @@ class GalleryResource extends JsonResource
         return [
             'name' => $this->name,
             'url' => $this->getUrl(),
+            'base_url' => $this->getBaseUrl(),
         ];
     }
 }

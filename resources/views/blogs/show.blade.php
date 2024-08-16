@@ -91,16 +91,18 @@
                             <div class="thumbnail border pt-3 pb-3 col-sm-6 col-md-4 col-lg-2"
                                 data-filter-tags="{{ json_encode(array_map('md5', $product['product_tags'])) }}">
                                 @if (count($product['images']) == 1)
-                                    <img class="w-100 pb-3 rounded" src="{{ $product['images'][0]['url'] }}"
+                                    <img class="w-100 mb-3 rounded"
+                                        src="{{ $product['images'][0]['base_url'] . '/__contain/' . $product['images'][0]['name'] }}"
                                         alt="{{ $product['name'] }}">
                                 @elseif (count($product['images']) > 1)
                                     <div id="product-carousel-{{ $productKey }}"
-                                        class="carousel pb-3 carousel-dark slide">
+                                        class="carousel mb-3 carousel-dark slide">
                                         <div class="carousel-inner">
                                             @foreach ($product['images'] as $productImage)
                                                 <div
                                                     class="carousel-item @if ($loop->first) active @endif">
-                                                    <img class="w-100 pb-2 rounded" src="{{ $productImage['url'] }}"
+                                                    <img class="w-100 rounded"
+                                                        src="{{ $productImage['base_url'] . '/__contain/' . $productImage['name'] }}"
                                                         alt="{{ $product['name'] }}">
                                                 </div>
                                             @endforeach

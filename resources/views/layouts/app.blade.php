@@ -85,7 +85,7 @@
         <nav class="navbar navbar-light bg-light navbar-expand-lg z-1030">
             <div class="container">
                 <a class="navbar-brand"
-                    href="{{ route('blogs.show', ['id' => \App\Facades\ActiveBlog::attr('id')]) }}">
+                    href="#">
                     @if (\App\Facades\ActiveBlog::get()->logoUrl())
                         <img class="pe-3 max-height-28-px" src="{{ \App\Facades\ActiveBlog::get()->logoUrl() }}">
                     @endif
