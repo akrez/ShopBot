@@ -45,7 +45,7 @@ class MessageProcessor implements MessageProcessorContract
                 foreach ($product['images'] as $productImageKey => $productImage) {
                     $medias[$productImageKey] = [
                         'type' => 'photo',
-                        'media' => $productImage['contain_url'],
+                        'media' => $productImage['url'],
                     ];
                     if ($caption) {
                         $medias[$productImageKey]['caption'] = implode("\n", $caption);

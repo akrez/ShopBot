@@ -8,7 +8,7 @@
     $contacts = collect(Arr::get($data, 'contacts', []));
     $contactSize = $contacts->count() ? max(4, intval(12 / count($contacts))) : 4;
     $whmq = '__contain';
-    $logoUrl = \Arr::get($data, 'logo.contain_url', null);
+    $logoUrl = \Arr::get($data, 'logo.url', null);
     $heroUrl = url('images/hero.jpg');
 @endphp
 <!doctype html>
