@@ -24,7 +24,7 @@ class GalleryController extends Controller
         }
 
         return Response()->download(
-            $galleryService->getPath($response->getData()['path']),
+            $galleryService->getStoragePath($response->getData()['path']),
             $response->getData()['name'],
             [],
             'inline'

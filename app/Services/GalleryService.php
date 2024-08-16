@@ -50,23 +50,31 @@ class GalleryService
         return $gallery;
     }
 
-    public function getGalleryUrlByModel(Gallery $gallery)
+    public function getUrlByModel(Gallery $gallery)
     {
-        $path = static::getGalleryPathByModel($gallery);
-
-        return $this->getUrl($path);
+        return $this->getUrl(
+            $gallery->gallery_category->value,
+            $gallery->name
+        );
     }
 
-    public function getGalleryUrl($category, $name, $whmq = null)
+    public function getUrl($category, $name, $whmq = null)
     {
-        $path = $this->getGalleryPath($category, $name, $whmq);
+        $segments = [
+            'gallery',
+            $category,
+        ];
+        if ($whmq) {
+            $segments[] = $whmq;
+        }
+        $segments[] = $name;
 
-        return $this->getUrl($path);
+        return $this->getStorageUrl(implode('/', $segments));
     }
 
-    public function getUrl($path)
+    public function getStorageUrl($url)
     {
-        return Storage::url($path);
+        return Storage::url($url);
     }
 
     public function store(Blog $blog, string $galleryType, string $galleryId, GalleryCategory $galleryCategory, GalleryDTO $galleryDTO)
@@ -120,7 +128,7 @@ class GalleryService
 
     public function paint(Gallery $gallery, $whmq)
     {
-        $sourceFilePath = $this->getGalleryPathByModel($gallery);
+        $sourceFilePath = $this->getPathByModel($gallery);
         //
         $manager = new ImageManager(Driver::class);
         $image = $manager->read($sourceFilePath);
@@ -163,7 +171,7 @@ class GalleryService
     protected function put($image, $category, $name, $quality, $whmq = null)
     {
         try {
-            $path = $this->getGalleryPath($category, $name, $whmq);
+            $path = $this->getPath($category, $name, $whmq);
             //
             $isUploaded = Storage::put($path, $image->encode(new AutoEncoder(quality: $quality)));
             if ($isUploaded) {
@@ -174,7 +182,7 @@ class GalleryService
                     'height' => $image->height(),
                     'name' => $pathinfo['basename'],
                     'path' => $path,
-                    'url' => $this->getGalleryUrl($category, $name, $whmq),
+                    'url' => $this->getUrl($category, $name, $whmq),
                 ]);
             }
         } catch (Exception $e) {
@@ -209,7 +217,7 @@ class GalleryService
 
     public function destroy(Blog $blog, Gallery $gallery)
     {
-        $path = static::getGalleryPathByModel($gallery);
+        $path = static::getPathByModel($gallery);
 
         if (
             $gallery->delete() and
@@ -256,16 +264,16 @@ class GalleryService
         }
     }
 
-    public function getGalleryPathByModel(Gallery $gallery, $whmq = null)
+    public function getPathByModel(Gallery $gallery, $whmq = null)
     {
-        return $this->getGalleryPath(
+        return $this->getPath(
             $gallery->gallery_category->value,
             $gallery->name,
             $whmq
         );
     }
 
-    public function getGalleryPath($category, $name, $whmq = null)
+    public function getPath($category, $name, $whmq = null)
     {
         $segments = [
             'gallery',
@@ -276,10 +284,10 @@ class GalleryService
         }
         $segments[] = $name;
 
-        return $this->getPath(implode('/', $segments));
+        return $this->getStoragePath(implode('/', $segments));
     }
 
-    public function getPath($path)
+    public function getStoragePath($path)
     {
         return $path;
     }
