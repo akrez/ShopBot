@@ -106,7 +106,7 @@ class GalleryService
         $manager = new ImageManager(Driver::class);
         $image = $manager->read($sourceFilePath);
         //
-        $dto = new GalleryPaintDTO($whmq, $image->width(), $image->height());
+        $dto = new GalleryPaintDTO($whmq);
         $validation = $dto->validate(true);
         if ($validation->errors()->isNotEmpty()) {
             return ResponseBuilder::new(422)->errors($validation->errors());

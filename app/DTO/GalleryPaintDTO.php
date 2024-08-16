@@ -11,10 +11,10 @@ class GalleryPaintDTO extends DTO
 {
     const WHMQ_REGEX_PATTERN = '/[A-Za-z0-9\-\.\_]/';
 
+    const MAX_SIZE = 3096;
+
     public function __construct(
         public $whmq,
-        public int $defaultWidth,
-        public int $defaultHeight,
         protected $width = null,
         protected $height = null,
         protected $mode = null,
@@ -50,14 +50,14 @@ class GalleryPaintDTO extends DTO
 
     public function rules(bool $isStore = true)
     {
-        return static::getRules($isStore, $this->defaultWidth, $this->defaultHeight);
+        return static::getRules($isStore);
     }
 
-    public static function getRules(bool $isStore, $defaultWidth, $defaultHeight)
+    public static function getRules(bool $isStore)
     {
         return [
-            'width' => ['nullable', 'integer', 'min:1', 'max:'.($defaultWidth * 2)],
-            'height' => ['nullable', 'integer', 'min:1', 'max:'.($defaultHeight * 2)],
+            'width' => ['nullable', 'integer', 'min:1', 'max:'.static::MAX_SIZE],
+            'height' => ['nullable', 'integer', 'min:1', 'max:'.static::MAX_SIZE],
             'mode' => ['nullable', Rule::in(GalleryService::VALID_MODES)],
             'quality' => ['nullable', 'integer', 'min:1', 'max:100'],
             'whmq' => [
