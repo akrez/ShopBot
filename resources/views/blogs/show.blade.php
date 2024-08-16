@@ -8,7 +8,7 @@
     $contacts = collect(Arr::get($data, 'contacts', []));
     $contactSize = $contacts->count() ? max(4, intval(12 / count($contacts))) : 4;
     $logo = \Arr::get($data, 'logo', null);
-    $logoUrl = $logo ? $logo['base_url'] . '/576__contain/' . $logo['name'] : null;
+    $logoUrl = $logo ? $logo['base_url'] . '/__contain/' . $logo['name'] : null;
     $heroUrl = url('images/hero.jpg');
 @endphp
 <!doctype html>
@@ -95,7 +95,7 @@
                                 data-filter-tags="{{ json_encode(array_map('md5', $product['product_tags'])) }}">
                                 @if (count($product['images']) == 1)
                                     <img class="w-100 mb-3 rounded"
-                                        src="{{ $product['images'][0]['base_url'] . '/576__contain_67/' . $product['images'][0]['name'] }}"
+                                        src="{{ $product['images'][0]['base_url'] . '/__contain_67/' . $product['images'][0]['name'] }}"
                                         alt="{{ $product['name'] }}">
                                 @elseif (count($product['images']) > 1)
                                     <div id="product-carousel-{{ $productKey }}"
@@ -105,7 +105,7 @@
                                                 <div
                                                     class="carousel-item @if ($loop->first) active @endif">
                                                     <img class="w-100 rounded"
-                                                        src="{{ $productImage['base_url'] . '/576__contain_67/' . $productImage['name'] }}"
+                                                        src="{{ $productImage['base_url'] . '/__contain_67/' . $productImage['name'] }}"
                                                         alt="{{ $product['name'] }}">
                                                 </div>
                                             @endforeach
