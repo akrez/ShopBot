@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\GalleryDTO;
+use App\DTO\GalleryPaintDTO;
 use App\Enums\Gallery\GalleryCategory;
 use App\Models\Blog;
 use App\Models\Gallery;
@@ -10,6 +11,7 @@ use App\Support\ResponseBuilder;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Colors\Rgb\Color;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\AutoEncoder;
 use Intervention\Image\ImageManager;
@@ -19,6 +21,14 @@ class GalleryService
     const MODE_CONTAIN = 'contain';
 
     const VALID_MODES = [self::MODE_CONTAIN];
+
+    public function firstApiGallery(string $category, string $name): ?Gallery
+    {
+        return Gallery::query()
+            ->where('gallery_category', $category)
+            ->where('name', $name)
+            ->first();
+    }
 
     public function getLatestQuery(Blog $blog, string $galleryType, string $galleryId, string $galleryCategory): HasMany
     {
@@ -44,6 +54,18 @@ class GalleryService
     {
         $path = static::getGalleryPathByModel($gallery);
 
+        return $this->getUrl($path);
+    }
+
+    public function getGalleryUrl($category, $name, $whmq = null)
+    {
+        $path = $this->getGalleryPath($category, $name, $whmq);
+
+        return $this->getUrl($path);
+    }
+
+    public function getUrl($path)
+    {
         return Storage::url($path);
     }
 
@@ -73,10 +95,15 @@ class GalleryService
         if (! $gallery->save()) {
             return $responseBuilder->status(500)->message('Internal Server Error');
         }
-
-        $uploadResponse = $this->upload(
-            $galleryDTO->file->getRealPath(),
-            $this->getGalleryPathByModel($gallery)
+        //
+        $manager = new ImageManager(Driver::class);
+        $image = $manager->read($galleryDTO->file->getRealPath());
+        //
+        $uploadResponse = $this->put(
+            $image,
+            $gallery->gallery_category->value,
+            $gallery->name,
+            AutoEncoder::DEFAULT_QUALITY
         );
         if (! $uploadResponse->isSuccessful()) {
             return $responseBuilder
@@ -91,17 +118,54 @@ class GalleryService
         ]));
     }
 
-    public function upload(string $sourceFilePath, string $path)
+    public function paint(Gallery $gallery, $whmq)
+    {
+        $sourceFilePath = $this->getGalleryPathByModel($gallery);
+        //
+        $manager = new ImageManager(Driver::class);
+        $image = $manager->read($sourceFilePath);
+        //
+        $dto = new GalleryPaintDTO($whmq, $image->width(), $image->height());
+        $validation = $dto->validate(true);
+        if ($validation->errors()->isNotEmpty()) {
+            return ResponseBuilder::new(422)->errors($validation->errors());
+        }
+        //
+        $width = $dto->getWidth();
+        $height = $dto->getHeight();
+        //
+        if ($width && $height) {
+        } elseif ($width) {
+            $height = ($width * $image->height()) / $image->width();
+        } elseif ($height) {
+            $width = ($height * $image->width()) / $image->height();
+        } else {
+            $width = $image->width();
+            $height = $image->height();
+        }
+        //
+        if ($dto->getMode() === self::MODE_CONTAIN) {
+            $width = $height = max($width, $height);
+            $image->contain(width: $width, height: $height, background: new Color(255, 255, 255, 0));
+        } else {
+            $image->resize(width: $width, height: $height);
+        }
+
+        return $this->put(
+            $image,
+            $gallery->gallery_category->value,
+            $gallery->name,
+            $dto->getQuality(),
+            $dto->whmq
+        );
+    }
+
+    protected function put($image, $category, $name, $quality, $whmq = null)
     {
         try {
-            if (! file_exists($sourceFilePath)) {
-                return ResponseBuilder::new(404);
-            }
+            $path = $this->getGalleryPath($category, $name, $whmq);
             //
-            $manager = new ImageManager(Driver::class);
-            $image = $manager->read($sourceFilePath);
-            //
-            $isUploaded = Storage::put($path, $image->encode(new AutoEncoder(quality: AutoEncoder::DEFAULT_QUALITY)));
+            $isUploaded = Storage::put($path, $image->encode(new AutoEncoder(quality: $quality)));
             if ($isUploaded) {
                 $pathinfo = pathinfo($path);
 
@@ -110,6 +174,7 @@ class GalleryService
                     'height' => $image->height(),
                     'name' => $pathinfo['basename'],
                     'path' => $path,
+                    'url' => $this->getGalleryUrl($category, $name, $whmq),
                 ]);
             }
         } catch (Exception $e) {
@@ -191,17 +256,31 @@ class GalleryService
         }
     }
 
-    private function getGalleryPathByModel(Gallery $gallery)
+    public function getGalleryPathByModel(Gallery $gallery, $whmq = null)
     {
-        return $this->getGalleryPath($gallery->gallery_category->value, $gallery->name);
+        return $this->getGalleryPath(
+            $gallery->gallery_category->value,
+            $gallery->name,
+            $whmq
+        );
     }
 
-    public function getGalleryPath($category, $name)
+    public function getGalleryPath($category, $name, $whmq = null)
     {
-        return implode('/', [
+        $segments = [
             'gallery',
             $category,
-            $name,
-        ]);
+        ];
+        if ($whmq) {
+            $segments[] = $whmq;
+        }
+        $segments[] = $name;
+
+        return $this->getPath(implode('/', $segments));
+    }
+
+    public function getPath($path)
+    {
+        return $path;
     }
 }

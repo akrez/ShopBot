@@ -35,7 +35,7 @@ class Gallery extends Model
 
     public function getUrl(): string
     {
-        return resolve(GalleryService::class)->getGalleryUrl($this);
+        return resolve(GalleryService::class)->getGalleryUrlByModel($this);
     }
 
     public function blog(): BelongsTo
