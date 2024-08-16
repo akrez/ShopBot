@@ -7,13 +7,19 @@ use App\Enums\Gallery\GalleryCategory;
 use App\Models\Blog;
 use App\Models\Gallery;
 use App\Support\ResponseBuilder;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\AutoEncoder;
 use Intervention\Image\ImageManager;
 
 class GalleryService
 {
+    const MODE_CONTAIN = 'contain';
+
+    const VALID_MODES = [self::MODE_CONTAIN];
+
     public function getLatestQuery(Blog $blog, string $galleryType, string $galleryId, string $galleryCategory): HasMany
     {
         return $blog->galleries()
@@ -34,9 +40,9 @@ class GalleryService
         return $gallery;
     }
 
-    public function getGalleryUrl(Gallery $gallery)
+    public function getGalleryUrlByModel(Gallery $gallery)
     {
-        $path = static::getGalleryPath($gallery);
+        $path = static::getGalleryPathByModel($gallery);
 
         return Storage::url($path);
     }
@@ -68,14 +74,14 @@ class GalleryService
             return $responseBuilder->status(500)->message('Internal Server Error');
         }
 
-        $manager = new ImageManager(new Driver);
-        $image = $manager->read($galleryDTO->file->getRealPath());
-
-        $path = static::getGalleryPath($gallery);
-
-        $isUploaded = Storage::put($path, $image->encode());
-        if (! $isUploaded) {
-            return $responseBuilder->status(500)->message('Internal Server Error');
+        $uploadResponse = $this->upload(
+            $galleryDTO->file->getRealPath(),
+            $this->getGalleryPathByModel($gallery)
+        );
+        if (! $uploadResponse->isSuccessful()) {
+            return $responseBuilder
+                ->status($uploadResponse->getStatus())
+                ->message($uploadResponse->getMessage());
         }
 
         $this->resetSelected($blog, $gallery);
@@ -83,6 +89,33 @@ class GalleryService
         return $responseBuilder->status(201)->data($gallery)->message(__(':name is created successfully', [
             'name' => $gallery->gallery_category->trans(),
         ]));
+    }
+
+    public function upload(string $sourceFilePath, string $path)
+    {
+        try {
+            if (! file_exists($sourceFilePath)) {
+                return ResponseBuilder::new(404);
+            }
+            //
+            $manager = new ImageManager(Driver::class);
+            $image = $manager->read($sourceFilePath);
+            //
+            $isUploaded = Storage::put($path, $image->encode(new AutoEncoder(quality: AutoEncoder::DEFAULT_QUALITY)));
+            if ($isUploaded) {
+                $pathinfo = pathinfo($path);
+
+                return ResponseBuilder::new(201)->data([
+                    'width' => $image->width(),
+                    'height' => $image->height(),
+                    'name' => $pathinfo['basename'],
+                    'path' => $path,
+                ]);
+            }
+        } catch (Exception $e) {
+        }
+
+        return ResponseBuilder::new(500);
     }
 
     public function update(Blog $blog, Gallery $gallery, GalleryDTO $galleryDTO)
@@ -111,7 +144,7 @@ class GalleryService
 
     public function destroy(Blog $blog, Gallery $gallery)
     {
-        $path = static::getGalleryPath($gallery);
+        $path = static::getGalleryPathByModel($gallery);
 
         if (
             $gallery->delete() and
@@ -158,12 +191,17 @@ class GalleryService
         }
     }
 
-    private function getGalleryPath(Gallery $gallery)
+    private function getGalleryPathByModel(Gallery $gallery)
+    {
+        return $this->getGalleryPath($gallery->gallery_category->value, $gallery->name);
+    }
+
+    public function getGalleryPath($category, $name)
     {
         return implode('/', [
             'gallery',
-            $gallery->gallery_category->value,
-            $gallery->name,
+            $category,
+            $name,
         ]);
     }
 }
