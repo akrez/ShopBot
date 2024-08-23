@@ -87,11 +87,9 @@ class BlogController extends Controller
 
     public function show(Request $request, int $id)
     {
-        $blog = $this->blogService->findOrFailApiBlog($id);
+        $blog = $this->blogService->findOrFailUserBlog(Auth::user(), $id);
 
-        return view('blogs.show', [
-            'data' => $this->blogService->getArrayResponse($blog),
-        ]);
+        return $this->blogService->render($blog);
     }
 
     public function active(int $id)
@@ -102,17 +100,5 @@ class BlogController extends Controller
         $response = $this->blogService->setUserActiveBlog($user, $blog);
 
         return new WebResponse($response, route('blogs.index'));
-    }
-
-    public function serve(Request $request, $host)
-    {
-        $hosts = resolve('Hosts');
-
-        abort_unless($id = $hosts->hostToBlogId($host), 404);
-        abort_unless($blog = $this->blogService->findOrFailApiBlog($id), 404);
-
-        return view('blogs.show', [
-            'data' => $this->blogService->getArrayResponse($blog),
-        ]);
     }
 }

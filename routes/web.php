@@ -4,6 +4,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogLogoController;
 use App\Http\Controllers\BotController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProductController;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 if (App::isProduction()) {
     Route::domain('{host}')
         ->whereIn('host', resolve('Hosts')->getArrayKeys())
-        ->get('/', [BlogController::class, 'serve']);
+        ->get('/', [FrontController::class, 'domain']);
 }
 
 Auth::routes();
@@ -28,7 +29,7 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
     Route::get(AppServiceProvider::HOME, [BlogController::class, 'index'])->name('home');
     Route::patch('blogs/{id}/active', [BlogController::class, 'active'])->name('blogs.active');
-    Route::resource('blogs', BlogController::class)->parameter('blogs', 'id')->except(['show', 'destroy']);
+    Route::resource('blogs', BlogController::class)->parameter('blogs', 'id')->except(['destroy']);
     Route::middleware(ActiveBlogMiddleware::class)->group(function () {
 
         Route::get('ports/{sheetName}', [PortController::class, 'index'])->name('ports.index');
@@ -55,4 +56,4 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', [SiteController::class, 'index']);
 Route::get('/gallery/{category}/{whmq}/{name}', [GalleryController::class, 'paint']);
-Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');
+Route::get('/fronts/{id}', [FrontController::class, 'index'])->name('fronts.index');

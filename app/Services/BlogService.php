@@ -91,6 +91,13 @@ class BlogService
         ]))->status(200);
     }
 
+    public function render(Blog $blog)
+    {
+        return view('fronts.index', [
+            'data' => $this->getArrayResponse($blog),
+        ]);
+    }
+
     public function getArrayResponse(Blog $blog)
     {
         $request = app('request');
