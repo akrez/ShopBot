@@ -13,7 +13,7 @@ class FrontController extends Controller
     {
         $blog = $this->blogService->findOrFailApiBlog($id);
 
-        return $this->blogService->render($blog);
+        return $this->blogService->renderView($blog);
     }
 
     public function domain(Request $request, $host)
@@ -23,6 +23,6 @@ class FrontController extends Controller
         abort_unless($id = $hosts->hostToBlogId($host), 404);
         abort_unless($blog = $this->blogService->findOrFailApiBlog($id), 404);
 
-        return $this->blogService->render($blog);
+        return $this->blogService->renderView($blog);
     }
 }

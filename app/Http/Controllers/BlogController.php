@@ -89,7 +89,7 @@ class BlogController extends Controller
     {
         $blog = $this->blogService->findOrFailUserBlog(Auth::user(), $id);
 
-        return $this->blogService->render($blog);
+        return $this->blogService->renderView($blog);
     }
 
     public function active(int $id)

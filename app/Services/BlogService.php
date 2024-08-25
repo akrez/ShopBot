@@ -91,7 +91,7 @@ class BlogService
         ]))->status(200);
     }
 
-    public function render(Blog $blog)
+    public function renderView(Blog $blog)
     {
         return view('fronts.index', [
             'data' => $this->getArrayResponse($blog),
