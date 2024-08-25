@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
             return '<?php ob_start() ?>';
         });
         Blade::directive('endspaceless', function () {
-            return "<?php echo preg_replace('/>\\s+</', '><', ob_get_clean()); ?>";
+            return "<?php echo trim(preg_replace('/>\\s+</', '><', ob_get_clean()));\n ?>";
         });
     }
 }
