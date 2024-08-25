@@ -7,6 +7,7 @@ use App\Support\ArrayHelper;
 use App\Support\Hosts;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -36,5 +37,12 @@ class AppServiceProvider extends ServiceProvider
             return new Hosts(storage_path('hosts.json'));
         });
         $this->app->alias('Arr', Arr::class);
+        //
+        Blade::directive('spaceless', function () {
+            return '<?php ob_start() ?>';
+        });
+        Blade::directive('endspaceless', function () {
+            return "<?php echo preg_replace('/>\\s+</', '><', ob_get_clean()); ?>";
+        });
     }
 }
