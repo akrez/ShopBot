@@ -11,7 +11,6 @@ use App\Support\ResponseBuilder;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Colors\Rgb\Color;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\AutoEncoder;
 use Intervention\Image\ImageManager;
@@ -127,7 +126,7 @@ class GalleryService
         //
         if ($dto->getMode() === self::MODE_CONTAIN) {
             $width = $height = max($width, $height);
-            $image->contain(width: $width, height: $height, background: new Color(255, 255, 255, 0));
+            $image->contain(width: $width, height: $height, background: $image->pickColor(0, 0));
         } else {
             $image->resize(width: $width, height: $height);
         }
