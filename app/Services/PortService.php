@@ -16,6 +16,7 @@ class PortService
             SheetName::PRODUCT_TAG->value => ProductTagService::class,
             SheetName::PRODUCT_PROPERTY->value => ProductPropertyService::class,
             SheetName::CONTACT->value => ContactService::class,
+            SheetName::COLOR->value => ColorService::class,
         ], $sheetName->value);
 
         abort_unless($serviceClassName, 500);

@@ -173,6 +173,12 @@
                                         {{ \App\Enums\Excel\SheetName::CONTACT->trans() }}
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('ports.index', ['sheetName' => \App\Enums\Excel\SheetName::COLOR->value]) }}">
+                                        {{ \App\Enums\Excel\SheetName::COLOR->trans() }}
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

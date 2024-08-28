@@ -25,6 +25,6 @@ class Color extends Model
 
     public function scopeOrderDefault(Builder $query)
     {
-        $query = $query->orderBy('created_at', 'ASC');
+        $query = $query->orderBy('updated_at', 'DESC');
     }
 }

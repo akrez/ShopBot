@@ -24,6 +24,7 @@ class PortController extends Controller
             SheetName::PRODUCT_TAG->value => 'ports._product_tag',
             SheetName::PRODUCT_PROPERTY->value => 'ports._product_property',
             SheetName::CONTACT->value => 'ports._contact',
+            SheetName::COLOR->value => 'ports._color',
         ], $sheetName->value);
 
         abort_unless($view, 500);

@@ -15,6 +15,7 @@ enum SheetName: string
             'product_tag' => __('Tags'),
             'product_property' => __('Properties'),
             'contact' => __('Contacts'),
+            'color' => __('Colors'),
         ];
     }
 
@@ -22,4 +23,5 @@ enum SheetName: string
     case PRODUCT_TAG = 'product_tag';
     case PRODUCT_PROPERTY = 'product_property';
     case CONTACT = 'contact';
+    case COLOR = 'color';
 }

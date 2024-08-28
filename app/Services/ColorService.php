@@ -91,21 +91,15 @@ class ColorService implements PortContract
 
         $source[] = [
             __('validation.attributes.id'),
-            __('validation.attributes.color_type'),
-            __('validation.attributes.color_key'),
-            __('validation.attributes.color_value'),
-            __('validation.attributes.color_link'),
-            __('validation.attributes.color_order'),
+            __('validation.attributes.code'),
+            __('validation.attributes.name'),
         ];
 
         foreach ($this->getLatestBlogColorsQuery($blog)->get() as $color) {
             $source[] = [
                 $color->id,
-                $color->color_type?->value,
-                $color->color_key,
-                $color->color_value,
-                $color->color_link,
-                $color->color_order,
+                $color->code,
+                $color->name,
             ];
         }
 
@@ -127,15 +121,12 @@ class ColorService implements PortContract
                 continue;
             }
             //
-            $row = ((array) $row) + array_fill(0, 6, null);
+            $row = ((array) $row) + array_fill(0, 3, null);
             $id = $row[0];
             //
             $colorDTO = new ColorDTO(
                 $row[1],
-                $row[2],
-                $row[3],
-                $row[4],
-                $row[5]
+                $row[2]
             );
             //
             $color = $this->firstColorById($blog, $id);
