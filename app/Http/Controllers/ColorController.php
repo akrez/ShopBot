@@ -53,9 +53,9 @@ class ColorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $code)
+    public function edit(int $id)
     {
-        $color = $this->colorService->findOrFailActiveBlogColor($code);
+        $color = $this->colorService->findOrFailActiveBlogColor($id);
 
         return view('colors.edit', [
             'color' => $color,
@@ -65,10 +65,10 @@ class ColorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $code)
+    public function update(Request $request, int $id)
     {
         $blog = $this->blogService->findOrFailActiveBlog();
-        $color = $this->colorService->findOrFailActiveBlogColor($code);
+        $color = $this->colorService->findOrFailActiveBlogColor($id);
 
         $response = $this->colorService->update($blog, $color, new ColorDTO(
             $request->code,

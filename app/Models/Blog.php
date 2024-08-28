@@ -92,6 +92,11 @@ class Blog extends Model
         return $this->hasMany(Contact::class);
     }
 
+    public function colors()
+    {
+        return $this->hasMany(Color::class);
+    }
+
     public function logo(): MorphOne
     {
         return $this->morphOne(Gallery::class, 'gallery')->where('gallery_category', GalleryCategory::BLOG_LOGO->value);

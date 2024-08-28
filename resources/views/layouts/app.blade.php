@@ -84,8 +84,7 @@
     @if (\App\Facades\ActiveBlog::has())
         <nav class="navbar navbar-light bg-light navbar-expand-lg z-1030">
             <div class="container">
-                <a class="navbar-brand"
-                    href="#">
+                <a class="navbar-brand" href="#">
                     @if (\App\Facades\ActiveBlog::get()->logoUrl())
                         <img class="pe-3 max-height-28-px" src="{{ \App\Facades\ActiveBlog::get()->logoUrl() }}">
                     @endif
@@ -139,6 +138,11 @@
                                 {{ __('Bots') }}
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ route('colors.index') }}">
+                                {{ __('Colors') }}
+                            </a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -189,6 +193,7 @@
     </div>
     <script src="{{ asset('libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
     <script src="{{ asset('libs/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('libs/jscolor/2.5.2/jscolor.min.js') }}"></script>
     <script>
         @if (session('swal-success'))
             Swal.fire(

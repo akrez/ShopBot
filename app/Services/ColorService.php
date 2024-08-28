@@ -15,19 +15,19 @@ class ColorService implements PortContract
         return $blog->colors()->orderDefault();
     }
 
-    public function findOrFailActiveBlogColor($colorCode)
+    public function findOrFailActiveBlogColor($colorId)
     {
         $blog = resolve(BlogService::class)->findOrFailActiveBlog();
-        $color = $blog->colors()->where('code', $colorCode)->first();
+        $color = $blog->colors()->where('id', $colorId)->first();
         abort_unless($color, 404);
 
         return $color;
     }
 
-    public function firstColorByCode(Blog $blog, $code): ?Color
+    public function firstColorById(Blog $blog, $id): ?Color
     {
-        if (strlen($code)) {
-            return $blog->colors()->where('code', $code)->first();
+        if (strlen($id)) {
+            return $blog->colors()->where('id', $id)->first();
         }
 
         return null;
@@ -58,7 +58,7 @@ class ColorService implements PortContract
     {
         $responseBuilder = resolve(ResponseBuilder::class)->input($colorDTO);
 
-        $validation = $colorDTO->validate(false, ['blog' => $blog, 'code' => $color->code]);
+        $validation = $colorDTO->validate(false, ['blog' => $blog, 'id' => $color->id]);
 
         if ($validation->errors()->isNotEmpty()) {
             return $responseBuilder->status(422)->message('Unprocessable Entity')->errors($validation->errors());
@@ -100,7 +100,7 @@ class ColorService implements PortContract
 
         foreach ($this->getLatestBlogColorsQuery($blog)->get() as $color) {
             $source[] = [
-                $color->code,
+                $color->id,
                 $color->color_type?->value,
                 $color->color_key,
                 $color->color_value,
@@ -128,7 +128,7 @@ class ColorService implements PortContract
             }
             //
             $row = ((array) $row) + array_fill(0, 6, null);
-            $code = $row[0];
+            $id = $row[0];
             //
             $colorDTO = new ColorDTO(
                 $row[1],
@@ -138,7 +138,7 @@ class ColorService implements PortContract
                 $row[5]
             );
             //
-            $color = $this->firstColorByCode($blog, $code);
+            $color = $this->firstColorById($blog, $id);
             //
             if ($color) {
                 $result[] = $this->update($blog, $color, $colorDTO);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogLogoController;
 use App\Http\Controllers\BotController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\GalleryController;
@@ -48,6 +49,7 @@ Route::middleware('auth')->group(function () {
         Route::post('products/{product_id}/product_properties', [ProductPropertyController::class, 'store'])->name('products.product_properties.store');
 
         Route::resource('contacts', ContactController::class)->parameter('contacts', 'id');
+        Route::resource('colors', ColorController::class)->parameter('colors', 'id');
 
         Route::resource('products/{product_id}/product_images', ProductImageController::class, ['as' => 'products'])->parameter('product_images', 'name')->except(['create', 'show']);
         Route::resource('blog_logos', BlogLogoController::class)->parameter('blog_logos', 'name');
