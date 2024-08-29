@@ -7,6 +7,7 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\PayvoiceController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
@@ -32,6 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('blogs/{id}/active', [BlogController::class, 'active'])->name('blogs.active');
     Route::resource('blogs', BlogController::class)->parameter('blogs', 'id')->except(['destroy']);
     Route::middleware(ActiveBlogMiddleware::class)->group(function () {
+
+        Route::get('payvoices', [PayvoiceController::class, 'index'])->name('payvoices.index');
 
         Route::get('ports/{sheetName}', [PortController::class, 'index'])->name('ports.index');
         Route::get('ports/{sheetName}/export', [PortController::class, 'export'])->name('ports.export');

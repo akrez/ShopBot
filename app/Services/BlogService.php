@@ -103,6 +103,8 @@ class BlogService
     {
         $request = $this->getRequest();
 
+        app(PayvoiceService::class)->store($blog, $request);
+
         $blog->load([
             'products' => function ($query) {
                 $query

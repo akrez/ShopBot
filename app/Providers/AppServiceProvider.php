@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Support\ActiveBlog;
 use App\Support\ArrayHelper;
 use App\Support\Hosts;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
@@ -44,5 +45,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('endspaceless', function () {
             return "<?php echo trim(preg_replace('/>\s+</', '><', ob_get_clean())); ?>";
         });
+        //
+        Paginator::useBootstrapFive();
     }
 }

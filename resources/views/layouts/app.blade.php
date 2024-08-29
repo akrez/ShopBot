@@ -98,8 +98,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent2">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-dark" href="{{ route('payvoices.index') }}"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ __('Blog') }}
                             </a>
                             <ul class="dropdown-menu">

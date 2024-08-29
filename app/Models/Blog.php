@@ -97,6 +97,11 @@ class Blog extends Model
         return $this->hasMany(Color::class);
     }
 
+    public function payvoices()
+    {
+        return $this->hasMany(Payvoice::class);
+    }
+
     public function logo(): MorphOne
     {
         return $this->morphOne(Gallery::class, 'gallery')->where('gallery_category', GalleryCategory::BLOG_LOGO->value);
