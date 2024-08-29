@@ -84,7 +84,7 @@
     @if (\App\Facades\ActiveBlog::has())
         <nav class="navbar navbar-light bg-light navbar-expand-lg z-1030">
             <div class="container">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{{ route('payvoices.index') }}">
                     @if (\App\Facades\ActiveBlog::get()->logoUrl())
                         <img class="pe-3 max-height-28-px" src="{{ \App\Facades\ActiveBlog::get()->logoUrl() }}">
                     @endif
@@ -98,7 +98,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent2">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="{{ route('payvoices.index') }}"
+                            <a class="nav-link dropdown-toggle text-dark" href="#"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ __('Blog') }}
                             </a>
