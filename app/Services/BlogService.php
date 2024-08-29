@@ -8,6 +8,7 @@ use App\Http\Resources\BlogResource;
 use App\Models\Blog;
 use App\Models\User;
 use App\Support\ResponseBuilder;
+use Illuminate\Http\Request;
 
 class BlogService
 {
@@ -100,7 +101,7 @@ class BlogService
 
     public function getArrayResponse(Blog $blog)
     {
-        $request = app('request');
+        $request = $this->getRequest();
 
         $blog->load([
             'products' => function ($query) {
@@ -126,5 +127,10 @@ class BlogService
         ]);
 
         return json_decode(json_encode((new BlogResource($blog))->toArray($request)), true);
+    }
+
+    protected function getRequest(): Request
+    {
+        return app('request');
     }
 }
