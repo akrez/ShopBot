@@ -16,7 +16,7 @@
                 </label>
                 <input name="code" type="text" id="2055690881"
                     class="form-control {{ $errors->get('code') ? ' is-invalid ' : '' }}" value="{{ $colorCode }}"
-                    data-jscolor="{value:'{{ $colorCode }}'}">
+                    data-jscolor='@json(['value' => $colorCode, 'paletteCols' => 10, 'palette' => collect(__('colors'))->keys()->implode(' ')])'>
                 @foreach ($errors->get('code') as $error)
                     <div class="invalid-feedback">{{ $error }}</div>
                 @endforeach
