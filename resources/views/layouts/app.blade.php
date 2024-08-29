@@ -21,10 +21,10 @@
     @endif
 
     <!-- CSS files -->
-    <link rel="stylesheet" href="{{ url('libs/bootstrap/dist/css/bootstrap.rtl.min.css') }}" />
-    <link rel="stylesheet" href="{{ url('libs/sweetalert2/dist/sweetalert2.min.css') }}" />
-    <link rel="stylesheet" href="{{ url('libs/vazirmatn/Vazirmatn-font-face.css') }}" />
-    <link rel="stylesheet" href="{{ url('libs/@fortawesome/fontawesome-free/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('npm/sweetalert2@11.12.4/dist/sweetalert2.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('npm/vazir-font@30.1.0/dist/font-face.css') }}" />
+    <link rel="stylesheet" href="{{ url('npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ url('css/app.css') }}">
 
     @yield('POS_HEAD')
@@ -197,9 +197,9 @@
         @endif
         @yield('content')
     </div>
-    <script src="{{ asset('libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
-    <script src="{{ asset('libs/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-    <script src="{{ asset('libs/jscolor/2.5.2/jscolor.min.js') }}"></script>
+    <script src="{{ asset('npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('npm/@eastdesire/jscolor@2.5.2/jscolor.min.js') }}"></script>
     <script>
         @if (session('swal-success'))
             Swal.fire(

@@ -30,9 +30,9 @@
         <meta name="description" content="{{ $description }}">
 
         <!-- CSS files -->
-        <link rel="stylesheet" href="{{ url('libs/bootstrap/dist/css/bootstrap.rtl.min.css') }}" />
-        <link rel="stylesheet" href="{{ url('libs/vazirmatn/Vazirmatn-font-face.css') }}" />
-        <link rel="stylesheet" href="{{ url('libs/bootstrap-icons/font/bootstrap-icons.min.css') }}">
+        <link rel="stylesheet" href="{{ url('npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css') }}" />
+        <link rel="stylesheet" href="{{ url('npm/vazir-font@30.1.0/dist/font-face.css') }}" />
+        <link rel="stylesheet" href="{{ url('npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css') }}">
         <link rel="stylesheet" href="{{ url('css/blog.css') }}">
 
         <style>
@@ -184,7 +184,7 @@
                 </div>
             </footer>
         @endif
-        <script src="{{ asset('libs/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
+        <script src="{{ asset('npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.js') }}"></script>
         <script>
             document.querySelectorAll("[data-filter-tag]").forEach(function(radioFilterElement) {
                 radioFilterElement.onclick = function() {
