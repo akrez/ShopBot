@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('header', __('Packages'))
+@section('subheader', $product->name)
 
 @section('content')
     <div class="row mb-2">

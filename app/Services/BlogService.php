@@ -118,6 +118,12 @@ class BlogService
                     ->with('images', function ($query) {
                         $query->orderDefault();
                     })
+                    ->with('packages', function ($query) {
+                        $query
+                            ->with('color')
+                            ->filterNotDeactive()
+                            ->orderDefault();
+                    })
                     ->orderDefault();
             },
             'contacts' => function ($query) {

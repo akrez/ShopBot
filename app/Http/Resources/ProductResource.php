@@ -18,6 +18,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'code' => $this->code,
             'images' => $this->whenLoaded('images', fn () => GalleryResource::collection($this->images)),
+            'packages' => $this->whenLoaded('packages', fn () => PackageResource::collection(collect($this->packages))),
             'product_tags' => $this->whenLoaded('productTags', fn () => collect($this->productTags)->pluck('tag_name')),
             'product_properties' => $this->whenLoaded('productProperties', fn () => new ProductPropertyCollection($this->productProperties)),
         ];
