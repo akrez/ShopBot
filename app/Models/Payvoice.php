@@ -23,7 +23,7 @@ class Payvoice extends Model
     {
         return $this->belongsTo(Blog::class);
     }
-    
+
     public function scopeOrderDefault(Builder $query)
     {
         $query = $query

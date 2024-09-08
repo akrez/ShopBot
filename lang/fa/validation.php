@@ -292,5 +292,8 @@ return [
         'contact_type' => 'نوع',
         //
         'token' => 'توکن',
+        //
+        'guaranty' => 'گارانتی',
+        'color_id' => 'رنگ',
     ],
 ];

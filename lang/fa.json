@@ -257,6 +257,8 @@
     "Color": "رنگ",
     "Payvoices": "بازدیدها",
     "Payvoice": "بازدید",
+    "Packages": "پکیج‌ها",
+    "Package": "پکیج",
     "Port": "ورودی و خروجی اکسل",
     "blog_logos": "لوگوهای وبلاگ",
     "blog_logo": "لوگوی وبلاگ",
@@ -270,5 +272,6 @@
     "whatsapp": "واتساپ",
     "phone": "تلفن",
     "instagram": "اینستاگرام",
-    "Upload :name Attribute":"آپلود اطلاعات :name"
+    "out_of_stock":"اتمام موجودی",
+    "Upload :name Attribute": "آپلود اطلاعات :name"
 }

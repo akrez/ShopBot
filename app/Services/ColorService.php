@@ -24,6 +24,15 @@ class ColorService implements PortContract
         return $color;
     }
 
+    public function getLatestBlogColorsIdNameArray(Blog $blog)
+    {
+        return $this
+            ->getLatestBlogColorsQuery($blog)
+            ->get()
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
     public function firstColorById(Blog $blog, $id): ?Color
     {
         if (strlen($id)) {

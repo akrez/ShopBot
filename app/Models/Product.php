@@ -64,6 +64,11 @@ class Product extends Model
         return $this->belongsTo(Blog::class);
     }
 
+    public function packages()
+    {
+        return $this->hasMany(Package::class, 'product_id', 'id');
+    }
+
     public function images()
     {
         return $this->morphMany(Gallery::class, 'gallery');

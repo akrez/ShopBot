@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\BlogService;
 use App\Services\PayvoiceService;
-use Jenssegers\Agent\Agent;
 
 class PayvoiceController extends Controller
 {
