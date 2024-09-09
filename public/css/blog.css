@@ -16,3 +16,10 @@ body {
 .text-shadow-white {
     text-shadow: 0 0 0.15em white, 0 0 0.15em white, 0 0 0.15em white;
 }
+
+.package-width {
+    width: 26px;
+    min-width: 26px;
+    max-width: 26px;
+    text-align: center;
+}

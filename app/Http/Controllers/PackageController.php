@@ -75,7 +75,7 @@ class PackageController extends Controller
         $product = $this->productService->findOrFailActiveBlogProduct($product_id);
         $package = $this->packageService->findOrFailActiveBlogPackage($product, $id);
 
-        return view('colors.edit', [
+        return view('packages.edit', [
             'product' => $product,
             'package' => $package,
             'colors' => $this->colorService->getLatestBlogColorsIdNameArray($blog),

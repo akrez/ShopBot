@@ -134,6 +134,37 @@ data-bs-slide="next">
 @endforeach
 </p>
 </div>
+@if ($product['packages'])
+<div class="card-footer text-body-secondary">
+@foreach ($product['packages'] as $package)
+<div class="mt-3 p-2 border small rounded">
+<div class="d-flex">
+<div class="package-width">🏷️</div>
+<div>{{ number_format($package['price']) }} ﷼</div>
+</div>
+@if ($package['color'])
+<div class="d-flex">
+<div class="package-width"
+style="color: {{ $package['color']['code'] }};">⦿</div>
+<div>{{ $package['color']['name'] }}</div>
+</div>
+@endif
+@if ($package['description'])
+<div class="d-flex">
+<div class="package-width">✔️</div>
+<div>{{ $package['description'] }}</div>
+</div>
+@endif
+@if ($package['guaranty'])
+<div class="d-flex">
+<div class="package-width">💯</div>
+<div>{{ $package['guaranty'] }}</div>
+</div>
+@endif
+</div>
+@endforeach
+</div>
+@endif
 </div>
 @endforeach
 </div>
