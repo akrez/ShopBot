@@ -43,7 +43,7 @@ class PayvoiceService
         Payvoice::create([
             'ip' => $request->ip() ?: null,
             'method' => $request->method() ?: null,
-            'controller' => $request->route()->action['controller'] ?: null,
+            'controller' => ($request->route() and $request->route()->action['controller'] ? $request->route()->action['controller'] : null),
             'useragent_device' => $agent->deviceType() ?: null,
             'useragent_browser' => $agent->browser() ?: null,
             'useragent_platform' => $agent->platform() ?: null,
